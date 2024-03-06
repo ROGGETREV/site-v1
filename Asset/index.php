@@ -1,0 +1,1 @@
+<?php header('location: https://assetdelivery.roblox.com/asset?'.$_SERVER["QUERY_STRING"]);

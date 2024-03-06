@@ -1,0 +1,13 @@
+Options -Indexes
+ErrorDocument 403 /request-error.php?code=403
+ErrorDocument 404 /request-error.php?code=404
+
+Redirect 404 /.gitignore
+
+RewriteEngine On
+
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+RewriteRule ^(.*)\.aspx$ $1 [L]
+RewriteRule ^(.*)\.ashx$ $1 [L]
+# RewriteRule ^(.*)\.html$ $1 [L]

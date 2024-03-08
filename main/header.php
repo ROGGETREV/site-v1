@@ -28,6 +28,12 @@
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="/User.aspx">Profile</a></li>
                     <li><a class="dropdown-item" href="/Currency.aspx"><?php echo (int)$user["nuggets"]; ?> Nuggets</a></li>
+                    <?php if(in_array($user["permission"], [
+                        "Moderator",
+                        "Administrator"
+                    ])) { ?>
+                    <li><a class="dropdown-item" href="/Management/Panel.aspx">Management</a></li>
+                    <?php } ?>
                     <li><a class="dropdown-item" href="/Settings.aspx">Settings</a></li>
                     <li class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="/UserAuthentication/LogOut.aspx">Log Out</a></li>

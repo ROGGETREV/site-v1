@@ -19,9 +19,21 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/Management/inc.php");
                 <?php
                 $error = "";
                 if(!empty($_POST)) {
-                    if(!isset($_REQUEST["id"])) {
-                        $error = "real";
-                        
+                    if(
+                        !isset($_REQUEST["id"]) ||
+                        !isset($_REQUEST["reason"]) ||
+                        empty($_REQUEST["id"]) ||
+                        empty($_REQUEST["reason"])
+                    ) {
+                        $error = "Missing input";
+                    } else {
+                        $error = "Moderated successfully";
+                        $id = (int)$_REQUEST["id"];
+                        $reason = $_REQUEST["reason"];
+                        $q = $con->prepare("UPDATE users SET banned = 1, banreason = :reason WHERE id = :id");
+                        $q->bindParam(':reason', $reason, PDO::PARAM_STR);
+                        $q->bindParam(':id', $id, PDO::PARAM_INT);
+                        $q->execute();
                     }
                 }
                 ?>

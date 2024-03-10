@@ -139,3 +139,124 @@ if($loggedin) {
         }
     }
 }
+
+function filterBadWords($string) {
+    $superSafeChat = false;
+    global $loggedin;
+    if($loggedin) {
+        global $user;
+        if($user["underage"] == 1) {
+            $superSafeChat = true;
+        }
+    }
+    $badWords = [
+        "fuck",
+        "shit",
+        "niga",
+        "iga",
+        "nigga",
+        "igga",
+        "niggga",
+        "iggga",
+        "nigggga",
+        "igggga",
+        "niger",
+        "nigger",
+        "niggger",
+        "nigggger",
+        "stfu",
+        "fxck",
+        "fawk",
+        "bitch",
+        "bitche",
+        "bitches",
+        "bitchs",
+        "lmao",
+        "lmfao",
+        "wtf",
+        "tf",
+        "kys",
+        "kms",
+        "ass",
+        "dick",
+        "boobs",
+        "boob",
+        "pussy",
+        "puss",
+        "damn",
+        "faggot",
+        "fagot",
+        "fag",
+        "faggt",
+        "fagt",
+
+        "yomi",
+        "madblox",
+        "madblxx",
+        "sigma",
+        "rizz",
+        
+        "fdp",
+        "ntm",
+        "nique ta mère",
+        "nique",
+        "ta mère",
+        "ta mere",
+        "pute",
+    ];
+
+    if($superSafeChat == true) {
+        array_push($badWords,"underage");
+    }
+
+    $exceptions = [
+        "mini-games",
+        "mini games",
+        "minigames",
+        "classic"
+    ];
+
+    $string = preg_replace('/[\x{00}-\x{1F}\x{7F}]/u', '', $string);
+
+    foreach ($badWords as $badWord) {
+        if(in_array($badWord, $exceptions)) {
+            return $word;
+        }
+        $badWordPattern = preg_replace('/\s+/', '\s*', preg_quote($badWord, '/'));
+        $string = preg_replace_callback('/' . $badWordPattern . '/iu', function ($matches) use ($exceptions) {
+            $word = $matches[0];
+            return str_repeat('#', strlen($matches[0]));
+        }, $string);
+    }
+
+    return $string;
+}
+
+if($loggedin) {
+    if((int)$user["banned"] === 1) {
+        if(!in_array($_SERVER["PHP_SELF"], [
+            "/UserAuthentication/LogOut.php",
+            "/not-approved.php"
+        ])) {
+            header('location: /not-approved.ashx');
+            exit;
+        }
+    } else {
+        if(in_array($_SERVER["PHP_SELF"], [
+            "/not-approved.php"
+        ])) {
+            header('location: /Home.ashx');
+            exit;
+        }
+    }
+}
+
+if(!empty($_SERVER["PHP_AUTH_USER"]) && !empty($_SERVER["PHP_AUTH_PW"])) {
+    if($_SERVER["PHP_AUTH_USER"] !== "nolanwhy" || $_SERVER["PHP_AUTH_PW"] !== "poopfart46") {
+        header('WWW-Authenticate: Basic realm="ROGGET"');
+        exit;
+    }
+} else {
+    header('WWW-Authenticate: Basic realm="ROGGET"');
+    exit;
+}

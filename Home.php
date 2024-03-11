@@ -12,15 +12,15 @@ $q->execute();
 $friends = array_reverse($q->fetchAll());
 
 $welcomeMessages = [
-    "Hello, {username}!",
-    "Welcome back, {username}!",
-    "Where have you been, {username}?",
-    "It's time to play ROGGET, {username}!",
-    "Good to see you again, {username}!",
-    "Hey there, {username}!",
-    "Glad you could join us, {username}!",
-    "Welcome to the party, {username}!",
-    "Make yourself at home, {username}!"
+    "Hello {emoji}, {username}!",
+    "Welcome back {emoji}, {username}!",
+    "Where have you been, {username}? {emoji}",
+    "It's time to play ROGGET {emoji}, {username}!",
+    "Good to see you again, {emoji} {username}!",
+    "Hey there {emoji}, {username}!",
+    "Glad you could join us {emoji}, {username}!",
+    "Welcome to the party {emoji}, {username}!",
+    "Make yourself at home {emoji}, {username}!"
 ];
 ?>
 <!DOCTYPE html>
@@ -36,7 +36,7 @@ $welcomeMessages = [
         <div class="d-flex">
             <img src="/images/Users/Get.ashx?ID=<?php echo (int)$user["id"]; ?>" onerror='this.src = "/images/loaderror.png";' onclick='window.location = "/User.aspx?ID=<?php echo (int)$user["id"]; ?>";' style="width: 125px;height: 125px;cursor: pointer;">
             <div style="margin-left: 12px;margin-top: 22px;">
-                <h2><?php echo htmlspecialchars(str_replace("{username}", $user["username"], $welcomeMessages[array_rand($welcomeMessages)])); ?> <?php if($user["buildersclub"] !== "None") {echo '<img src="/images/'.$user["buildersclub"].'.png" style="width: 36px;height: 36px;margin-top: -8px;">';} ?></h2>
+                <h2><?php echo str_replace("{emoji}", '<img src="/images/emojis/grinning-face.png" style="width: 36px;height: 36px;margin-top: -8px;">', htmlspecialchars(str_replace("{username}", $user["username"], $welcomeMessages[array_rand($welcomeMessages)]))); ?> <?php if($user["buildersclub"] !== "None") {echo '<img src="/images/'.$user["buildersclub"].'.png" style="width: 36px;height: 36px;margin-top: -8px;">';} ?></h2>
                 <h5>Placeholder</h5>
             </div>
         </div>

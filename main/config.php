@@ -260,3 +260,52 @@ if(!empty($_SERVER["PHP_AUTH_USER"]) && !empty($_SERVER["PHP_AUTH_PW"])) {
     header('WWW-Authenticate: Basic realm="ROGGET"');
     exit;
 }
+
+function datetime($unix) {
+    $now = time();
+    $diff = $unix - $now;
+    
+    if($diff < 0) {
+        $diff = abs($diff);
+        if($diff < 60) {
+            return ($diff <= 1) ? 'now' : $diff . ' seconds ago';
+        } elseif($diff < 3600) {
+            $minutes = floor($diff / 60);
+            return ($minutes == 1) ? '1 minute ago' : $minutes . ' minutes ago';
+        } elseif($diff < 86400) {
+            $hours = floor($diff / 3600);
+            return ($hours == 1) ? '1 hour ago' : $hours . ' hours ago';
+        } elseif($diff < 2592000) {
+            $days = floor($diff / 86400);
+            return ($days == 1) ? '1 day ago' : $days . ' days ago';
+        } elseif($diff < 31536000) {
+            $months = floor($diff / 2592000);
+            return ($months == 1) ? '1 month ago' : $months . ' months ago';
+        } else {
+            $years = floor($diff / 31536000);
+            return ($years == 1) ? '1 year ago' : $years . ' years ago';
+        }
+    } elseif($diff < 60) {
+        return ($diff <= 1) ? 'now' : 'in ' . $diff . ' seconds';
+    } elseif($diff < 3600) {
+        $minutes = floor($diff / 60);
+        return ($minutes == 1) ? 'in 1 minute' : 'in ' . $minutes . ' minutes';
+    } elseif($diff < 86400) {
+        $hours = floor($diff / 3600);
+        return ($hours == 1) ? 'in 1 hour' : 'in ' . $hours . ' hours';
+    } elseif($diff < 2592000) {
+        $days = floor($diff / 86400);
+        return ($days == 1) ? 'in 1 day' : 'in ' . $days . ' days';
+    } elseif($diff < 31536000) {
+        $months = floor($diff / 2592000);
+        return ($months == 1) ? 'in 1 month' : 'in ' . $months . ' months';
+    } else {
+        $years = floor($diff / 31536000);
+        return ($years == 1) ? 'in 1 year' : 'in ' . $years . ' years';
+    }
+}
+
+// TODO: use this in user get and catalog get
+function exitFile($file) {
+    exit(file_get_contents($file));
+}

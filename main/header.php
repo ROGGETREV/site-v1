@@ -2,7 +2,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
     <div class="container-fluid<?php /**/ ?>">
         <a class="navbar-brand" href="/">
-            <img src="/images/logo.png" style="height: 28px;">
+            <img src="/images/logo.png" style="height: 28px;" onerror='this.src = "/images/loaderror.png";'>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

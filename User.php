@@ -86,14 +86,14 @@ if($id !== (int)$user["id"]) {
             <?php } ?>
             <img src="/images/Users/Get.ashx?ID=<?php echo (int)$usr["id"]; ?>" onerror='this.src = "/images/loaderror.png";' style="width: 125px;height: 125px;">
             <div style="margin-left: 12px;margin-top: 22px;">
-                <h2><?php echo htmlspecialchars($usr["username"]); ?> <?php if($usr["buildersclub"] !== "None") {echo '<img src="/images/'.$usr["buildersclub"].'.png" style="width: 36px;height: 36px;margin-top: -8px;">';} ?></h2>
+                <h2><?php echo htmlspecialchars($usr["username"]); ?> <?php if($usr["buildersclub"] !== "None") {echo '<img src="/images/'.$usr["buildersclub"].'.png" style="width: 36px;height: 36px;margin-top: -8px;" onerror=\'this.src = "/images/loaderror.png";\'>';} ?></h2>
                 <h5><?php echo (int)count($friends); ?> Friend<?php if(count($friends) !== 1) {echo "s";} ?></h5>
             </div>
         </div>
         <br>
         <h4>About</h4>
         <div class="card card-body">
-            <?php if($id !== (int)$user["id"]) { ?><button style="position: absolute;top: 9px;right: 9px;" class="btn btn-outline-danger btn-auto">Report Abuse</button><?php } ?>
+            <?php if($id !== (int)$user["id"]) { ?><button style="position: absolute;top: 9px;right: 9px;" class="btn btn-outline-danger btn-auto" onclick='window.location = "/AbuseReport/User.aspx";'>Report Abuse</button><?php } ?>
             <?php echo htmlspecialchars($usr["description"]); ?>
         </div>
         <br>

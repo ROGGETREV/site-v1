@@ -40,14 +40,69 @@ $timeoutRemaining = 10;
 $bodyColors = json_decode($renderUser["bodyColors"], true);
 
 $characterScript = '
---local bodyColors = Instance.new("BodyColors", plr.Character)
---bodyColors.HeadColor = BrickColor.new('.(int)$bodyColors["head"].')
---bodyColors.TorsoColor = BrickColor.new('.(int)$bodyColors["torso"].')
---bodyColors.LeftArmColor = BrickColor.new('.(int)$bodyColors["leftarm"].')
---bodyColors.RightArmColor = BrickColor.new('.(int)$bodyColors["rightarm"].')
---bodyColors.LeftLegColor = BrickColor.new('.(int)$bodyColors["leftleg"].')
---bodyColors.RightLegColor = BrickColor.new('.(int)$bodyColors["rightleg"].')
+bodyColors = Instance.new("BodyColors", plr.Character)
+bodyColors.HeadColor = BrickColor.new('.(int)$bodyColors["head"].')
+bodyColors.TorsoColor = BrickColor.new('.(int)$bodyColors["torso"].')
+bodyColors.LeftArmColor = BrickColor.new('.(int)$bodyColors["leftarm"].')
+bodyColors.RightArmColor = BrickColor.new('.(int)$bodyColors["rightarm"].')
+bodyColors.LeftLegColor = BrickColor.new('.(int)$bodyColors["leftleg"].')
+bodyColors.RightLegColor = BrickColor.new('.(int)$bodyColors["rightleg"].')
 ';
+
+$characterScript2008 = '
+bodyColors = Instance.new("BodyColors", plr.Character)
+bodyColors.HeadColor = BrickColor.new('.(int)$bodyColors["head"].')
+bodyColors.TorsoColor = BrickColor.new('.(int)$bodyColors["torso"].')
+bodyColors.LeftArmColor = BrickColor.new('.(int)$bodyColors["leftarm"].')
+bodyColors.RightArmColor = BrickColor.new('.(int)$bodyColors["rightarm"].')
+bodyColors.LeftLegColor = BrickColor.new('.(int)$bodyColors["leftleg"].')
+bodyColors.RightLegColor = BrickColor.new('.(int)$bodyColors["rightleg"].')
+';
+
+$q = $con->prepare("SELECT * FROM wearing WHERE user = :id");
+$q->bindParam(':id', $id, PDO::PARAM_INT);
+$q->execute();
+foreach($q->fetchAll() as $wearing) {
+    $qq = $con->prepare("SELECT * FROM `catalog` WHERE id = :id");
+    $qq->bindParam(':id', $wearing["item"], PDO::PARAM_INT);
+    $qq->execute();
+    $item = $qq->fetch();
+    if($item) {
+        $name = "avatar".(int)rand();
+        if($item["type"] === "shirt") {
+            $shit = '
+'.$name.' = Instance.new("Shirt", plr.Character)
+'.$name.'.Name = "'.addslashes($item["name"]).'"
+'.$name.'.ShirtTemplate = "http://shitblx.cf/Asset/assets/shirt/'.(int)$item["id"].'.png"
+';
+            $characterScript .= $shit;
+            $characterScript2008 .= $shit;
+        } else if($item["type"] === "pants") {
+            $shit = '
+'.$name.' = Instance.new("Pants", plr.Character)
+'.$name.'.Name = "'.addslashes($item["name"]).'"
+'.$name.'.PantsTemplate = "http://shitblx.cf/Asset/assets/pants/'.(int)$item["id"].'.png"
+';
+            $characterScript .= $shit;
+            $characterScript2008 .= $shit;
+        } else if($item["type"] === "face") {
+            $characterScript .= '
+plr.Character.Head.face.Texture = "http://shitblx.cf/Asset/assets/face/'.(int)$item["id"].'.png"
+';
+            $characterScript2008 .= '
+plr.Character.Head.face.Texture = "http://shitblx.cf/Asset/assets/face/'.(int)$item["id"].'_stretch.png"
+';
+        } else if($item["type"] === "tshirt") {
+            $shit = '
+'.$name.' = Instance.new("Decal", plr.Character.Torso)
+'.$name.'.Name = "'.addslashes($item["name"]).'"
+'.$name.'.Texture = "http://shitblx.cf/Asset/assets/tshirt/'.(int)$item["id"].'.png"
+';
+            $characterScript .= $shit;
+            $characterScript2008 .= $shit;
+        }
+    }
+}
 
 $continue2008 = true;
 $continue2011edited2016 = true;
@@ -59,10 +114,10 @@ $script2008 = '
 local plr = game.Players:CreateLocalPlayer(0)
 plr:LoadCharacter()
 
-'.$characterScript.'
+'.$characterScript2008.'
 
 print("Rendering user ID '.$id.' (2008)")
-b64 = game:GetService("ThumbnailGenerator"):Click("PNG", 895, 895, true)
+b64 = game:GetService("ThumbnailGenerator"):Click("PNG", 1024, 1024, true)
 print("Done")
 return b64';
 
@@ -111,11 +166,10 @@ if($continue2008) {
 
     file_put_contents($_SERVER["DOCUMENT_ROOT"]."/images/Users/2008_".(int)$id.".png", base64_decode($res2008));
 }
-
 // End 2008
 // Start 2011
 
-$q = $con->prepare("SELECT * FROM renderqueue WHERE remote = :id AND type = 'user'");
+$q = $con->prepare("SELECT * FROM renderqueue WHERE `remote` = :id AND `type` = 'user'");
 $q->bindParam(':id', $id, PDO::PARAM_INT);
 $q->execute();
 $renderQueue = $q->fetch();
@@ -141,7 +195,7 @@ for i, v in pairs(plr.Character:GetChildren()) do
 end
 
 print("Rendering user ID '.$id.' (2011edited2016)")
-b64 = game:GetService("ThumbnailGenerator"):Click("PNG", 895, 895, true)
+b64 = game:GetService("ThumbnailGenerator"):Click("PNG", 1024, 1024, true)
 print("Done")
 return b64';
 
@@ -195,14 +249,18 @@ if($continue2011edited2016) {
 // Start 2016
 
 $script2016 = '
+game:GetService("ContentProvider"):SetBaseUrl("http://shitblx.cf/")
+game:GetService("ScriptContext").ScriptsDisabled = true
+--still didnt work without the scripts on top of this
+
 local plr = game.Players:CreateLocalPlayer(0)
 --plr.CharacterAppearance = "http://shitblx.cf/Game/CharacterFetch.ashx?ID='.(int)$id.'"
-plr:LoadCharacter()
+plr:LoadCharacter()d
 
 '.$characterScript.'
 
 print("Rendering user ID '.$id.' (2016)")
-b64 = game:GetService("ThumbnailGenerator"):Click("PNG", 895, 895, true)
+b64 = game:GetService("ThumbnailGenerator"):Click("PNG", 1024, 1024, false)
 print("Done")
 return b64';
 

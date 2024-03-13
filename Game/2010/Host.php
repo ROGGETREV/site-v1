@@ -49,7 +49,7 @@ game.Players.PlayerAdded:connect(function(player)
         end
     end)
 
-    player.CharacterAppearance = "http://shitblx.cf/Game/CharacterFetch.ashx?ID="..player.userId.."&game="..gameId
+    player.CharacterAppearance = "http://shitblx.cf/Game/CharacterFetch.ashx?userId="..player.userId.."&game="..gameId
     
     print("Loading character...")
     pcall(function() player:LoadCharacter() end)

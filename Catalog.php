@@ -27,7 +27,14 @@ if(!$loggedin) {
                     <?php
                     $q = $con->prepare("SELECT * FROM catalog WHERE moderation = 'Accepted'");
                     $q->execute();
-                    foreach($q->fetchAll() as $item) { ?>
+                    foreach($q->fetchAll() as $item) {
+                    $owned = false;
+                    $qq = $con->prepare("SELECT * FROM owneditems WHERE user = :id AND item = :iid");
+                    $qq->bindParam(':id', $user["id"], PDO::PARAM_INT);
+                    $qq->bindParam(':iid', $item["id"], PDO::PARAM_INT);
+                    $qq->execute();
+                    if($qq->fetch()) $owned = true;
+                    ?>
                     <div class="col-md-2" style="cursor: pointer;" onclick='window.location = "/Item.aspx?ID=<?php echo (int)$item["id"]; ?>";'>
                         <div class="card">
                             <div style="height: 0; padding-top: 100%; position: relative;">
@@ -35,7 +42,7 @@ if(!$loggedin) {
                             </div>
                             <div class="card-body" style="padding: 6px;">
                                 <h6 class="card-title"><?php echo htmlspecialchars($item["name"]); ?></h6>
-                                <p class="card-text"><?php echo (int)$item["nuggets"]; ?> Nuggets</p>
+                                <p class="card-text"><?php if(!$owned) {echo (int)$item["nuggets"]." Nuggets";} else {echo "Owned";} ?></p>
                             </div>
                         </div>
                     </div>

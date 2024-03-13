@@ -12,7 +12,7 @@ $sql = [
     "pass" => "NeverGonnaGiveYouUp!?69fg-"
 ];
 $developement ? $sql["dbname"] = "roggetdev" : $sql["dbname"] = "roggetprod";
-if(!$developement) error_reporting(0);
+if(!$developement) error_reporting(0); else error_reporting(E_ALL);
 try{
     $con = new PDO("mysql:host=".$sql["server"].";dbname=".$sql["dbname"], $sql["user"], $sql["pass"]);
 } catch(PDOException $e) {
@@ -26,8 +26,8 @@ $siteTheme = "dark";//"light";
 
 $RCCS = [
     "renders" => [
-        "2008" => "26.41.174.225:8541",
-        "2016" => "26.41.174.225:8542"
+        "2008" => "25.33.214.80:8541",
+        "2016" => "25.33.214.80:8542"
     ]
 ];
 
@@ -251,7 +251,7 @@ if($loggedin) {
     }
 }
 
-if(!empty($_SERVER["PHP_AUTH_USER"]) && !empty($_SERVER["PHP_AUTH_PW"])) {
+/*if(!empty($_SERVER["PHP_AUTH_USER"]) && !empty($_SERVER["PHP_AUTH_PW"])) {
     if($_SERVER["PHP_AUTH_USER"] !== "nolanwhy" || $_SERVER["PHP_AUTH_PW"] !== "poopfart46") {
         header('WWW-Authenticate: Basic realm="ROGGET"');
         exit;
@@ -259,7 +259,7 @@ if(!empty($_SERVER["PHP_AUTH_USER"]) && !empty($_SERVER["PHP_AUTH_PW"])) {
 } else {
     header('WWW-Authenticate: Basic realm="ROGGET"');
     exit;
-}
+}*/
 
 function datetime($unix) {
     $now = time();
@@ -305,7 +305,6 @@ function datetime($unix) {
     }
 }
 
-// TODO: use this in user get and catalog get
 function exitFile($file) {
     exit(file_get_contents($file));
 }

@@ -8,7 +8,7 @@ if(isset($_REQUEST["g-recaptcha-response"])) {
     $response = $reCAPTCHA->verifyResponse($_SERVER["REMOTE_ADDR"], $_REQUEST["g-recaptcha-response"]);
     if($response && $response->success) $captcha = true;
 }
-if(!$captcha) exit(json_encode(["success"=>false,"problem"=>"captcha","message"=>"Please complete the captcha"]));
+//if(!$captcha) exit(json_encode(["success"=>false,"problem"=>"captcha","message"=>"Please complete the captcha"]));
 
 if(!isset($_REQUEST["username"])) {
     exit(json_encode(["success"=>false,"problem"=>"username","message"=>"must be at least 3 characters"]));
@@ -19,6 +19,9 @@ if(strlen($username) < 3) {
 }
 if(strlen($username) > 16) {
     exit(json_encode(["success"=>false,"problem"=>"username","message"=>"must be less than 16 characters"]));
+}
+if(!preg_match('/^[A-Za-z0-9_]*$/', $username)) {
+    exit(json_encode(["success"=>false,"problem"=>"username","message"=>"must have only the alphabet, numbers or _"]));
 }
 
 if(!isset($_REQUEST["password"])) {

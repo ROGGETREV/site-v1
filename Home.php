@@ -16,7 +16,7 @@ $welcomeMessages = [
     "Welcome back {emoji}, {username}!",
     "Where have you been, {username}? {emoji}",
     "It's time to play ROGGET {emoji}, {username}!",
-    "Good to see you again, {emoji} {username}!",
+    "Good to see you again {emoji}, {username}!",
     "Hey there {emoji}, {username}!",
     "Glad you could join us {emoji}, {username}!",
     "Welcome to the party {emoji}, {username}!",

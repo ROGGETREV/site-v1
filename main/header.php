@@ -18,6 +18,12 @@
                 <li class="nav-item">
                     <a class="nav-link<?php if($_SERVER["PHP_SELF"] === "/Catalog.php" || $_SERVER["PHP_SELF"] === "/Item.php") {echo " active";} ?>" href="/Catalog.aspx">Catalog</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link<?php if($_SERVER["PHP_SELF"] === "/Character.php") {echo " active";} ?>" href="/Character.aspx">Character</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link<?php if($_SERVER["PHP_SELF"] === "/Messages.php" || $_SERVER["PHP_SELF"] === "/Message.php") {echo " active";} ?>" href="/Messages.aspx">Messages</a>
+                </li>
             </ul>
         </div>
         <ul class="navbar-nav">
@@ -29,14 +35,14 @@
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="/User.aspx">Profile</a></li>
                     <li><a class="dropdown-item" href="/Currency.aspx"><?php echo (int)$user["nuggets"]; ?> Nuggets</a></li>
+                    <li class="dropdown-divider"></li>
                     <?php if(in_array($user["permission"], [
                         "Moderator",
                         "Administrator"
                     ])) { ?>
-                    <li><a class="dropdown-item" href="/Management/Panel.aspx">Management</a></li>
+                    <li><a class="dropdown-item" href="/Management/Panel.aspx">Management Panel</a></li>
                     <?php } ?>
                     <li><a class="dropdown-item" href="/Settings.aspx">Settings</a></li>
-                    <li class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="/UserAuthentication/LogOut.aspx">Log Out</a></li>
                 </ul>
             </li>

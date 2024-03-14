@@ -28,7 +28,6 @@ bodyColors.LeftLegColor = BrickColor.new(1)
 bodyColors.RightLegColor = BrickColor.new(1)
 ';
 
-
 $q = $con->prepare("SELECT * FROM wearing WHERE user = :id");
 $q->bindParam(':id', $id, PDO::PARAM_INT);
 $q->execute();
@@ -120,13 +119,17 @@ if($continue2008) {
 // End 2008
 // Start 2011
 
+$script2011 = 'local plr = game.Players:CreateLocalPlayer(0)
+plr.CharacterAppearance = "http://shitblx.cf/Game/CharacterFetch.ashx?userId='.(int)$id.'"
+plr:LoadCharacter()';
 $q = $con->prepare("SELECT * FROM renderqueue WHERE `remote` = :id AND `type` = 'user'");
 $q->bindParam(':id', $id, PDO::PARAM_INT);
 $q->execute();
 $renderQueue = $q->fetch();
 if(!$renderQueue) {
-    $q = $con->prepare("INSERT INTO `renderqueue` (`id`, `remote`, `type`, `client`) VALUES (NULL, :id, 'user', '2011')");
+    $q = $con->prepare("INSERT INTO `renderqueue` (`id`, `remote`, `type`, `client`, `script`) VALUES (NULL, :id, 'user', '2011', :script)");
     $q->bindParam(':id', $id, PDO::PARAM_INT);
+    $q->bindParam(':script', $script2011, PDO::PARAM_STR);
     $q->execute();
 }
 

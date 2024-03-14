@@ -6,17 +6,17 @@ if(!$loggedin) {
     exit;
 }
 
-$q = $con->prepare("SELECT * FROM messages WHERE user2 = :id AND hasBeenRead = 0");
+$q = $con->prepare("SELECT * FROM messages WHERE user2 = :id AND hasBeenRead = 0 AND reply = 0");
 $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
 $q->execute();
 $unread = $q->fetchAll();
 
-$q = $con->prepare("SELECT * FROM messages WHERE user1 = :id");
+$q = $con->prepare("SELECT * FROM messages WHERE user1 = :id AND reply = 0");
 $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
 $q->execute();
 $sent = $q->fetchAll();
 
-$q = $con->prepare("SELECT * FROM messages WHERE user2 = :id AND hasBeenRead = 1");
+$q = $con->prepare("SELECT * FROM messages WHERE user2 = :id AND hasBeenRead = 1 AND reply = 0");
 $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
 $q->execute();
 $read = $q->fetchAll();
@@ -31,6 +31,7 @@ $read = $q->fetchAll();
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>
     <br>
     <div class="container card card-body">
+        <button class="btn btn-outline-primary float-end ms-auto" style="position: absolute;right: 10px;top: 10px;" onclick='window.location = "/MessageSend.aspx";'><i class="bi bi-send-fill"></i></button>
         <h1>Messages</h1>
         <h3>Unread Messages</h3>
         <?php if(count($unread) >= 1) {
@@ -109,7 +110,7 @@ $read = $q->fetchAll();
             </table>
         </div>
         <?php } else { ?>
-        <h6>You didn't send messages.</h6>
+        <h6>You didn't send any messages.</h6>
         <?php } ?>
         <br>
         <h3>Read Messages</h3>
@@ -149,7 +150,7 @@ $read = $q->fetchAll();
             </table>
         </div>
         <?php } else { ?>
-        <h6>You didn't send messages.</h6>
+        <h6>You didn't read any messages.</h6>
         <?php } ?>
     </div>
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/footer.php"); ?>

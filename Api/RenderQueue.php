@@ -18,7 +18,8 @@ if($_REQUEST["apiKey"] !== $apiKey) {
 $type = $_REQUEST["type"];
 if(!in_array($type, [
     "get",
-    "set"
+    "set",
+    "scriptget"
 ])) {
     exit(json_encode(["success"=>false,"message"=>"Wrong type"]));
 }
@@ -67,4 +68,19 @@ if($type === "get") {
     } else if($renderType === "place") {
         // 
     }
+} else if($type === "scriptget") {
+    if(!isset($_REQUEST["id"])) {
+        exit(json_encode(["success"=>false,"message"=>"No id provided"]));
+    }
+    $id = (int)$_REQUEST["id"];
+    $q = $con->prepare("SELECT * FROM renderqueue WHERE id = :id");
+    $q->bindParam(':id', $id, PDO::PARAM_INT);
+    $q->execute();
+    $render = $q->fetch();
+    if(!$render) exit("print('wrong render id');");
+    echo 'pcall(function() game.GuiRoot.MainMenu:remove() end)
+pcall(function() game.GuiRoot.RightPalette:remove() end)
+pcall(function() game.GuiRoot.ScoreHud:remove() end)
+pcall(function() game.CoreGui.RobloxGui:remove() end)
+'.$render["script"];
 }

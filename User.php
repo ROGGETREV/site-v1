@@ -79,9 +79,10 @@ if($id !== (int)$user["id"]) {
                 }
             }
             ?>
-            <button style="position: absolute;top: 9px;right: 9px;" class="btn btn-<?php echo $btnColor; ?> btn-auto" onclick='<?php echo $btnOnclick; ?>'><?php echo $btnText; ?></button>
+            <button style="position: absolute;top: 9px;right: 9px;" class="btn btn-primary btn-auto" onclick='window.location = "/MessageSend.aspx?ID=<?php echo (int)$usr["id"]; ?>";'><i class="bi bi-send-fill"></i></button>
+            <button style="position: absolute;top: 9px;right: 56px;" class="btn btn-<?php echo $btnColor; ?> btn-auto" onclick='<?php echo $btnOnclick; ?>'><?php echo $btnText; ?></button>
             <?php if($secondButton) { ?>
-            <button style="position: absolute;top: 9px;right: 95px;" class="btn btn-<?php echo $sbtnColor; ?> btn-auto" onclick='<?php echo $sbtnOnclick; ?>'><?php echo $sbtnText; ?></button>
+            <button style="position: absolute;top: 9px;right: 143px;" class="btn btn-<?php echo $sbtnColor; ?> btn-auto" onclick='<?php echo $sbtnOnclick; ?>'><?php echo $sbtnText; ?></button>
             <?php } ?>
             <?php } ?>
             <img src="/images/Users/Get.ashx?ID=<?php echo (int)$usr["id"]; ?>" onerror='this.src = "/images/loaderror.png";' style="width: 125px;height: 125px;">

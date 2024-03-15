@@ -49,15 +49,7 @@ bodyColors.LeftLegColor = BrickColor.new('.(int)$bodyColors["leftleg"].')
 bodyColors.RightLegColor = BrickColor.new('.(int)$bodyColors["rightleg"].')
 ';
 
-$characterScript2008 = '
-bodyColors = Instance.new("BodyColors", plr.Character)
-bodyColors.HeadColor = BrickColor.new('.(int)$bodyColors["head"].')
-bodyColors.TorsoColor = BrickColor.new('.(int)$bodyColors["torso"].')
-bodyColors.LeftArmColor = BrickColor.new('.(int)$bodyColors["leftarm"].')
-bodyColors.RightArmColor = BrickColor.new('.(int)$bodyColors["rightarm"].')
-bodyColors.LeftLegColor = BrickColor.new('.(int)$bodyColors["leftleg"].')
-bodyColors.RightLegColor = BrickColor.new('.(int)$bodyColors["rightleg"].')
-';
+$characterScript2008 = $characterScript;
 
 $q = $con->prepare("SELECT * FROM wearing WHERE user = :id");
 $q->bindParam(':id', $id, PDO::PARAM_INT);
@@ -170,8 +162,10 @@ if($continue2008) {
 // Start 2011
 
 $script2011 = 'local plr = game.Players:CreateLocalPlayer(0)
-plr.CharacterAppearance = "http://shitblx.cf/Game/CharacterFetch.ashx?userId='.(int)$id.'"
-plr:LoadCharacter()';
+plr:LoadCharacter()
+
+'.$characterScript;
+
 $q = $con->prepare("SELECT * FROM renderqueue WHERE `remote` = :id AND `type` = 'user'");
 $q->bindParam(':id', $id, PDO::PARAM_INT);
 $q->execute();
@@ -186,6 +180,9 @@ if(!$renderQueue) {
 // End 2011
 // Start 2011edited2016
 $script2011edited2016 = '
+game:GetService("ContentProvider"):SetBaseUrl("http://shitblx.cf/")
+game:GetService("ScriptContext").ScriptsDisabled = true
+
 local plr = game.Players:CreateLocalPlayer(0)
 --plr.CharacterAppearance = "http://shitblx.cf/Game/CharacterFetch.ashx?ID='.(int)$id.'"
 plr:LoadCharacter()
@@ -255,11 +252,10 @@ if($continue2011edited2016) {
 $script2016 = '
 game:GetService("ContentProvider"):SetBaseUrl("http://shitblx.cf/")
 game:GetService("ScriptContext").ScriptsDisabled = true
---still didnt work without the scripts on top of this
 
 local plr = game.Players:CreateLocalPlayer(0)
 --plr.CharacterAppearance = "http://shitblx.cf/Game/CharacterFetch.ashx?ID='.(int)$id.'"
-plr:LoadCharacter()d
+plr:LoadCharacter()
 
 '.$characterScript.'
 

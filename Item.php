@@ -1,11 +1,6 @@
 <?php
 require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
 
-if(!$loggedin) {
-    header('location: /Default.aspx');
-    exit;
-}
-
 if(!isset($_REQUEST["ID"])) {
     header('location: /request-error.aspx?code=404');
     exit;
@@ -50,6 +45,7 @@ if($q->fetch()) $owned = true;
     <div class="container card card-body">
         <!-- Main page -->
         <h2><a href="/Catalog.aspx">< Back to Catalog</a></h2>
+        <h3>ROGGET <?php echo htmlspecialchars(ucfirst($item["type"])); ?></h3>
         <div class="row">
             <div class="col-md-3">
                 <img src="/images/Catalog/Get.ashx?ID=<?php echo (int)$item["id"]; ?>" onerror='this.src = "/images/loaderror.png";' style="width: 100%;">
@@ -58,11 +54,14 @@ if($q->fetch()) $owned = true;
                 <h2><?php echo htmlspecialchars($item["name"]); ?></h2>
                 <h6>By <a href="/User.aspx?ID=<?php echo (int)$usr["id"]; ?>"><?php echo htmlspecialchars($usr["username"]); ?></a></h6>
                 <br><br><br><br><br><br><br>
-                <?php if(!$owned) { ?>
+                <?php if($loggedin) {
+                if(!$owned) { ?>
                 <br><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#purchaseModal">Purchase for <?php echo (int)$item["nuggets"]; ?> Nuggets</button>
                 <?php } else { ?>
                 <span>You already own this item.</span><br>
                 <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelPurchaseModal">Cancel Purchase</button>
+                <?php }} else { ?>
+                <br><button class="btn btn-secondary" onclick='window.location = "/Default.aspx";'>Login to purchase</button>
                 <?php } ?>
             </div>
         </div>
@@ -70,7 +69,9 @@ if($q->fetch()) $owned = true;
         <h3>Description</h3>
         <h6><?php echo htmlspecialchars($item["description"]); ?></h6>
     </div>
-    <?php if(!$owned) { ?>
+    <?php
+    if(!$loggedin) {
+    if(!$owned) { ?>
     <!-- Purchase modal -->
     <div class="modal fade" id="purchaseModal" tabindex="-1" aria-labelledby="purchaseModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -80,7 +81,7 @@ if($q->fetch()) $owned = true;
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Would you like to buy <?php echo htmlspecialchars($item["name"]); ?> for <?php echo (int)$item["nuggets"]; ?> Nuggets
+                    Would you like to buy <?php echo htmlspecialchars($item["name"]); ?> for <?php echo (int)$item["nuggets"]; ?> Nuggets?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="purchaseModalCancel">Close</button>
@@ -158,7 +159,7 @@ if($q->fetch()) $owned = true;
         }
     });
     </script>
-    <?php } ?>
+    <?php }} ?>
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/footer.php"); ?>
 </body>
 </html>

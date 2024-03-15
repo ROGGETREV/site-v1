@@ -2,7 +2,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
     <div class="container-fluid<?php /**/ ?>">
         <a class="navbar-brand" href="/">
-            <img src="/images/logo.png" style="height: 28px;" onerror='this.src = "/images/loaderror.png";'>
+            <img src="/images/logoweed.png" style="height: 28px;" onerror='this.src = "/images/loaderror.png";'>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -18,12 +18,22 @@
                 <li class="nav-item">
                     <a class="nav-link<?php if($_SERVER["PHP_SELF"] === "/Catalog.php" || $_SERVER["PHP_SELF"] === "/Item.php") {echo " active";} ?>" href="/Catalog.aspx">Catalog</a>
                 </li>
+                <?php if($loggedin) { ?>
                 <li class="nav-item">
                     <a class="nav-link<?php if($_SERVER["PHP_SELF"] === "/Character.php") {echo " active";} ?>" href="/Character.aspx">Character</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link<?php if($_SERVER["PHP_SELF"] === "/Messages.php" || $_SERVER["PHP_SELF"] === "/Message.php") {echo " active";} ?>" href="/Messages.aspx">Messages</a>
+                    <?php
+                    $messageCount = "";
+                    $q = $con->prepare("SELECT * FROM messages WHERE user2 = :id AND hasBeenRead = 0 AND reply = 0");
+                    $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
+                    $q->execute();
+                    $messages = $q->fetchAll();
+                    if(count($messages) >= 1) $messageCount = " (".count($messages).")";
+                    ?>
+                    <a class="nav-link<?php if($_SERVER["PHP_SELF"] === "/Messages.php" || $_SERVER["PHP_SELF"] === "/Message.php") {echo " active";} ?>" href="/Messages.aspx">Messages<?php echo $messageCount; ?></a>
                 </li>
+                <?php } ?>
             </ul>
         </div>
         <ul class="navbar-nav">
@@ -58,3 +68,4 @@
     </div>
 </nav>
 <div style="width: 100%;height: 58px;"></div>
+<?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/alerts.php"); ?>

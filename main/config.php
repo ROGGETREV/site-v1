@@ -308,3 +308,11 @@ function datetime($unix) {
 function exitFile($file) {
     exit(file_get_contents($file));
 }
+
+function exitHTTPCode($code) {
+    http_response_code($code);
+    $_REQUEST["code"] = $code;
+    $_GET["code"] = $code;
+    require_once($_SERVER["DOCUMENT_ROOT"]."/request-error.php");
+    exit;
+}

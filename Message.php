@@ -58,7 +58,7 @@ foreach($q->fetchAll() as $msg) array_push($messages, $msg);
 <html lang="en">
 <head>
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/head.php"); ?>
-    <title><?php echo htmlspecialchars($msg["subject"]); ?> - Messages - ROGGET</title>
+    <title><?php echo htmlspecialchars($message["subject"]); ?> - Messages - ROGGET</title>
 </head>
 <body data-bs-theme="<?php echo $siteTheme; ?>">
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>

@@ -48,6 +48,7 @@ if($type === "get") {
     $renderType = $_REQUEST["renderType"];
     if(!in_array($renderType, [
         "user",
+        "item",
         "place"
     ])) {
         exit(json_encode(["success"=>false,"message"=>"Wrong renderType"]));
@@ -64,6 +65,19 @@ if($type === "get") {
         $q->bindParam(':id', $remote, PDO::PARAM_INT);
         $q->execute();
         file_put_contents($_SERVER["DOCUMENT_ROOT"]."/images/Users/2011_".(int)$remote.".png", base64_decode($b64));
+        exit(json_encode(["success"=>true]));
+    } else if($renderType === "item") {
+        $q = $con->prepare("SELECT * FROM catalog WHERE id = :id");
+        $q->bindParam(':id', $remote, PDO::PARAM_INT);
+        $q->execute();
+        $item = $q->fetch();
+        if(!$item) {
+            exit(json_encode(["success"=>false,"message"=>"Wrong remote"]));
+        }
+        $q = $con->prepare("DELETE FROM renderqueue WHERE remote = :id AND type = 'item'");
+        $q->bindParam(':id', $remote, PDO::PARAM_INT);
+        $q->execute();
+        file_put_contents($_SERVER["DOCUMENT_ROOT"]."/images/Catalog/2011_".(int)$remote.".png", base64_decode($b64));
         exit(json_encode(["success"=>true]));
     } else if($renderType === "place") {
         // 

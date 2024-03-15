@@ -1,0 +1,18 @@
+<?php
+require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
+header('Content-Type: application/json');
+
+if(!$loggedin) {
+    exit(json_encode(["success"=>false,"message"=>"Please login"]));
+}
+
+if(!isset($_REQUEST["ID"])) {
+    exit(json_encode(["success"=>false,"message"=>"Please put an ID"]));
+}
+
+$q = $con->prepare("DELETE FROM wearing WHERE user = :id AND item = :iid");
+$q->bindParam(':id', $user["id"], PDO::PARAM_INT);
+$q->bindParam(':iid', $_REQUEST["ID"], PDO::PARAM_INT);
+$q->execute();
+
+exit(json_encode(["success"=>true]));

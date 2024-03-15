@@ -10,17 +10,23 @@ if(!$loggedin) {
 <html lang="en">
 <head>
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/head.php"); ?>
-    <title>Account Moderated - ROGGET</title>
+    <title>ChatTest - ROGGET</title>
 </head>
 <body data-bs-theme="<?php echo $siteTheme; ?>">
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>
     <br>
     <div class="container card card-body">
-        <h1>Account Moderated</h1>
-        <h3>Your account (<?php echo htmlspecialchars($user["username"]); ?>) has been moderated by a ROGGET moderator.</h3>
-        <h6>Reason: <?php echo htmlspecialchars($user["banreason"]); ?></h6>
-        <a href="/UserAuthentication/LogOut.ashx">Log Out</a>
+        ChatTest<br>
     </div>
+    <script>
+    const socket = io("realtime.shitblx.cf");
+    socket.on("connect", () => {
+        socket.emit("auth", "I farted");
+        socket.on("auth-error", (a) => {
+            alert(a);
+        });
+    });
+    </script>
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/footer.php"); ?>
 </body>
 </html>

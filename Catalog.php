@@ -1,10 +1,5 @@
 <?php
 require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
-
-if(!$loggedin) {
-    header('location: /Default.aspx');
-    exit;
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">

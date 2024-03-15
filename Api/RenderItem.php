@@ -8,15 +8,17 @@ if(!$loggedin) {
 
 if($user["permission"] !== "Administrator") exit(json_encode(["success"=>false,"message"=>"You can't render items without being an administrator"]));
 
-$id = (int)$user["id"];
-if(!isset($_REQUEST["ID"])) {
-    exit(json_encode(["success"=>false,"message"=>"Please put an ID"]));
-}
+if(!isset($_REQUEST["ID"])) exit(json_encode(["success"=>false,"message"=>"Please put an ID"]));
+
 $id = (int)$_REQUEST["ID"];
-$q = $con->prepare("SELECT * FROM `catalog` WHERE id = :id");
+
+$q = $con->prepare("SELECT * FROM catalog WHERE id = :id");
 $q->bindParam(':id', $id, PDO::PARAM_INT);
 $q->execute();
 $item = $q->fetch();
+if(!$item) {
+    exit(json_encode(["success"=>false,"message"=>"Item doesn't exist"]));
+}
 
 $characterScript = '
 bodyColors = Instance.new("BodyColors", plr.Character)
@@ -28,30 +30,40 @@ bodyColors.LeftLegColor = BrickColor.new(1)
 bodyColors.RightLegColor = BrickColor.new(1)
 ';
 
-$q = $con->prepare("SELECT * FROM wearing WHERE user = :id");
-$q->bindParam(':id', $id, PDO::PARAM_INT);
-$q->execute();
-foreach($q->fetchAll() as $wearing) {
-    $qq = $con->prepare("SELECT * FROM `catalog` WHERE id = :id");
-    $qq->bindParam(':id', $wearing["item"], PDO::PARAM_INT);
-    $qq->execute();
-    $item = $qq->fetch();
-    if($item) {
-        $name = "avatar".(int)rand();
-        if($item["type"] === "shirt") {
-            $characterScript .= '
+$characterScript2008 = $characterScript;
+
+$name = "avatar".(int)rand();
+if($item["type"] === "shirt") {
+    $shit = '
 '.$name.' = Instance.new("Shirt", plr.Character)
 '.$name.'.Name = "'.addslashes($item["name"]).'"
 '.$name.'.ShirtTemplate = "http://shitblx.cf/Asset/assets/shirt/'.(int)$item["id"].'.png"
 ';
-        } else if($item["type"] === "tshirt") {
-            $characterScript .= '
+    $characterScript .= $shit;
+    $characterScript2008 .= $shit;
+} else if($item["type"] === "pants") {
+    $shit = '
+'.$name.' = Instance.new("Pants", plr.Character)
+'.$name.'.Name = "'.addslashes($item["name"]).'"
+'.$name.'.PantsTemplate = "http://shitblx.cf/Asset/assets/pants/'.(int)$item["id"].'.png"
+';
+    $characterScript .= $shit;
+    $characterScript2008 .= $shit;
+} else if($item["type"] === "face") {
+    $characterScript .= '
+plr.Character.Head.face.Texture = "http://shitblx.cf/Asset/assets/face/'.(int)$item["id"].'.png"
+';
+    $characterScript2008 .= '
+plr.Character.Head.face.Texture = "http://shitblx.cf/Asset/assets/face/'.(int)$item["id"].'_stretch.png"
+';
+} else if($item["type"] === "tshirt") {
+    $shit = '
 '.$name.' = Instance.new("Decal", plr.Character.Torso)
 '.$name.'.Name = "'.addslashes($item["name"]).'"
 '.$name.'.Texture = "http://shitblx.cf/Asset/assets/tshirt/'.(int)$item["id"].'.png"
 ';
-        }
-    }
+    $characterScript .= $shit;
+    $characterScript2008 .= $shit;
 }
 
 $continue2008 = true;
@@ -64,10 +76,10 @@ $script2008 = '
 local plr = game.Players:CreateLocalPlayer(0)
 plr:LoadCharacter()
 
-'.$characterScript.'
+'.$characterScript2008.'
 
 print("Rendering user ID '.$id.' (2008)")
-b64 = game:GetService("ThumbnailGenerator"):Click("PNG", 895, 895, true)
+b64 = game:GetService("ThumbnailGenerator"):Click("PNG", 1024, 1024, true)
 print("Done")
 return b64';
 
@@ -114,15 +126,17 @@ if($continue2008) {
         $res2008
     );
 
-    file_put_contents($_SERVER["DOCUMENT_ROOT"]."/images/Users/2008_".(int)$id.".png", base64_decode($res2008));
+    file_put_contents($_SERVER["DOCUMENT_ROOT"]."/images/Catalog/2008_".(int)$id.".png", base64_decode($res2008));
 }
 // End 2008
 // Start 2011
 
 $script2011 = 'local plr = game.Players:CreateLocalPlayer(0)
-plr.CharacterAppearance = "http://shitblx.cf/Game/CharacterFetch.ashx?userId='.(int)$id.'"
-plr:LoadCharacter()';
-$q = $con->prepare("SELECT * FROM renderqueue WHERE `remote` = :id AND `type` = 'user'");
+plr:LoadCharacter()
+
+'.$characterScript;
+
+$q = $con->prepare("SELECT * FROM renderqueue WHERE `remote` = :id AND `type` = 'item'");
 $q->bindParam(':id', $id, PDO::PARAM_INT);
 $q->execute();
 $renderQueue = $q->fetch();
@@ -136,8 +150,10 @@ if(!$renderQueue) {
 // End 2011
 // Start 2011edited2016
 $script2011edited2016 = '
+game:GetService("ContentProvider"):SetBaseUrl("http://shitblx.cf/")
+game:GetService("ScriptContext").ScriptsDisabled = true
+
 local plr = game.Players:CreateLocalPlayer(0)
---plr.CharacterAppearance = "http://shitblx.cf/Game/CharacterFetch.ashx?ID='.(int)$id.'"
 plr:LoadCharacter()
 
 '.$characterScript.'
@@ -149,7 +165,7 @@ for i, v in pairs(plr.Character:GetChildren()) do
 end
 
 print("Rendering user ID '.$id.' (2011edited2016)")
-b64 = game:GetService("ThumbnailGenerator"):Click("PNG", 895, 895, true)
+b64 = game:GetService("ThumbnailGenerator"):Click("PNG", 1024, 1024, true)
 print("Done")
 return b64';
 
@@ -196,7 +212,7 @@ if($continue2011edited2016) {
         $res2011edited2016
     );
 
-    file_put_contents($_SERVER["DOCUMENT_ROOT"]."/images/Users/2011edited2016_".(int)$id.".png", base64_decode($res2011edited2016));
+    file_put_contents($_SERVER["DOCUMENT_ROOT"]."/images/Catalog/2011edited2016_".(int)$id.".png", base64_decode($res2011edited2016));
 }
 
 // End 2011edited2016
@@ -205,16 +221,14 @@ if($continue2011edited2016) {
 $script2016 = '
 game:GetService("ContentProvider"):SetBaseUrl("http://shitblx.cf/")
 game:GetService("ScriptContext").ScriptsDisabled = true
---still didnt work without the scripts on top of this
 
 local plr = game.Players:CreateLocalPlayer(0)
---plr.CharacterAppearance = "http://shitblx.cf/Game/CharacterFetch.ashx?ID='.(int)$id.'"
-plr:LoadCharacter()d
+plr:LoadCharacter()
 
 '.$characterScript.'
 
 print("Rendering user ID '.$id.' (2016)")
-b64 = game:GetService("ThumbnailGenerator"):Click("PNG", 895, 895, false)
+b64 = game:GetService("ThumbnailGenerator"):Click("PNG", 1024, 1024, false)
 print("Done")
 return b64';
 
@@ -261,9 +275,9 @@ if($continue2016) {
         $res2016
     );
 
-    file_put_contents($_SERVER["DOCUMENT_ROOT"]."/images/Users/2016_".(int)$id.".png", base64_decode($res2016));
+    file_put_contents($_SERVER["DOCUMENT_ROOT"]."/images/Catalog/2016_".(int)$id.".png", base64_decode($res2016));
 }
 
 // End 2016
 
-echo json_encode(["success"=>true,"timeoutRemaining"=>$timeoutRemaining]);
+echo json_encode(["success"=>true]);

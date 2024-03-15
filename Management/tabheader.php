@@ -6,4 +6,7 @@
     <li class="nav-item">
         <a class="nav-link<?php if($_SERVER["PHP_SELF"] === "/Management/Account/Unmoderate.php") { echo " active"; } ?>" href="/Management/Account/Unmoderate.aspx">Account Unmoderation</a>
     </li>
+    <li class="nav-item">
+        <a class="nav-link<?php if($_SERVER["PHP_SELF"] === "/Management/Alerts.php") { echo " active"; } ?>" href="/Management/Alerts.aspx">Alerts</a>
+    </li>
 </ul>

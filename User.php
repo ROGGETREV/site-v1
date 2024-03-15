@@ -1,11 +1,6 @@
 <?php
 require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
 
-if(!$loggedin) {
-    header('location: /Default.aspx');
-    exit;
-}
-
 if(!isset($_REQUEST["ID"])) {
     if($loggedin) {
         $_REQUEST["ID"] = (int)$user["id"];
@@ -47,11 +42,17 @@ if($id !== (int)$user["id"]) {
 </head>
 <body data-bs-theme="<?php echo $siteTheme; ?>">
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>
+    <?php if((int)$usr["banned"] === 1) { ?>
+    <br>
+    <div class="container p-3 bg-danger rounded-3">
+        This user has been moderated from ROGGET.
+    </div>
+    <?php } ?>
     <br>
     <div class="container card card-body">
         <div class="d-flex">
             <?php
-            if($id !== (int)$user["id"]) {
+            if($id !== (int)$user["id"] && $loggedin) {
             $secondButton = false;
             $btnText = "Add Friend";
             $btnColor = "primary";
@@ -94,7 +95,7 @@ if($id !== (int)$user["id"]) {
         <br>
         <h4>About</h4>
         <div class="card card-body">
-            <?php if($id !== (int)$user["id"]) { ?><button style="position: absolute;top: 9px;right: 9px;" class="btn btn-outline-danger btn-auto" onclick='window.location = "/AbuseReport/User.aspx";'>Report Abuse</button><?php } ?>
+            <?php if($id !== (int)$user["id"] && $loggedin) { ?><button style="position: absolute;top: 9px;right: 9px;" class="btn btn-outline-danger btn-auto" onclick='window.location = "/AbuseReport/User.aspx";'>Report Abuse</button><?php } ?>
             <?php echo htmlspecialchars($usr["description"]); ?>
         </div>
         <br>

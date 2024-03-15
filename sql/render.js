@@ -125,7 +125,7 @@ async function waitForRobloxStart() {
         }, 100);
         let timeout = setTimeout(async () => {
             console.log("Looks like Roblox is stuck. Skipping render...");
-            await finishRender(id, type);
+            exec('taskkill /f /im ' + renderFile);
             process.exit();
         }, 15000);
     });

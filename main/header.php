@@ -2,7 +2,7 @@
 <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
     <div class="container-fluid<?php /**/ ?>">
         <a class="navbar-brand" href="/">
-            <img src="/images/logoweed.png" style="height: 28px;" onerror='this.src = "/images/loaderror.png";'>
+            <img src="/images/logo.png" style="height: 28px;" onerror='this.src = "/images/loaderror.png";'>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -17,6 +17,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link<?php if($_SERVER["PHP_SELF"] === "/Catalog.php" || $_SERVER["PHP_SELF"] === "/Item.php") {echo " active";} ?>" href="/Catalog.aspx">Catalog</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link<?php if($_SERVER["PHP_SELF"] === "/People.php") {echo " active";} ?>" href="/People.aspx">People</a>
                 </li>
                 <?php if($loggedin) { ?>
                 <li class="nav-item">

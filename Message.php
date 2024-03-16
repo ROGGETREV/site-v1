@@ -22,6 +22,11 @@ if(!$message) {
     exit;
 }
 
+if((int)$message["user1"] !== (int)$user["id"] && (int)$message["user2"] !== (int)$user["id"]) {
+    header('location: /Messages.aspx');
+    exit;
+}
+
 if((int)$message["reply"] !== 0) {
     header('location: /Message.aspx?ID='.(int)$message["reply"]);
     exit;
@@ -46,13 +51,13 @@ if((int)$message["user1"] === (int)$user["id"]) {
     $sender = $q->fetch();
 }
 
-$messages = [];
-array_push($messages, $message);
+$sentmessages = [];
+array_push($sentmessages, $message);
 
 $q = $con->prepare("SELECT * FROM messages WHERE reply = :id");
 $q->bindParam(':id', $id, PDO::PARAM_INT);
 $q->execute();
-foreach($q->fetchAll() as $msg) array_push($messages, $msg);
+foreach($q->fetchAll() as $msg) array_push($sentmessages, $msg);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -66,7 +71,7 @@ foreach($q->fetchAll() as $msg) array_push($messages, $msg);
     <div class="container card card-body">
         <a href="/Messages.aspx"><h2>< Back to Messages</h2></a>
         <h4>Messages between <?php echo htmlspecialchars($sender["username"]); ?> and <?php echo htmlspecialchars($receiver["username"]); ?></h4>
-        <?php foreach($messages as $msg) {
+        <?php foreach($sentmessages as $msg) {
         $sender = $user;
         $receiver = $user;
         

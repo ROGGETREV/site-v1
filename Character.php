@@ -32,7 +32,7 @@ $welcomeMessages = [
 <body data-bs-theme="<?php echo $siteTheme; ?>">
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>
     <br>
-    <div class="container card card-body">
+    <div class="container card card-body advertisement ad">
         <h1>Character Editor</h1>
         <div class="row">
             <div class="col-md-2">

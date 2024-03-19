@@ -49,7 +49,7 @@ if($id !== (int)$user["id"]) {
     </div>
     <?php } ?>
     <br>
-    <div class="container card card-body">
+    <div class="container card card-body advertisement ad">
         <div class="d-flex">
             <?php
             if($id !== (int)$user["id"] && $loggedin) {

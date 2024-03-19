@@ -1,9 +1,23 @@
 <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
-/*$rcc = new Roblox\Grid\Rcc\RCCServiceSoap("127.0.0.1", 64989);
+$rcc = new Roblox\Grid\Rcc\RCCServiceSoap("127.0.0.1", 8543);
 echo "HW: ".$rcc->HelloWorld();
 echo "<br>";
 echo "Version: ".$rcc->GetVersion();
-$script = 'print("e");
+$rcc->OpenJobEx("Test", [
+    "Mode" => "Thumbnail",
+    "Settings" => [
+        "Type" => "Closeup",
+        "PlaceId" => 1,
+        "UserId" => 5,
+        "BaseUrl" => "shitblx.cf",
+        "MatchmakingContextId" => 1,
+        "Arguments" => ["https://www.shitblx.cf/", "https://www.shitblx.cf/Game/CharacterFetch.ashx?userId=2", "PNG", 768, 768, true]
+    ],
+    "Arguments"=> [
+        "MachineAddress"=> "127.0.0.1"
+    ]
+]);
+/*$script = 'print("e");
 
 Port = 53640
 
@@ -53,7 +67,7 @@ game.Players.PlayerRemoving:connect(function(PlayerRemoved)
     game:httpGet("http://madblxx.tk/api/setplayers?gameid=1&count="..count)
 end)';
 $rcc->BatchJobEx("test", $script);*/
-$script = '
+/*$script = '
 --game:Load("http://shitblx.cf/test.rbxl")
 game.Players:CreateLocalPlayer(0)
 game.Players.LocalPlayer:LoadCharacter()
@@ -119,10 +133,25 @@ $xml = '<?xml version="1.0" encoding="UTF-8"?>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>';
 
-$ch = curl_init("127.0.0.1:8541");
-curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: text/xml"]);
+$shit = json_encode([
+    "Mode" => "Thumbnail",
+    "Settings" => [
+        "Type" => "Closeup",
+        "PlaceId" => 1,
+        "UserId" => 5,
+        "BaseUrl" => "shitblx.cf",
+        "MatchmakingContextId" => 1,
+        "Arguments" => ["https://www.shitblx.cf/", "https://www.shitblx.cf/Game/CharacterFetch.ashx?userId=2", "PNG", 768, 768, true]
+    ],
+    "Arguments"=> [
+        "MachineAddress"=> "127.0.0.1"
+    ]
+]);
+
+$ch = curl_init("127.0.0.1:8543");
+curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json"]);
 curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $shit);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $res = curl_exec($ch);
 
@@ -141,4 +170,4 @@ $res = str_replace(
 );
 
 $decoded = base64_decode($res);
-file_put_contents("test.png",$decoded);
+file_put_contents("test.png",$decoded);*/

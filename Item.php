@@ -42,7 +42,7 @@ if($q->fetch()) $owned = true;
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>
     <br>
 
-    <div class="container card card-body">
+    <div class="container card card-body advertisement ad">
         <!-- Main page -->
         <h2><a href="/Catalog.aspx">< Back to Catalog</a></h2>
         <h3>ROGGET <?php echo htmlspecialchars(ucfirst($item["type"])); ?></h3>

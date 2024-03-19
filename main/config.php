@@ -20,6 +20,20 @@ try{
     exit("Database problem detected! Please wait until the developers fix it and try again.");
 }
 
+$cloudflare = false;
+if(isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
+    $cloudflare = true;
+    $_SERVER["CLOUDFLARE_IP"] = $_SERVER["REMOTE_ADDR"];
+    $_SERVER["REMOTE_ADDR"] = $_SERVER["HTTP_CF_CONNECTING_IP"];
+}
+
+require_once($_SERVER["DOCUMENT_ROOT"]."/Assemblies/Roblox/Grid/Rcc/RCCServiceSoap.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/Assemblies/Roblox/Grid/Rcc/Job.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/Assemblies/Roblox/Grid/Rcc/LuaType.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/Assemblies/Roblox/Grid/Rcc/LuaValue.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/Assemblies/Roblox/Grid/Rcc/ScriptExecution.php");
+require_once($_SERVER["DOCUMENT_ROOT"]."/Assemblies/Roblox/Grid/Rcc/Status.php");
+
 $loggedin = false;
 
 $siteTheme = "dark";//"light";
@@ -77,11 +91,20 @@ function random_jobID() {
 
 $discord = [
     "clientid" => "1214360705889996900",
-    "clientsecret" => "VxBulJ6UdEFweAkmetv9NvV_6DhVTW8b"
+    "clientsecret" => "VxBulJ6UdEFweAkmetv9NvV_6DhVTW8b",
+    "serverid" => "1206722089005092864"
 ];
 
 function getDiscordUserInfoFromAccessToken($token) {
     $ch = curl_init("https://discord.com/api/users/@me");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [ "Authorization: Bearer ".$token ]);
+
+    return json_decode(curl_exec($ch), true);
+}
+
+function getDiscordServersFromAccessToken($token) {
+    $ch = curl_init("https://discord.com/api/users/@me/guilds");
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [ "Authorization: Bearer ".$token ]);
 
@@ -97,7 +120,27 @@ if($loggedin) {
         header('location: /DiscordVerify.ashx');
         exit;
     }
-    if($user["discord_verified"] && (time() - 100000) >= $user["discord_expires_in"]) {
+    if($user["discord_verified"] && time() >= ($user["discord_last_server_check"] + 1800)) {
+        $time = time();
+        $guilds = getDiscordServersFromAccessToken($user["discord_access_token"]);
+        $joinedROGGET = false;
+        foreach($guilds as $server) {
+            if($server["id"] == $discord["serverid"]) $joinedROGGET = true;
+        }
+        $q = $con->prepare("UPDATE users SET discord_last_server_check = :time WHERE id = :id");
+        $q->bindParam(':time', $time, PDO::PARAM_INT);
+        $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
+        $q->execute();
+        if(!$joinedROGGET) {
+            $q = $con->prepare("UPDATE users SET discord_verified = false, discord_time_since_no_verification = :time WHERE id = :id");
+            $q->bindParam(':time', $time, PDO::PARAM_INT);
+            $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
+            $q->execute();
+            header('location: /DiscordVerify.ashx');
+            exit;
+        }
+    }
+    if($user["discord_verified"] && (time() - 300000) >= $user["discord_expires_in"]) {
         $ch = curl_init("https://discord.com/api/oauth2/token");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
@@ -129,7 +172,7 @@ if($loggedin) {
         }
 
         curl_close($ch);
-    } else {
+    }/* else {
         if((time() - $user["discord_time_since_no_verification"]) >= 86400) {
             $q = $con->prepare("DELETE FROM users WHERE id = :id");
             $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
@@ -137,7 +180,7 @@ if($loggedin) {
             header('location: /UserAuthentication/LogOut.ashx');
             exit;
         }
-    }
+    }*/
 }
 
 function filterBadWords($string) {

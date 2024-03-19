@@ -4,7 +4,7 @@ if(!$loggedin || !isset($_REQUEST["code"]) || empty($_REQUEST["code"])) {
     header('location: /');
     exit;
 }
-if($user["discord_verified"] === 1) {
+if((int)$user["discord_verified"] === 1) {
     header('location: /Home.aspx');
     exit;
 }
@@ -30,7 +30,8 @@ if(curl_errno($ch)){
 curl_close($ch);
 
 if(isset($res["error"])) exit("Sorry, Discord couldn't complete the verification: ".$res["error_description"]);
-if($res["scope"] !== "identify") exit("Sorry, ROGGET couldn't complete the verification: The scope Discord gave us was not identify.");
+// $scopes = explode(" ", $res["scope"]);
+if($res["scope"] !== "guilds identify" && $res["scope"] !== "identify guilds") exit("Sorry, ROGGET couldn't complete the verification: The scope Discord gave us didn't have guilds or identify.");
 
 $resUser = getDiscordUserInfoFromAccessToken($res["access_token"]);
 
@@ -38,6 +39,13 @@ $q = $con->prepare("SELECT * FROM users WHERE discord_verified = true AND discor
 $q->bindParam(':did', $resUser["id"], PDO::PARAM_INT);
 $q->execute();
 if($q->fetch()) exit("Sorry, ROGGET couldn't complete the verification: This Discord account was already used on another ROGGET account.");
+
+$guilds = getDiscordServersFromAccessToken($res["access_token"]);
+$joinedROGGET = false;
+foreach($guilds as $server) {
+    if($server["id"] == $discord["serverid"]) $joinedROGGET = true;
+}
+if(!$joinedROGGET) exit("Sorry, ROGGET couldn't complete the verification: This Discord account did not join the ROGGET server.");
 
 $expires = time() + $res["expires_in"];
 $q = $con->prepare("UPDATE users SET discord_verified = true, discord_id = :did, discord_access_token = :atoken, discord_refresh_token = :rtoken, discord_expires_in = :expire WHERE id = :id");

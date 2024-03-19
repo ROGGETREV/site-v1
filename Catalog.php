@@ -10,7 +10,7 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
 <body data-bs-theme="<?php echo $siteTheme; ?>">
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>
     <br>
-    <div class="container card card-body">
+    <div class="container card card-body advertisement ad">
         <h2>Catalog Beta</h2>
         <div class="row">
             <div class="col-md-2">

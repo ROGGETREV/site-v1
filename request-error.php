@@ -11,7 +11,7 @@ $code = 404;
 <body data-bs-theme="<?php echo $siteTheme; ?>">
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>
     <br>
-    <div class="container card card-body">
+    <div class="container card card-body advertisement ad">
         <h2>404 Not Found</h2>
         <p>The page you were trying to access does not exist, or you don't have the permission to access it.</p>
         <img src="https://http.cat/images/<?php echo (int)$code; ?>.jpg" style="width: 500px;">

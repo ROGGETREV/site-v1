@@ -10,7 +10,7 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
 <body data-bs-theme="<?php echo $siteTheme; ?>">
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>
     <br>
-    <div class="container card card-body">
+    <div class="container card card-body advertisement ad">
         <h1>Privacy Policy</h1>
         <p>Welcome to ROGGET. By using our website, you agree to comply with and be bound by the following privacy policy. Please read these terms carefully:</p>
 

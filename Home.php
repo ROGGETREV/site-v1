@@ -32,7 +32,7 @@ $welcomeMessages = [
 <body data-bs-theme="<?php echo $siteTheme; ?>">
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>
     <br>
-    <div class="container card card-body">
+    <div class="container card card-body advertisement ad">
         <div class="d-flex">
             <img src="/images/Users/Get.ashx?ID=<?php echo (int)$user["id"]; ?>" onerror='this.src = "/images/loaderror.png";' onclick='window.location = "/User.aspx?ID=<?php echo (int)$user["id"]; ?>";' style="width: 125px;height: 125px;cursor: pointer;">
             <div style="margin-left: 12px;margin-top: 22px;">

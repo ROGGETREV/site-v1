@@ -68,7 +68,7 @@ foreach($q->fetchAll() as $msg) array_push($sentmessages, $msg);
 <body data-bs-theme="<?php echo $siteTheme; ?>">
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>
     <br>
-    <div class="container card card-body">
+    <div class="container card card-body advertisement ad">
         <a href="/Messages.aspx"><h2>< Back to Messages</h2></a>
         <h4>Messages between <?php echo htmlspecialchars($sender["username"]); ?> and <?php echo htmlspecialchars($receiver["username"]); ?></h4>
         <?php foreach($sentmessages as $msg) {

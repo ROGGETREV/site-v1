@@ -6,6 +6,14 @@ Redirect 404 /.gitignore
 
 RewriteEngine On
 
+RewriteRule ^users/(\d+)/profile$ /User.php?ID=$1 [L]
+
+RewriteRule ^v1/games$ /v1/games/index.php [L,QSA]
+RewriteRule ^v1/games/$ /v1/games/index.php [L,QSA]
+RewriteRule ^v1/games/(\d+)/votes$ /v1/games/votes.php?ID=$1 [L]
+RewriteRule ^v1/users/(\d+)/currency$ /v1/users/currency.php?ID=$1 [L]
+RewriteRule ^v1/users/(\d+)/outfits$ /v1/users/outfits.php?ID=$1 [L]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^([^\.]+)$ $1.php [NC,L]
 RewriteRule ^(.*)\.aspx$ $1 [L]

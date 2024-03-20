@@ -3,7 +3,7 @@ $rcc = new Roblox\Grid\Rcc\RCCServiceSoap("127.0.0.1", 8543);
 echo "HW: ".$rcc->HelloWorld();
 echo "<br>";
 echo "Version: ".$rcc->GetVersion();
-$rcc->OpenJobEx("Test", [
+$rcc->OpenJobEx("Testt", [
     "Mode" => "Thumbnail",
     "Settings" => [
         "Type" => "Closeup",

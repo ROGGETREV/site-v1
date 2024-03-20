@@ -76,7 +76,7 @@ if(
             "displayName" => $usr["username"]
         ],
         "twoStepVerificationData" => null,
-        "isBanned" => false,
+        "isBanned" => (bool)$usr["banned"],
         "accountBlob" => "string"
     ]));
 } else {

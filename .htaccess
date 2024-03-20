@@ -18,4 +18,5 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^([^\.]+)$ $1.php [NC,L]
 RewriteRule ^(.*)\.aspx$ $1 [L]
 RewriteRule ^(.*)\.ashx$ $1 [L]
+RewriteRule ^(.*)\.sigma$ $1 [L]
 # RewriteRule ^(.*)\.html$ $1 [L]

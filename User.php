@@ -26,12 +26,15 @@ $q->bindParam(':id', $usr["id"], PDO::PARAM_INT);
 $q->execute();
 $friends = array_reverse($q->fetchAll());
 
-if($id !== (int)$user["id"]) {
-    $q = $con->prepare("SELECT * FROM friendships WHERE ((user1 = :id AND user2 = :id2) OR (user1 = :id2 AND user2 = :id))");
-    $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
-    $q->bindParam(':id2', $id, PDO::PARAM_INT);
-    $q->execute();
-    $friendship = $q->fetch();
+$friendship = false;
+if($loggedin) {
+    if($id !== (int)$user["id"]) {
+        $q = $con->prepare("SELECT * FROM friendships WHERE ((user1 = :id AND user2 = :id2) OR (user1 = :id2 AND user2 = :id))");
+        $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
+        $q->bindParam(':id2', $id, PDO::PARAM_INT);
+        $q->execute();
+        $friendship = $q->fetch();
+    }
 }
 ?>
 <!DOCTYPE html>

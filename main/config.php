@@ -15,9 +15,10 @@ $developement ? $sql["dbname"] = "roggetdev" : $sql["dbname"] = "roggetprod";
 if(!$developement) error_reporting(0); else error_reporting(E_ALL);
 try{
     $con = new PDO("mysql:host=".$sql["server"].";dbname=".$sql["dbname"], $sql["user"], $sql["pass"]);
-} catch(PDOException $e) {
-    if($developement) exit("Database problem detected! Please wait until the developers fix it and try again.<br>Error: ".$e->getMessage());
-    exit("Database problem detected! Please wait until the developers fix it and try again.");
+} catch(sPDOException $e) {
+    echo "Database problem detected! Please wait until the developers fix it and try again.";
+    if($developement) echo "<br>Error: ".$e->getMessage();
+    exit;
 }
 
 $cloudflare = false;
@@ -36,8 +37,6 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/Assemblies/Roblox/Grid/Rcc/Status.php")
 
 $loggedin = false;
 
-$siteTheme = "dark";//"light";
-
 $RCCS = [
     "_renders" => [
         "2008" => "25.33.214.80:8541",
@@ -53,6 +52,13 @@ $RCCS = [
     "gameservers" => [
         "2016" => "127.0.0.1:8542"
     ],
+];
+
+$clientKeys = [
+    "public" => "BgIAAACkAABSU0ExAAQAAAEAAQCh3lXVMKEjK7WuI8dXeqkoZjaAKJk5fykRACovrc2KZiwpU7e5etfMUeP/9NDkxqRybozh1IX3mhIr8lcrF/u4s3QKuEinYoXiEbcuGGqUr33Z2DJlwkU/xtNAaRcMYzBNeowhRholyFbbpYPQOm2omo3xmmWOk+MBdXRuZ+xmrg==",
+    "private" => "-----BEGIN RSA PRIVATE KEY-----
+MIICXgIBAAKBgQCuZuxnbnR1AeOTjmWa8Y2aqG060IOl21bIJRpGIYx6TTBjDBdpQNPGP0XCZTLY2X2vlGoYLrcR4oVip0i4CnSzuPsXK1fyKxKa94XU4YxucqTG5ND0/+NRzNd6ubdTKSxmis2tLyoAESl/OZkogDZmKKl6V8cjrrUrI6Ew1VXeoQIDAQABAoGBAJEsGZMLbaNMXDyips8wTTg1BR+VHFC+YOGfiNxh5saTZDi+gupZTS9T0eS8SnQZrrat6xaQJFGd5nw1VaHlCjiEWDEKOYW5ciEvtLZxW4wpLUx+jT8g32SJcNwl6s52Fx4RdLbypLYEa9LJoDZT6ZUNh6qszdXdajtzCQWQXHf1AkEA2OnM3zH8cWyLmxxYIvOMUt4uoszk2Q/gYSCpBL23PnH6/Lc3KuuRFC/zRQkCJejvRcQFq8Gm5oAllh96iRL86wJBAM3UFOz0XPWu0EcrM1nBk2kLkI7RS2Ch91Yv2tSfafRScFuO1MY2f/OdFygxJr3c7ebSGicOeIUZ7UC2oPHDP6MCQQChUaAQDjjUkglxni7eL4sYxiyg3wkDdY9GLOgGoqF5S4OCFzBsNy16ef7ORNjYINhyZkphZnAd1QgfEeIrt3dpAkEAh+4k96wV7EbL1ARqwD7/7CKwEDGWdzXf03J9MWgqICmFfGHikRiS/b7j+S4kqMTL9GES1nJPE4/gyJkTxzYrwwJAIg0A3UiB6Xx6Uq9vK+srPzyamk3hX4M6mg/k2sdZINS+yJzjlr3Lu3R+LFbSLUcdLp6uXfieFDe4D9Bn9+FQpA==
+-----END RSA PRIVATE KEY-----"
 ];
 
 $reCAPTCHA = [
@@ -77,6 +83,10 @@ if(isset($_COOKIE["_ROGGETSECURITY"])) {
         setcookie(".ROGGETSECURITY", null, -1, "/");
     }
 }
+
+$siteTheme = "dark";//"light";
+
+if($loggedin) $siteTheme = $user["theme"];
 
 if($loggedin) {
     $time = time();
@@ -122,75 +132,79 @@ function getDiscordServersFromAccessToken($token) {
 }
 
 if($loggedin) {
-    if(!$user["discord_verified"] && !in_array($_SERVER["PHP_SELF"], [
-        "/Api/DiscordVerification.php",
-        "/DiscordVerify.php",
-        "/UserAuthentication/LogOut.php"
-    ])) {
-        header('location: /DiscordVerify.ashx');
-        exit;
-    }
-    if($user["discord_verified"] && time() >= ($user["discord_last_server_check"] + 1800)) {
-        $time = time();
-        $guilds = getDiscordServersFromAccessToken($user["discord_access_token"]);
-        $joinedROGGET = false;
-        foreach($guilds as $server) {
-            if($server["id"] == $discord["serverid"]) $joinedROGGET = true;
-        }
-        $q = $con->prepare("UPDATE users SET discord_last_server_check = :time WHERE id = :id");
-        $q->bindParam(':time', $time, PDO::PARAM_INT);
-        $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
-        $q->execute();
-        if(!$joinedROGGET) {
-            $q = $con->prepare("UPDATE users SET discord_verified = false, discord_time_since_no_verification = :time WHERE id = :id");
-            $q->bindParam(':time', $time, PDO::PARAM_INT);
-            $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
-            $q->execute();
+    if($user["discord_verify_required"]) {
+        if(!$user["discord_verified"] && !in_array($_SERVER["PHP_SELF"], [
+            "/Api/DiscordVerification.php",
+            "/DiscordVerify.php",
+            "/UserAuthentication/LogOut.php"
+        ])) {
             header('location: /DiscordVerify.ashx');
             exit;
         }
-    }
-    if($user["discord_verified"] && (time() - 300000) >= $user["discord_expires_in"]) {
-        $ch = curl_init("https://discord.com/api/oauth2/token");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
-            "grant_type" => "refresh_token",
-            "refresh_token" => $user["discord_refresh_token"]
-        ]));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [ "Content-Type: application/x-www-form-urlencoded" ]);
-        curl_setopt($ch, CURLOPT_USERPWD, $discord["clientid"].":".$discord["clientsecret"]);
-
-        $res = json_decode(curl_exec($ch), true);
-
-        if(!curl_errno($ch) && !isset($res["error"])){
-            $expires = time() + $res["expires_in"];
-            $q = $con->prepare("UPDATE users SET discord_access_token = :atoken, discord_refresh_token = :rtoken, discord_expires_in = :expire WHERE id = :id");
-            $q->bindParam(':atoken', $res["access_token"], PDO::PARAM_STR);
-            $q->bindParam(':rtoken', $res["refresh_token"], PDO::PARAM_STR);
-            $q->bindParam(':expire', $expires, PDO::PARAM_INT);
-            $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
-            $q->execute();
-        } else {
+        if($user["discord_verified"] && time() >= ($user["discord_last_server_check"] + 1800)) {
             $time = time();
-            $q = $con->prepare("UPDATE users SET discord_verified = false, discord_time_since_no_verification = :time WHERE id = :id");
+            $guilds = getDiscordServersFromAccessToken($user["discord_access_token"]);
+            $joinedROGGET = false;
+            foreach($guilds as $guild) {
+                if($guild["id"] == $discord["serverid"]) $joinedROGGET = true;
+            }
+            $q = $con->prepare("UPDATE users SET discord_last_server_check = :time WHERE id = :id");
             $q->bindParam(':time', $time, PDO::PARAM_INT);
             $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
             $q->execute();
-            header('location: /DiscordVerify.ashx');
-            exit;
+            if(!$joinedROGGET) {
+                $q = $con->prepare("UPDATE users SET discord_verified = false, discord_time_since_no_verification = :time WHERE id = :id");
+                $q->bindParam(':time', $time, PDO::PARAM_INT);
+                $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
+                $q->execute();
+                header('location: /DiscordVerify.ashx');
+                exit;
+            }
         }
+        if($user["discord_verified"] && (time() - 300000) >= $user["discord_expires_in"]) {
+            $ch = curl_init("https://discord.com/api/oauth2/token");
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+                "grant_type" => "refresh_token",
+                "refresh_token" => $user["discord_refresh_token"]
+            ]));
+            curl_setopt($ch, CURLOPT_HTTPHEADER, [ "Content-Type: application/x-www-form-urlencoded" ]);
+            curl_setopt($ch, CURLOPT_USERPWD, $discord["clientid"].":".$discord["clientsecret"]);
 
-        curl_close($ch);
-    }/* else {
-        if((time() - $user["discord_time_since_no_verification"]) >= 86400) {
-            $q = $con->prepare("DELETE FROM users WHERE id = :id");
-            $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
-            $q->execute();
-            header('location: /UserAuthentication/LogOut.ashx');
-            exit;
-        }
-    }*/
+            $res = json_decode(curl_exec($ch), true);
+
+            if(!curl_errno($ch) && !isset($res["error"])){
+                $expires = time() + $res["expires_in"];
+                $q = $con->prepare("UPDATE users SET discord_access_token = :atoken, discord_refresh_token = :rtoken, discord_expires_in = :expire WHERE id = :id");
+                $q->bindParam(':atoken', $res["access_token"], PDO::PARAM_STR);
+                $q->bindParam(':rtoken', $res["refresh_token"], PDO::PARAM_STR);
+                $q->bindParam(':expire', $expires, PDO::PARAM_INT);
+                $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
+                $q->execute();
+            } else {
+                $time = time();
+                $q = $con->prepare("UPDATE users SET discord_verified = false, discord_time_since_no_verification = :time WHERE id = :id");
+                $q->bindParam(':time', $time, PDO::PARAM_INT);
+                $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
+                $q->execute();
+                header('location: /DiscordVerify.ashx');
+                exit;
+            }
+
+            curl_close($ch);
+        }/* else {
+            if((time() - $user["discord_time_since_no_verification"]) >= 86400) {
+                $q = $con->prepare("DELETE FROM users WHERE id = :id");
+                $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
+                $q->execute();
+                header('location: /UserAuthentication/LogOut.ashx');
+                exit;
+            }
+        }*/
+    } else {
+        $user["discord_verify_required"] = false;
+    }
 }
 
 function filterBadWords($string) {
@@ -198,6 +212,7 @@ function filterBadWords($string) {
     global $loggedin;
     if($loggedin) {
         global $user;
+        $user["underage"] = 0;
         if($user["underage"] == 1) {
             $superSafeChat = true;
         }
@@ -213,7 +228,7 @@ function filterBadWords($string) {
         "iggga",
         "nigggga",
         "igggga",
-        "niger",
+        //"niger", it's a country but still
         "nigger",
         "niggger",
         "nigggger",
@@ -248,6 +263,8 @@ function filterBadWords($string) {
         "madblxx",
         "sigma",
         "rizz",
+        "gyatt",
+        "xxxtentation",
         
         "fdp",
         "ntm",
@@ -258,8 +275,8 @@ function filterBadWords($string) {
         "pute",
     ];
 
-    if($superSafeChat == true) {
-        array_push($badWords,"underage");
+    if($superSafeChat) {
+        array_push($badWords, "underage");
     }
 
     $exceptions = [

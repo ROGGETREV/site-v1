@@ -55,7 +55,8 @@ if($loggedin) {
     <div class="container card card-body advertisement ad">
         <div class="d-flex">
             <?php
-            if($id !== (int)$user["id"] && $loggedin) {
+            if($loggedin) {
+            if($id !== (int)$user["id"]) {
             $secondButton = false;
             $btnText = "Add Friend";
             $btnColor = "primary";
@@ -88,7 +89,7 @@ if($loggedin) {
             <?php if($secondButton) { ?>
             <button style="position: absolute;top: 9px;right: 143px;" class="btn btn-<?php echo $sbtnColor; ?> btn-auto" onclick='<?php echo $sbtnOnclick; ?>'><?php echo $sbtnText; ?></button>
             <?php } ?>
-            <?php } ?>
+            <?php }} ?>
             <img src="/images/Users/Get.ashx?ID=<?php echo (int)$usr["id"]; ?>" onerror='this.src = "/images/loaderror.png";' style="width: 125px;height: 125px;">
             <div style="margin-left: 12px;margin-top: 22px;">
                 <h2><?php echo htmlspecialchars($usr["username"]); ?> <?php if($usr["buildersclub"] !== "None") {echo '<img src="/images/'.$usr["buildersclub"].'.png" style="width: 36px;height: 36px;margin-top: -8px;" onerror=\'this.src = "/images/loaderror.png";\'>';} ?></h2>
@@ -98,7 +99,7 @@ if($loggedin) {
         <br>
         <h4>About</h4>
         <div class="card card-body">
-            <?php if($id !== (int)$user["id"] && $loggedin) { ?><button style="position: absolute;top: 9px;right: 9px;" class="btn btn-outline-danger btn-auto" onclick='window.location = "/AbuseReport/User.aspx";'>Report Abuse</button><?php } ?>
+            <?php if($loggedin) {if($id !== (int)$user["id"]) { ?><button style="position: absolute;top: 9px;right: 9px;" class="btn btn-outline-danger btn-auto" onclick='window.location = "/AbuseReport/User.aspx";'>Report Abuse</button><?php }} ?>
             <?php echo htmlspecialchars($usr["description"]); ?>
         </div>
         <br>

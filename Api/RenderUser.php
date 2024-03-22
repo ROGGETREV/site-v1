@@ -65,7 +65,7 @@ foreach($q->fetchAll() as $wearing) {
             $shit = '
 '.$name.' = Instance.new("Shirt", plr.Character)
 '.$name.'.Name = "'.addslashes($item["name"]).'"
-'.$name.'.ShirtTemplate = "http://shitblx.cf/Asset/assets/shirt/'.(int)$item["id"].'.png"
+'.$name.'.ShirtTemplate = "http://shitblx.cf/Asset/?redir=/Asset/assets/shirt/'.(int)$item["id"].'.png"
 ';
             $characterScript .= $shit;
             $characterScript2008 .= $shit;
@@ -73,22 +73,22 @@ foreach($q->fetchAll() as $wearing) {
             $shit = '
 '.$name.' = Instance.new("Pants", plr.Character)
 '.$name.'.Name = "'.addslashes($item["name"]).'"
-'.$name.'.PantsTemplate = "http://shitblx.cf/Asset/assets/pants/'.(int)$item["id"].'.png"
+'.$name.'.PantsTemplate = "http://shitblx.cf/Asset/?redir=/Asset/assets/pants/'.(int)$item["id"].'.png"
 ';
             $characterScript .= $shit;
             $characterScript2008 .= $shit;
         } else if($item["type"] === "face") {
             $characterScript .= '
-plr.Character.Head.face.Texture = "http://shitblx.cf/Asset/assets/face/'.(int)$item["id"].'.png"
+plr.Character.Head.face.Texture = "http://shitblx.cf/Asset/?redir=/Asset/assets/face/'.(int)$item["id"].'.png"
 ';
             $characterScript2008 .= '
-plr.Character.Head.face.Texture = "http://shitblx.cf/Asset/assets/face/'.(int)$item["id"].'_stretch.png"
+plr.Character.Head.face.Texture = "http://shitblx.cf/Asset/?redir=/Asset/assets/face/'.(int)$item["id"].'_stretch.png"
 ';
         } else if($item["type"] === "tshirt") {
             $shit = '
 '.$name.' = Instance.new("Decal", plr.Character.Torso)
 '.$name.'.Name = "'.addslashes($item["name"]).'"
-'.$name.'.Texture = "http://shitblx.cf/Asset/assets/tshirt/'.(int)$item["id"].'.png"
+'.$name.'.Texture = "http://shitblx.cf/Asset/?redir=/Asset/assets/tshirt/'.(int)$item["id"].'.png"
 ';
             $characterScript .= $shit;
             $characterScript2008 .= $shit;
@@ -184,7 +184,7 @@ game:GetService("ContentProvider"):SetBaseUrl("http://shitblx.cf/")
 game:GetService("ScriptContext").ScriptsDisabled = true
 
 local plr = game.Players:CreateLocalPlayer(0)
---plr.CharacterAppearance = "http://shitblx.cf/Game/CharacterFetch.ashx?ID='.(int)$id.'"
+--plr.CharacterAppearance = "http://shitblx.cf/Asset/?redir=/Game/CharacterFetch.ashx?ID='.(int)$id.'"
 plr:LoadCharacter()
 
 '.$characterScript.'
@@ -254,13 +254,53 @@ game:GetService("ContentProvider"):SetBaseUrl("http://shitblx.cf/")
 game:GetService("ScriptContext").ScriptsDisabled = true
 
 local plr = game.Players:CreateLocalPlayer(0)
---plr.CharacterAppearance = "http://shitblx.cf/Game/CharacterFetch.ashx?ID='.(int)$id.'"
+--plr.CharacterAppearance = "http://shitblx.cf/Asset/?redir=/Game/CharacterFetch.ashx?ID='.(int)$id.'"
 plr:LoadCharacter()
 
 '.$characterScript.'
 
+--local FOV = 40 --52.5
+--local AngleOffsetX = 0
+--local AngleOffsetY = 0
+--local AngleOffsetZ = 0
+--
+--local areThereAccessories = false
+--local largestSize = Vector3.new(0, 0, 0)
+--local accessorySize = Vector3.new(0, 0, 0)
+--for i, accessory in pairs(plr.Character:GetChildren()) do
+--    if accessory.ClassName == "Accessory" then
+--    areThereAccessories = true
+--        local accessoryHandle = accessory.Handle
+--        if accessoryHandle then
+--            accessorySize = accessoryHandle.Size
+--        end
+--        if accessorySize.y > largestSize.y then
+--            largestSize = accessorySize
+--        end
+--    end
+--end
+--
+--local CameraAngle = plr.Character.Head.CFrame * CFrame.new(AngleOffsetX, AngleOffsetY, AngleOffsetZ)
+--local CameraPosition = plr.Character.Head.CFrame + Vector3.new(0, 0, 0) + (CFrame.Angles(0, -3.4, 0).lookVector.unit * -3)
+--
+--if areThereAccessories == true then
+--    print("Old FOV: "..FOV)
+--    FOV = (FOV + (largestSize.y / 0.2))
+--    print("New FOV: "..FOV)
+--    CameraAngle = plr.Character.Head.CFrame * CFrame.new(AngleOffsetX, AngleOffsetY, AngleOffsetZ)
+--    --CameraPosition = plr.Character.Head.CFrame + Vector3.new(0, largestSize.y/2, 0) + (CFrame.Angles(0, -3.4, 0).lookVector.unit * -3)
+--end
+--
+--local Camera = Instance.new("Camera", plr.Character)
+--Camera.Name = "ThumbnailCamera"
+--Camera.CameraType = Enum.CameraType.Scriptable
+--
+--Camera.CoordinateFrame = CFrame.new(CameraPosition.p, CameraAngle.p)
+--Camera.FieldOfView = FOV
+--workspace.CurrentCamera = Camera
+
 print("Rendering user ID '.$id.' (2016)")
-b64 = game:GetService("ThumbnailGenerator"):Click("PNG", 1024, 1024, false)
+b64 = game:GetService("ThumbnailGenerator"):Click("PNG", 1024, 1024, true)
 print("Done")
 return b64';
 

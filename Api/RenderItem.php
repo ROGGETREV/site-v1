@@ -37,7 +37,7 @@ if($item["type"] === "shirt") {
     $shit = '
 '.$name.' = Instance.new("Shirt", plr.Character)
 '.$name.'.Name = "'.addslashes($item["name"]).'"
-'.$name.'.ShirtTemplate = "http://shitblx.cf/Asset/assets/shirt/'.(int)$item["id"].'.png"
+'.$name.'.ShirtTemplate = "http://shitblx.cf/Asset/?redir=/Asset/assets/shirt/'.(int)$item["id"].'.png"
 ';
     $characterScript .= $shit;
     $characterScript2008 .= $shit;
@@ -45,22 +45,22 @@ if($item["type"] === "shirt") {
     $shit = '
 '.$name.' = Instance.new("Pants", plr.Character)
 '.$name.'.Name = "'.addslashes($item["name"]).'"
-'.$name.'.PantsTemplate = "http://shitblx.cf/Asset/assets/pants/'.(int)$item["id"].'.png"
+'.$name.'.PantsTemplate = "http://shitblx.cf/Asset/?redir=/Asset/assets/pants/'.(int)$item["id"].'.png"
 ';
     $characterScript .= $shit;
     $characterScript2008 .= $shit;
 } else if($item["type"] === "face") {
     $characterScript .= '
-plr.Character.Head.face.Texture = "http://shitblx.cf/Asset/assets/face/'.(int)$item["id"].'.png"
+plr.Character.Head.face.Texture = "http://shitblx.cf/Asset/?redir=/Asset/assets/face/'.(int)$item["id"].'.png"
 ';
     $characterScript2008 .= '
-plr.Character.Head.face.Texture = "http://shitblx.cf/Asset/assets/face/'.(int)$item["id"].'_stretch.png"
+plr.Character.Head.face.Texture = "http://shitblx.cf/Asset/?redir=/Asset/assets/face/'.(int)$item["id"].'_stretch.png"
 ';
 } else if($item["type"] === "tshirt") {
     $shit = '
 '.$name.' = Instance.new("Decal", plr.Character.Torso)
 '.$name.'.Name = "'.addslashes($item["name"]).'"
-'.$name.'.Texture = "http://shitblx.cf/Asset/assets/tshirt/'.(int)$item["id"].'.png"
+'.$name.'.Texture = "http://shitblx.cf/Asset/?redir=/Asset/assets/tshirt/'.(int)$item["id"].'.png"
 ';
     $characterScript .= $shit;
     $characterScript2008 .= $shit;
@@ -228,7 +228,7 @@ plr:LoadCharacter()
 '.$characterScript.'
 
 print("Rendering user ID '.$id.' (2016)")
-b64 = game:GetService("ThumbnailGenerator"):Click("PNG", 1024, 1024, false)
+b64 = game:GetService("ThumbnailGenerator"):Click("PNG", 1024, 1024, true)
 print("Done")
 return b64';
 

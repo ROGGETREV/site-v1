@@ -1,0 +1,3 @@
+RewriteEngine Off
+
+ErrorDocument 404 /Game/players/index.php

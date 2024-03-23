@@ -10,7 +10,7 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
 <body data-bs-theme="<?php echo $siteTheme; ?>">
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>
     <br>
-    <div class="container card card-body advertisement ad">
+    <div class="<?php echo $containerClasses; ?>">
         <h2>Catalog Beta</h2>
         <div class="row">
             <div class="col-md-2">
@@ -37,7 +37,7 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
                             </div>
                             <div class="card-body" style="padding: 6px;">
                                 <h6 class="card-title"><?php echo htmlspecialchars($item["name"]); ?></h6>
-                                <p class="card-text"><?php if(!$owned) {echo (int)$item["nuggets"]." Nuggets";} else {echo "Owned";} ?></p>
+                                <p class="card-text"><?php echo htmlspecialchars(ucfirst($item["type"])); ?> - <?php if(!$owned) {echo (int)$item["nuggets"]." Nuggets";} else {echo "Owned";} ?></p>
                             </div>
                         </div>
                     </div>

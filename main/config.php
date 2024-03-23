@@ -21,6 +21,8 @@ try{
     exit;
 }
 
+$containerClasses = "container card card-body";// advertisement ad";
+
 $cloudflare = false;
 if(isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
     $cloudflare = true;

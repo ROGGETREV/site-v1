@@ -16,7 +16,7 @@ if($loggedin) {
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>
     <img src="/images/game.png" style="position: fixed;width: 100%;z-index: -999999999999;border-radius: 15px;filter: blur(10px);">
     <br>
-    <div class="container card card-body advertisement ad">
+    <div class="<?php echo $containerClasses; ?>">
         <h2>Sign Up to ROGGET</h2>
         <p>Already have an account? <a href="/UserAuthentication/LogIn.aspx">Log In</a>!</p>
         <div class="card card-body">

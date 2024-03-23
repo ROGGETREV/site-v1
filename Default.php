@@ -20,7 +20,7 @@ $userCount = (int)$q->fetch()[0];
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>
     <img src="/images/game.png" style="position: fixed;width: 100%;z-index: -999999999999;border-radius: 15px;filter: blur(10px);">
     <br>
-    <div class="container card card-body advertisement ad">
+    <div class="<?php echo $containerClasses; ?>">
         <h2>Welcome to ROGGET!</h2>
         <p>A 2010 revival with <?php echo (int)$userCount; ?> amazing users!</p>
         <div class="d-flex">

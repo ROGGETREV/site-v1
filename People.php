@@ -10,7 +10,7 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
 <body data-bs-theme="<?php echo $siteTheme; ?>">
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>
     <br>
-    <div class="container card card-body advertisement ad">
+    <div class="<?php echo $containerClasses; ?>">
         <h2>Users</h2>
         <?php
         $q = $con->prepare("SELECT * FROM users WHERE banned = 0 ORDER BY lastonline DESC");

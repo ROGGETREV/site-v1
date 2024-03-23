@@ -30,7 +30,7 @@ $read = $q->fetchAll();
 <body data-bs-theme="<?php echo $siteTheme; ?>">
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>
     <br>
-    <div class="container card card-body advertisement ad">
+    <div class="<?php echo $containerClasses; ?>">
         <button class="btn btn-outline-primary float-end ms-auto" style="position: absolute;right: 10px;top: 10px;" onclick='window.location = "/MessageSend.aspx";'><i class="bi bi-send-fill"></i></button>
         <h1>Messages</h1>
         <h3>Unread Messages</h3>

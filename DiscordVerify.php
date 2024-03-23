@@ -19,7 +19,7 @@ if($user["discord_verified"] === 1) {
 <body data-bs-theme="<?php echo $siteTheme; ?>">
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>
     <br>
-    <div class="container card card-body advertisement ad">
+    <div class="<?php echo $containerClasses; ?>">
         <h1>Discord Verification</h1>
         <h3>Your account (<?php echo htmlspecialchars($user["username"]); ?>) needs to be verified using Discord to play ROGGET.</h3>
         <h6 class="text-danger">You must verify now or your account will be permanently deleted from ROGGET.</h6>

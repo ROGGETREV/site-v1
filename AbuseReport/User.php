@@ -15,7 +15,7 @@ if(!$loggedin) {
 <body data-bs-theme="<?php echo $siteTheme; ?>">
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>
     <br>
-    <div class="container card card-body advertisement ad">
+    <div class="<?php echo $containerClasses; ?>">
         todo: faire cette putain de page
     </div>
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/footer.php"); ?>

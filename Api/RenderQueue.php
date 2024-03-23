@@ -79,7 +79,7 @@ if($type === "get") {
         $q->execute();
         file_put_contents($_SERVER["DOCUMENT_ROOT"]."/images/Catalog/2011_".(int)$remote.".png", base64_decode($b64));
         exit(json_encode(["success"=>true]));
-    } else if($renderType === "place") {
+    } else if($renderType === "game") {
         // 
     }
 } else if($type === "scriptget") {

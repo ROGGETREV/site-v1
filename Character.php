@@ -32,7 +32,7 @@ $welcomeMessages = [
 <body data-bs-theme="<?php echo $siteTheme; ?>">
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>
     <br>
-    <div class="container card card-body advertisement ad">
+    <div class="<?php echo $containerClasses; ?>">
         <h1>Character Editor</h1>
         <div class="row">
             <div class="col-md-2">
@@ -42,8 +42,8 @@ $welcomeMessages = [
                 <select class="form-select" aria-label="Render Year" id="renderYearSelector">
                     <option value="2008"<?php if($user["renderYear"] === "2008") echo " selected"; ?>>2008</option>
                     <option value="2011"<?php if($user["renderYear"] === "2011") echo " selected"; ?>>2011 (unstable)</option>
-                    <option value="2011edited2016"<?php if($user["renderYear"] === "2011edited2016") echo " selected"; ?>>2011edited2016 (broken)</option>
-                    <option value="2016"<?php if($user["renderYear"] === "2016") echo " selected"; ?>>2016 (broken)</option>
+                    <option value="2011edited2016"<?php if($user["renderYear"] === "2011edited2016") echo " selected"; ?>>2011edited2016</option>
+                    <option value="2016"<?php if($user["renderYear"] === "2016") echo " selected"; ?>>2016</option>
                 </select>
             </div>
             <div class="col-md-10">

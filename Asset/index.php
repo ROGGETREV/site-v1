@@ -6,7 +6,7 @@ if(isset($_REQUEST["redir"])) {
     header("location: ".$_REQUEST["redir"]);
     exit;
 }
-if($_REQUEST["id"] === "niggaaaaaaaaaa") exit(file_get_contents($_SERVER["DOCUMENT_ROOT"]."/town.rbxl"));
+if($_REQUEST["id"] === "niggaaaaaaaaaa") exit(file_get_contents($_SERVER["DOCUMENT_ROOT"]."/roggettown.rbxl"));
 if(file_exists("assets/other/".$_REQUEST["id"])) {
     header("location: assets/other/".$_REQUEST["id"]);
     exit;

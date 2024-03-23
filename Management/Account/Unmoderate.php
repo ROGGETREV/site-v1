@@ -10,7 +10,7 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/Management/inc.php");
 <body data-bs-theme="<?php echo $siteTheme; ?>">
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>
     <br>
-    <div class="container card card-body advertisement ad">
+    <div class="<?php echo $containerClasses; ?>">
         <h1>Management Panel</h1>
         <h4><?php echo htmlspecialchars($user["username"]); ?>, you are an <?php echo htmlspecialchars($user["permission"]); ?>!</h4>
         <div class="card" style="margin-top: 3px;">

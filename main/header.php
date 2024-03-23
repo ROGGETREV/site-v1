@@ -13,13 +13,13 @@
                     <a class="nav-link<?php if($_SERVER["PHP_SELF"] === "/Home.php") {echo " active";} ?>" href="/Home.aspx">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link<?php if($_SERVER["PHP_SELF"] === "/Games.php") {echo " active";} ?>" href="/Games.aspx">Games</a>
+                    <a class="nav-link<?php if($_SERVER["PHP_SELF"] === "/Games.php" || $_SERVER["PHP_SELF"] === "/Game.php") {echo " active";} ?>" href="/Games.aspx">Games</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link<?php if($_SERVER["PHP_SELF"] === "/Catalog.php" || $_SERVER["PHP_SELF"] === "/Item.php") {echo " active";} ?>" href="/Catalog.aspx">Catalog</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link<?php if($_SERVER["PHP_SELF"] === "/People.php") {echo " active";} ?>" href="/People.aspx">People</a>
+                    <a class="nav-link<?php if($_SERVER["PHP_SELF"] === "/People.php" || $_SERVER["PHP_SELF"] === "/User.php") {echo " active";} ?>" href="/People.aspx">People</a>
                 </li>
                 <?php if($loggedin) { ?>
                 <li class="nav-item">

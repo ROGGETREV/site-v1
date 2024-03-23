@@ -20,7 +20,7 @@ $friends = $q->fetchAll();
 <body data-bs-theme="<?php echo $siteTheme; ?>">
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>
     <br>
-    <div class="container card card-body advertisement ad">
+    <div class="<?php echo $containerClasses; ?>">
         <h2>Hello, <?php echo htmlspecialchars($user["username"]); ?>.</h2>
         <h5>You have <?php echo (int)$user["nuggets"]; ?> Nuggets.</h5>
         <hr>

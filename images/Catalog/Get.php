@@ -2,11 +2,7 @@
 require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
 header("content-type: image/png");
 if(!isset($_REQUEST["ID"])) {
-    if($loggedin) {
-        $_REQUEST["ID"] = (int)$user["id"];
-    } else {
-        exitFile($_SERVER["DOCUMENT_ROOT"]."/images/loaderror.png");
-    }
+    exitFile($_SERVER["DOCUMENT_ROOT"]."/images/loaderror.png");
 }
 
 $id = (int)$_REQUEST["ID"];

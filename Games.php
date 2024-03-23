@@ -1,0 +1,61 @@
+<?php
+require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
+if(!$loggedin) exit("This page cannot be seen from logged out people <strong>YET.</strong>");
+if((int)$user["id"] !== 2) exit("This page cannot be seen except from nolanwhy <strong>YET.</strong>");
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/head.php"); ?>
+    <title>Games - ROGGET</title>
+</head>
+<body data-bs-theme="<?php echo $siteTheme; ?>">
+    <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>
+    <br>
+    <div class="<?php echo $containerClasses; ?>">
+        <h2>Games</h2>
+        <div class="row">
+            <div class="col-md-2">
+                <img src="/images/CatalogAssets/browsebycategory.png" style="width: 100%;">
+                <h5 style="cursor: pointer;" onclick='scrollDiv("recentGames");'>Recent</h5>
+                <h5 style="cursor: pointer;" onclick='scrollDiv("popularGames");'>Popular</h5>
+            </div>
+            <div class="col-md-10">
+                <div id="recentGames">
+                    <h4>Recent Games</h4>
+                    <div class="row">
+                        <?php
+                        $q = $con->prepare("SELECT * FROM games WHERE moderation = 'Accepted'");
+                        $q->execute();
+                        foreach($q->fetchAll() as $game) {
+                        $qq = $con->prepare("SELECT * FROM users WHERE id = :id");
+                        $qq->bindParam(':id', $game["creator"], PDO::PARAM_INT);
+                        $qq->execute();
+                        $usr = $qq->fetch();
+                        if($usr) {
+                        ?>
+                        <div class="col-md-2" style="cursor: pointer;" onclick='window.location = "/Game.aspx?ID=<?php echo (int)$game["id"]; ?>";'>
+                            <div class="card">
+                                <div style="height: 0; padding-top: 100%; position: relative;">
+                                    <img src="/images/Games/Get.ashx?ID=<?php echo (int)$game["id"]; ?>" class="card-img-top" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; width: 100%; height: 100%;">
+                                </div>
+                                <div class="card-body" style="padding: 6px;">
+                                    <h6 class="card-title"><?php echo htmlspecialchars($game["name"]); ?></h6>
+                                    <p class="card-text">by <strong><?php echo htmlspecialchars($usr["username"]); ?></strong></p>
+                                </div>
+                            </div>
+                        </div>
+                        <?php }} ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    function scrollDiv(div) {
+        document.querySelector("#" + div).scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    </script>
+    <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/footer.php"); ?>
+</body>
+</html>

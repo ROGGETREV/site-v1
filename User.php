@@ -52,7 +52,7 @@ if($loggedin) {
     </div>
     <?php } ?>
     <br>
-    <div class="container card card-body advertisement ad">
+    <div class="<?php echo $containerClasses; ?>">
         <div class="d-flex">
             <?php
             if($loggedin) {

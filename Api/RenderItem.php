@@ -52,6 +52,46 @@ if($item["type"] === "shirt") {
 } else if($item["type"] === "face") {
     $characterScript .= '
 plr.Character.Head.face.Texture = "http://shitblx.cf/Asset/?redir=/Asset/assets/face/'.(int)$item["id"].'.png"
+
+local FOV = 40 --52.5
+local AngleOffsetX = 0
+local AngleOffsetY = 0
+local AngleOffsetZ = 0
+
+local areThereAccessories = false
+local largestSize = Vector3.new(0, 0, 0)
+local accessorySize = Vector3.new(0, 0, 0)
+for i, accessory in pairs(plr.Character:GetChildren()) do
+    if accessory.ClassName == "Accessory" then
+    areThereAccessories = true
+        local accessoryHandle = accessory.Handle
+        if accessoryHandle then
+            accessorySize = accessoryHandle.Size
+        end
+        if accessorySize.y > largestSize.y then
+            largestSize = accessorySize
+        end
+    end
+end
+
+local CameraAngle = plr.Character.Head.CFrame * CFrame.new(AngleOffsetX, AngleOffsetY, AngleOffsetZ)
+local CameraPosition = plr.Character.Head.CFrame + Vector3.new(0, 0, 0) + (CFrame.Angles(0, -3.4, 0).lookVector.unit * -3)
+
+if areThereAccessories == true then
+    print("Old FOV: "..FOV)
+    FOV = (FOV + (largestSize.y / 0.2))
+    print("New FOV: "..FOV)
+    CameraAngle = plr.Character.Head.CFrame * CFrame.new(AngleOffsetX, AngleOffsetY, AngleOffsetZ)
+    --CameraPosition = plr.Character.Head.CFrame + Vector3.new(0, largestSize.y/2, 0) + (CFrame.Angles(0, -3.4, 0).lookVector.unit * -3)
+end
+
+local Camera = Instance.new("Camera", plr.Character)
+Camera.Name = "ThumbnailCamera"
+Camera.CameraType = Enum.CameraType.Scriptable
+
+Camera.CoordinateFrame = CFrame.new(CameraPosition.p, CameraAngle.p)
+Camera.FieldOfView = FOV
+workspace.CurrentCamera = Camera
 ';
     $characterScript2008 .= '
 plr.Character.Head.face.Texture = "http://shitblx.cf/Asset/?redir=/Asset/assets/face/'.(int)$item["id"].'_stretch.png"

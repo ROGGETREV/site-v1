@@ -2,16 +2,8 @@
 require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
 header('Content-Type: application/json');
 
-if(!$loggedin && !isset($_REQUEST["authentication"])) {
+if(!$loggedin) {
     exit(json_encode(["success"=>false,"message"=>"Please login"]));
-}
-
-if(isset($_REQUEST["authentication"])) {
-    if($_REQUEST["authentication"] === "nolanwhyfrfr") {
-        $user["id"] = 2;
-    } else {
-        exit(json_encode(["success"=>false,"message"=>"Please login"]));
-    }
 }
 
 if(!isset($_REQUEST["ID"])) {

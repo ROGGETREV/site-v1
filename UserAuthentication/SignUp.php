@@ -5,6 +5,11 @@ if($loggedin) {
     header('location: /Home.aspx');
     exit;
 }
+
+if(str_contains($_SERVER["HTTP_USER_AGENT"], "ROBLOX Android App")) {
+    header('location: /Games.aspx');
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

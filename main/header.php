@@ -1,3 +1,4 @@
+<?php if(!str_contains($_SERVER["HTTP_USER_AGENT"], "ROBLOX Android App")) { ?>
 <!--iframe style="width: 100%;height: 100%;position: fixed;z-index: 0;" src="https://www.youtube.com/embed/xfGwJHW-xy0?si=HfqaJR1JxWvGcLrb" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe-->
 <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
     <div class="container-fluid<?php /**/ ?>">
@@ -13,7 +14,7 @@
                     <a class="nav-link<?php if($_SERVER["PHP_SELF"] === "/Home.php") {echo " active";} ?>" href="/Home.aspx">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link<?php if($_SERVER["PHP_SELF"] === "/Games.php" || $_SERVER["PHP_SELF"] === "/Game.php") {echo " active";} ?>" href="/Games.aspx">Games</a>
+                    <a class="nav-link<?php if($_SERVER["PHP_SELF"] === "/Games.php" || $_SERVER["PHP_SELF"] === "/Place.php") {echo " active";} ?>" href="/Games.aspx">Games</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link<?php if($_SERVER["PHP_SELF"] === "/Catalog.php" || $_SERVER["PHP_SELF"] === "/Item.php") {echo " active";} ?>" href="/Catalog.aspx">Catalog</a>
@@ -47,7 +48,7 @@
                 </a>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li><a class="dropdown-item" href="/User.aspx">Profile</a></li>
-                    <li><a class="dropdown-item" href="/Currency.aspx"><?php echo (int)$user["nuggets"]; ?> Nuggets</a></li>
+                    <li><a class="dropdown-item" href="/Nuggets.aspx"><?php echo (int)$user["nuggets"]; ?> Nuggets</a></li>
                     <li class="dropdown-divider"></li>
                     <?php if(in_array($user["permission"], [
                         "Moderator",
@@ -71,4 +72,5 @@
     </div>
 </nav>
 <div style="width: 100%;height: 58px;"></div>
+<?php } ?>
 <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/alerts.php"); ?>

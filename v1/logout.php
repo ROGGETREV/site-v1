@@ -6,4 +6,4 @@ if(isset($_COOKIE["_ROGGETSECURITY"])) {
     $q->bindParam(':sessKey', $_COOKIE["_ROGGETSECURITY"], PDO::PARAM_STR);
     $q->execute();
 }
-setcookie(".ROGGETSECURITY", null, -1, "/");
+setcookie(".ROGGETSECURITY", "", -1, "/");

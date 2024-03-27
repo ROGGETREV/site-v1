@@ -6,6 +6,11 @@ if($loggedin) {
     exit;
 }
 
+if(str_contains($_SERVER["HTTP_USER_AGENT"], "ROBLOX Android App")) {
+    header('location: /Games.aspx');
+    exit;
+}
+
 $q = $con->prepare("SELECT count(*) FROM users");
 $q->execute();
 $userCount = (int)$q->fetch()[0];
@@ -22,7 +27,7 @@ $userCount = (int)$q->fetch()[0];
     <br>
     <div class="<?php echo $containerClasses; ?>">
         <h2>Welcome to ROGGET!</h2>
-        <p>A 2010 revival with <?php echo (int)$userCount; ?> amazing users!</p>
+        <p>A 2010L, 2011E and 2016L revival with <?php echo (int)$userCount; ?> amazing users!</p>
         <div class="d-flex">
             <a href="/UserAuthentication/LogIn.aspx"><button type="submit" id="submitBtn" class="btn btn-primary btn-auto">Log In!</button></a>
             <div style="width: 10px;"></div>

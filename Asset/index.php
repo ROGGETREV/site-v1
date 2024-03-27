@@ -6,7 +6,14 @@ if(isset($_REQUEST["redir"])) {
     header("location: ".$_REQUEST["redir"]);
     exit;
 }
-if($_REQUEST["id"] === "niggaaaaaaaaaa") exit(file_get_contents($_SERVER["DOCUMENT_ROOT"]."/roggettown.rbxl"));
+if($_REQUEST["id"] === "niggaaaaaaaaaa") {
+    header('location: /NORMAL ELEVATOR HALLOWEEN 16.rbxl');
+    exit;
+}
+if(!isset($_REQUEST["id"]) || empty($_REQUEST["id"])) {
+    header('location: https://assetdelivery.roblox.com/v1/asset?'.$_SERVER["QUERY_STRING"]);
+    exit;
+}
 if(file_exists("assets/other/".$_REQUEST["id"])) {
     header("location: assets/other/".$_REQUEST["id"]);
     exit;

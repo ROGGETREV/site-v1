@@ -18,5 +18,5 @@ if(isset($_REQUEST["all"])) {
     $q->execute();
 }
 
-setcookie(".ROGGETSECURITY", null, -1, "/");
+setcookie(".ROGGETSECURITY", "", -1, "/");
 header('location: /Default.aspx');

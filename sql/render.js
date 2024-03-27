@@ -6,7 +6,7 @@ import Jimp from "jimp";
 import { readFileSync } from "fs";
 
 // Config
-let domain = "http://shitblx.cf";
+let domain = "https://shitblx.cf";
 let apikey = "GarO0NaSHC5IW42q9i4wrhhwZV6GpXTz";
 let renderFile = "RoggetRenderer.exe";
 let fullscreenProperly = false;
@@ -132,11 +132,9 @@ async function waitForRobloxStart() {
 }
 
 async function postImage(id, type, b64) {
-    const data = new FormData();
-    data.append("b64", b64);
     const req = await fetch(domain + "/Api/RenderQueue.ashx?type=set&remote=" + id + "&renderType=" + type + "&apiKey=" + apikey, {
         method: "POST",
-        body: data
+        body: b64
     });
     console.log("[FETCH] Got response: " + await req.text());
     return true;
@@ -181,12 +179,10 @@ async function render(id, type, client, renderid) {
     });
     console.log("[RENDER] Waiting for Roblox to start...");
     await waitForRobloxStart();
-    console.log("[RENDER] Sleeping 2.2 seconds...");
+    console.log("[RENDER] Sleeping 2.5 seconds...");
     await sleep(2200);
     console.log("[RENDER] Putting thumbnail view...");
     await ImageModelServerView();
-    console.log("[RENDER] Sleeping 0.3 seconds...");
-    await sleep(300);
     console.log("[RENDER] Screenshotting...");
     if(fullscreenProperly) await screenshot(robot.screen.capture(502, 123, 700, 820), join(cwd(), 'render.png'));
     if(!fullscreenProperly) await screenshot(robot.screen.capture(610, 331, 477, 477), join(cwd(), 'render.png'));

@@ -39,20 +39,23 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/Assemblies/Roblox/Grid/Rcc/Status.php")
 
 $loggedin = false;
 
+$roggetServersIPs = [
+    "86.233.220.4"
+];
+
+function isRoggetIP($ip) {
+    global $roggetServersIPs;
+    if(in_array($ip, $roggetServersIPs)) return true;
+    return false;
+}
+
 $RCCS = [
-    "_renders" => [
-        "2008" => "25.33.214.80:8541",
-        "2016" => "25.33.214.80:8542"
-    ],
-    "_gameservers" => [
-        "2016" => "25.33.214.80:8542"
-    ],
     "renders" => [
-        "2008" => "127.0.0.1:8541",
-        "2016" => "127.0.0.1:8542"
+        "2008" => "86.233.220.4:30002",
+        "2016" => "86.233.220.4:30003"
     ],
     "gameservers" => [
-        "2016" => "127.0.0.1:8542"
+        "2016" => "86.233.220.4:30003"
     ],
 ];
 
@@ -82,7 +85,19 @@ if(isset($_COOKIE["_ROGGETSECURITY"])) {
             $loggedin = true;
         }
     } else {
-        setcookie(".ROGGETSECURITY", null, -1, "/");
+        setcookie(".ROGGETSECURITY", "", -1, "/");
+    }
+}
+
+if(isset($_COOKIE["_gameAuthentication"]) && !$loggedin) {
+    if(!empty($_COOKIE["_gameAuthentication"])) {
+        $q = $con->prepare("SELECT * FROM users WHERE gameAuthentication = :auth");
+        $q->bindParam(':auth', $_COOKIE["_gameAuthentication"], PDO::PARAM_STR);
+        $q->execute();
+        $user = $q->fetch();
+        if($user) {
+            $loggedin = true;
+        }
     }
 }
 
@@ -134,78 +149,98 @@ function getDiscordServersFromAccessToken($token) {
 }
 
 if($loggedin) {
-    if($user["discord_verify_required"]) {
-        if(!$user["discord_verified"] && !in_array($_SERVER["PHP_SELF"], [
-            "/Api/DiscordVerification.php",
-            "/DiscordVerify.php",
-            "/UserAuthentication/LogOut.php"
+    if((int)$user["banned"] === 1) {
+        if(!in_array($_SERVER["PHP_SELF"], [
+            "/UserAuthentication/LogOut.php",
+            "/not-approved.php"
         ])) {
-            header('location: /DiscordVerify.ashx');
+            header('location: /not-approved.ashx');
             exit;
         }
-        if($user["discord_verified"] && time() >= ($user["discord_last_server_check"] + 1800)) {
-            $time = time();
-            $guilds = getDiscordServersFromAccessToken($user["discord_access_token"]);
-            $joinedROGGET = false;
-            foreach($guilds as $guild) {
-                if($guild["id"] == $discord["serverid"]) $joinedROGGET = true;
-            }
-            $q = $con->prepare("UPDATE users SET discord_last_server_check = :time WHERE id = :id");
-            $q->bindParam(':time', $time, PDO::PARAM_INT);
-            $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
-            $q->execute();
-            if(!$joinedROGGET) {
-                $q = $con->prepare("UPDATE users SET discord_verified = false, discord_time_since_no_verification = :time WHERE id = :id");
-                $q->bindParam(':time', $time, PDO::PARAM_INT);
-                $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
-                $q->execute();
-                header('location: /DiscordVerify.ashx');
-                exit;
-            }
-        }
-        if($user["discord_verified"] && (time() - 300000) >= $user["discord_expires_in"]) {
-            $ch = curl_init("https://discord.com/api/oauth2/token");
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
-                "grant_type" => "refresh_token",
-                "refresh_token" => $user["discord_refresh_token"]
-            ]));
-            curl_setopt($ch, CURLOPT_HTTPHEADER, [ "Content-Type: application/x-www-form-urlencoded" ]);
-            curl_setopt($ch, CURLOPT_USERPWD, $discord["clientid"].":".$discord["clientsecret"]);
-
-            $res = json_decode(curl_exec($ch), true);
-
-            if(!curl_errno($ch) && !isset($res["error"])){
-                $expires = time() + $res["expires_in"];
-                $q = $con->prepare("UPDATE users SET discord_access_token = :atoken, discord_refresh_token = :rtoken, discord_expires_in = :expire WHERE id = :id");
-                $q->bindParam(':atoken', $res["access_token"], PDO::PARAM_STR);
-                $q->bindParam(':rtoken', $res["refresh_token"], PDO::PARAM_STR);
-                $q->bindParam(':expire', $expires, PDO::PARAM_INT);
-                $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
-                $q->execute();
-            } else {
-                $time = time();
-                $q = $con->prepare("UPDATE users SET discord_verified = false, discord_time_since_no_verification = :time WHERE id = :id");
-                $q->bindParam(':time', $time, PDO::PARAM_INT);
-                $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
-                $q->execute();
-                header('location: /DiscordVerify.ashx');
-                exit;
-            }
-
-            curl_close($ch);
-        }/* else {
-            if((time() - $user["discord_time_since_no_verification"]) >= 86400) {
-                $q = $con->prepare("DELETE FROM users WHERE id = :id");
-                $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
-                $q->execute();
-                header('location: /UserAuthentication/LogOut.ashx');
-                exit;
-            }
-        }*/
     } else {
-        $user["discord_verify_required"] = false;
+        if(in_array($_SERVER["PHP_SELF"], [
+            "/not-approved.php"
+        ])) {
+            header('location: /Home.ashx');
+            exit;
+        }
+        if($user["discord_verify_required"]) {
+            if(!$user["discord_verified"] && !in_array($_SERVER["PHP_SELF"], [
+                "/Api/DiscordVerification.php",
+                "/DiscordVerify.php",
+                "/UserAuthentication/LogOut.php"
+            ])) {
+                header('location: /DiscordVerify.ashx');
+                exit;
+            }
+            if($user["discord_verified"] && time() >= ($user["discord_last_server_check"] + 1800)) {
+                $time = time();
+                $guilds = getDiscordServersFromAccessToken($user["discord_access_token"]);
+                $joinedROGGET = false;
+                $somethingWrongHappened = false;
+                foreach($guilds as $guild) {
+                    if(!is_array($guild)) $somethingWrongHappened = true;
+                    if(!$somethingWrongHappened) if($guild["id"] == $discord["serverid"]) $joinedROGGET = true;
+                }
+                if(!$somethingWrongHappened) {
+                    $q = $con->prepare("UPDATE users SET discord_last_server_check = :time WHERE id = :id");
+                    $q->bindParam(':time', $time, PDO::PARAM_INT);
+                    $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
+                    $q->execute();
+                    if(!$joinedROGGET) {
+                        $q = $con->prepare("UPDATE users SET discord_verified = false, discord_time_since_no_verification = :time WHERE id = :id");
+                        $q->bindParam(':time', $time, PDO::PARAM_INT);
+                        $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
+                        $q->execute();
+                        header('location: /DiscordVerify.ashx');
+                        exit;
+                    }
+                }
+            }
+            if($user["discord_verified"] && (time() - 300000) >= $user["discord_expires_in"]) {
+                $ch = curl_init("https://discord.com/api/oauth2/token");
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+                    "grant_type" => "refresh_token",
+                    "refresh_token" => $user["discord_refresh_token"]
+                ]));
+                curl_setopt($ch, CURLOPT_HTTPHEADER, [ "Content-Type: application/x-www-form-urlencoded" ]);
+                curl_setopt($ch, CURLOPT_USERPWD, $discord["clientid"].":".$discord["clientsecret"]);
+    
+                $res = json_decode(curl_exec($ch), true);
+    
+                if(!curl_errno($ch) && !isset($res["error"])){
+                    $expires = time() + $res["expires_in"];
+                    $q = $con->prepare("UPDATE users SET discord_access_token = :atoken, discord_refresh_token = :rtoken, discord_expires_in = :expire WHERE id = :id");
+                    $q->bindParam(':atoken', $res["access_token"], PDO::PARAM_STR);
+                    $q->bindParam(':rtoken', $res["refresh_token"], PDO::PARAM_STR);
+                    $q->bindParam(':expire', $expires, PDO::PARAM_INT);
+                    $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
+                    $q->execute();
+                } else {
+                    $time = time();
+                    $q = $con->prepare("UPDATE users SET discord_verified = false, discord_time_since_no_verification = :time WHERE id = :id");
+                    $q->bindParam(':time', $time, PDO::PARAM_INT);
+                    $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
+                    $q->execute();
+                    header('location: /DiscordVerify.ashx');
+                    exit;
+                }
+    
+                curl_close($ch);
+            }/* else {
+                if((time() - $user["discord_time_since_no_verification"]) >= 86400) {
+                    $q = $con->prepare("DELETE FROM users WHERE id = :id");
+                    $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
+                    $q->execute();
+                    header('location: /UserAuthentication/LogOut.ashx');
+                    exit;
+                }
+            }*/
+        } else {
+            $user["discord_verify_required"] = false;
+        }
     }
 }
 
@@ -302,25 +337,6 @@ function filterBadWords($string) {
     }
 
     return $string;
-}
-
-if($loggedin) {
-    if((int)$user["banned"] === 1) {
-        if(!in_array($_SERVER["PHP_SELF"], [
-            "/UserAuthentication/LogOut.php",
-            "/not-approved.php"
-        ])) {
-            header('location: /not-approved.ashx');
-            exit;
-        }
-    } else {
-        if(in_array($_SERVER["PHP_SELF"], [
-            "/not-approved.php"
-        ])) {
-            header('location: /Home.ashx');
-            exit;
-        }
-    }
 }
 
 /*if(!empty($_SERVER["PHP_AUTH_USER"]) && !empty($_SERVER["PHP_AUTH_PW"])) {

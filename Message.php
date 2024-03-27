@@ -97,7 +97,7 @@ foreach($q->fetchAll() as $msg) array_push($sentmessages, $msg);
                 </div>
             </div>
             <h3><?php echo htmlspecialchars($msg["subject"]); ?></h3>
-            <h6><?php echo htmlspecialchars($msg["content"]); ?></h6>
+            <h6><?php echo nl2br(htmlspecialchars($msg["content"])); ?></h6>
         </div>
         <?php } ?>
     </div>

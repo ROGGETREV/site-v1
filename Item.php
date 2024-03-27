@@ -70,7 +70,7 @@ if($q->fetch()) $owned = true;
         <h6><?php echo htmlspecialchars($item["description"]); ?></h6>
     </div>
     <?php
-    if(!$loggedin) {
+    if($loggedin) {
     if(!$owned) { ?>
     <!-- Purchase modal -->
     <div class="modal fade" id="purchaseModal" tabindex="-1" aria-labelledby="purchaseModalLabel" aria-hidden="true">

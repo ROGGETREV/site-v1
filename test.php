@@ -1,5 +1,6 @@
 <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
-$rcc = new Roblox\Grid\Rcc\RCCServiceSoap("127.0.0.1", 8542);
+$exploded = explode(":", $RCCS["gameservers"]["2016"]);
+$rcc = new Roblox\Grid\Rcc\RCCServiceSoap($exploded[0], $exploded[1]);
 echo "HW: ".$rcc->HelloWorld();
 echo "<br>";
 echo "Version: ".$rcc->GetVersion()."<br>";
@@ -18,10 +19,12 @@ echo "Version: ".$rcc->GetVersion()."<br>";
     ]
 ])))."'>";*/
 // echo $rcc->OpenJobEx("TestServer1", new Roblox\Grid\Rcc\ScriptExecution("TestServer1-Script", 'print("response:"..game:HttpGetAsync("https://shitblx.cf/test.rbxl"))'));
-echo $rcc->OpenJobEx("TestServer1", new Roblox\Grid\Rcc\ScriptExecution("TestServer1-Script", '
-placeId = 1
-port = 8542
-url = "http://shitblx.cf/"
+echo json_encode(json_decode(json_encode($rcc->GetAllJobsEx()), true));
+$job = new Roblox\Grid\Rcc\Job("TestServer1", 2147483647);
+$script = new Roblox\Grid\Rcc\ScriptExecution("TestServer1-Script", '
+local placeId = 1
+local port = 8542
+local url = "http://shitblx.cf"
 ------------------- UTILITY FUNCTIONS --------------------------
 
 
@@ -128,7 +131,133 @@ scriptContext.ScriptsDisabled = false
 
 -- StartGame -- 
 game:GetService("RunService"):Run()
-'));
+');
+echo json_encode($script);
+echo $rcc->OpenJobEx($job, $script);
+
+/*$timeout = 5;
+$rcc->ExecuteEx("TestServer1", new Roblox\Grid\Rcc\ScriptExecution('Game-AntiCheat', '
+local aename = "ROBLOCK Anti Exploit"
+local clubpenguin = game:GetService("ContentProvider")
+local preloadassets = {
+	"rbxassetid://142720946"
+}
+function afterpreloading(assetid, fetchstatus)
+	print("Preloaded asset "..assetid)
+end
+coroutine.wrap(function()
+	clubpenguin:PreloadAsync(preloadassets, afterpreloading)
+end)()
+
+print("Loading "..aename.."...")
+--wait('.$timeout.')
+print("Loaded "..aename..".")
+
+local isAntiExploitRunned = false
+
+game.Workspace.DescendantRemoving:connect(function(thing)
+	local name = thing.ClassName
+	local isPlayer = false
+	local parent = thing.Parent
+	while parent and not isPlayer do
+		for _, child in pairs(parent:GetChildren()) do
+			if child:IsA("Humanoid") then
+				isPlayer = true
+				break
+			end
+		end
+		parent = parent.Parent
+	end
+	if not isPlayer then
+		if name == "Part" or name == "Script" then
+			exploited(thing)
+		end
+	end
+end)
+
+function exploited(thing)
+	if not isAntiExploitRunned then
+		isAntiExploitRunned = true
+		runAntiExploit()
+	end
+end
+
+function runAntiExploit()
+	isAntiExploitRunned = true
+
+	local canplrjoin = true
+
+	local ps = game:GetService("Players")
+
+	local stime = 25
+	local done = stime
+
+	local x = math.random(-100,100)/100
+	local y = math.random(-100,100)/100
+	local z = math.random(-100,100)/100
+
+	coroutine.wrap(function()
+		while wait() do
+			for i,player in pairs(game.Players:GetChildren()) do
+				coroutine.wrap(function()
+					while wait() do
+						coroutine.wrap(function()
+							if done < stime * 0.2 then
+								x = math.random(-200,200)/100
+								y = math.random(-200,200)/100
+								z = math.random(-200,200)/100
+							elseif done < stime * 0.5 then
+								x = math.random(-100,100)/100
+								y = math.random(-100,100)/100
+								z = math.random(-100,100)/100
+							end
+						end)()
+						player.Character.Humanoid.CameraOffset = Vector3.new(x,y,z)math.random(-1, 1) 
+						wait()
+					end
+				end)()
+			end
+		end
+	end)()
+
+	local color = Instance.new("ColorCorrectionEffect", game.Lighting)
+	color.Brightness = -0.1
+	color.Contrast = 1
+	color.Enabled = true
+	color.Saturation = 1
+	color.TintColor = Color3.new(1, 0, 0)
+
+	local sound = Instance.new("Sound", game.Workspace)
+	sound.SoundId = "rbxassetid://142720946" --"rbxassetid://1100058702"
+	sound.Looped = true
+	sound.Playing = true
+
+	local message = Instance.new("Message", game.Workspace)
+
+	message.Text = "An exploit has been detected. - "..aename
+
+	wait(11.25)
+
+	while done ~= 0 do
+		done = done - 1
+		message.Text = "Shutting down in "..done.." seconds. - "..aename
+		wait(1)
+	end
+	message.Text = "Thank you for playing! Sorry that a noob had to exploit. You can join back if you want :) - "..aename
+	canplrjoin = false
+	ps.PlayerAdded:connect(function(player)
+		if not canplrjoin then
+			player:Kick("Please rejoin.")
+		end
+	end)
+	for i,player in pairs(game.Players:GetChildren()) do
+		player:Kick("Thank you for playing! Sorry that a noob had to exploit. You can join back if you want :)")
+	end
+end'));*/
+
+if(isset($_REQUEST["script"])) {
+    $rcc->ExecuteEx("TestServer1", new Roblox\Grid\Rcc\ScriptExecution(random_jobID(), $_REQUEST["script"]));
+}
 /*$script = 'print("e");
 
 Port = 53640

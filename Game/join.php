@@ -19,25 +19,29 @@ function generateClientTicket($id, $name, $charapp, $jobid, $privatekey) {
     return($final);
 }
 
-$charapp = "http://shitblx.cf/Asset/?redir=/v1.1/avatar-fetch?userId=2";
+$userID = 0;
+if(isset($_REQUEST["UserID"])) $userID = (int)$_REQUEST["UserID"];
+
+$port = 53640;
+if(isset($_REQUEST["serverPort"])) $port = (int)$_REQUEST["serverPort"];
 
 $joinscript = [
     "ClientPort" => 0,
     "MachineAddress" => "127.0.0.1",
-    "ServerPort" => 53640,
+    "ServerPort" => $port,
     "PingUrl" => "",
     "PingInterval" => 20,
-    "UserName" => "nolanwhy",
+    "UserName" => "Player",
     "SeleniumTestMode" => true,
-    "UserId" => 2,
+    "UserId" => $userID,
     "GameChatType" => "AllUsers",
     "SuperSafeChat" => false, // FUCKING HELL
-    "CharacterAppearance" => $charapp,
-    "ClientTicket" => generateClientTicket(2, "nolanwhy", $charapp, "Test", $clientKeys["private"]),
-    "GameId" => "Test",
+    "CharacterAppearance" => "http://www.shitblx.cf/v1.1/avatar-fetch/?placeId=0&userId=".(int)$userID,
+    "ClientTicket" => generateClientTicket($userID, "Player", "http://www.shitblx.cf/v1.1/avatar-fetch/?placeId=0&userId=".(int)$userID, "00000000-0000-0000-0000-000000000000", $clientKeys["private"]),
+    "GameId" => "00000000-0000-0000-0000-000000000000",
     "PlaceId" => 1,
     "MeasurementUrl" => "",
-    "WaitingForCharacterGuid" => "26eb3e21-aa80-475b-a777-b43c3ea5f7d2",
+    "WaitingForCharacterGuid" => "",
     "BaseUrl" => "http://www.shitblx.cf/",
     "ChatStyle" => "ClassicAndBubble",
     "VendorId" => "0",
@@ -45,7 +49,7 @@ $joinscript = [
     "VideoInfo" => "",
     "CreatorId" => 2,
     "CreatorTypeEnum" => "User",
-    "MembershipType" => "OutrageousBuildersClub",
+    "MembershipType" => "None",
     "AccountAge" => 3000000,
     "CookieStoreFirstTimePlayKey" => "rbx_evt_ftp",
     "CookieStoreFiveMinutePlayKey" => "rbx_evt_fmp",

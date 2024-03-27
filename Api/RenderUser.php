@@ -162,9 +162,10 @@ if($continue2008) {
 // Start 2011
 
 $script2011 = 'local plr = game.Players:CreateLocalPlayer(0)
+plr.CharacterAppearance = "http://shitblx.cf/Game/CharacterFetch.ashx?userId='.(int)$id.'"
 plr:LoadCharacter()
 
-'.$characterScript;
+';
 
 $q = $con->prepare("SELECT * FROM renderqueue WHERE `remote` = :id AND `type` = 'user'");
 $q->bindParam(':id', $id, PDO::PARAM_INT);
@@ -184,7 +185,7 @@ game:GetService("ContentProvider"):SetBaseUrl("http://shitblx.cf/")
 game:GetService("ScriptContext").ScriptsDisabled = true
 
 local plr = game.Players:CreateLocalPlayer(0)
---plr.CharacterAppearance = "http://shitblx.cf/Asset/?redir=/Game/CharacterFetch.ashx?ID='.(int)$id.'"
+--plr.CharacterAppearance = "http://shitblx.cf/Asset/?redir=/Game/CharacterFetch.ashx?userId='.(int)$id.'"
 plr:LoadCharacter()
 
 '.$characterScript.'
@@ -254,7 +255,7 @@ game:GetService("ContentProvider"):SetBaseUrl("http://shitblx.cf/")
 game:GetService("ScriptContext").ScriptsDisabled = true
 
 local plr = game.Players:CreateLocalPlayer(0)
---plr.CharacterAppearance = "http://shitblx.cf/Asset/?redir=/Game/CharacterFetch.ashx?ID='.(int)$id.'"
+--plr.CharacterAppearance = "http://shitblx.cf/Asset/?redir=/Game/CharacterFetch.ashx?userId='.(int)$id.'"
 plr:LoadCharacter()
 
 '.$characterScript.'

@@ -3,7 +3,7 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
 header("content-type: application/json");
 
 $info = [
-    "UserId" => null,
+    "UserId" => 0,
     "Username" => null,
     "DisplayName" => null,
     "HasPasswordSet" => true,

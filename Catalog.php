@@ -11,7 +11,7 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>
     <br>
     <div class="<?php echo $containerClasses; ?>">
-        <h2>Catalog Beta</h2>
+        <h2>Catalog</h2>
         <div class="row">
             <div class="col-md-2">
                 <img src="/images/CatalogAssets/browsebycategory.png" style="width: 100%;">

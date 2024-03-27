@@ -37,14 +37,14 @@ if($type === "get") {
     if(!isset($_REQUEST["remote"])) {
         exit(json_encode(["success"=>false,"message"=>"No remote provided"]));
     }
-    if(!isset($_REQUEST["b64"])) {
-        exit(json_encode(["success"=>false,"message"=>"No b64 provided"]));
+    if(empty(file_get_contents("php://input"))) {
+        exit(json_encode(["success"=>false,"message"=>"No image data (b64) provided"]));
     }
     if(!isset($_REQUEST["renderType"])) {
         exit(json_encode(["success"=>false,"message"=>"No renderType provided"]));
     }
     $remote = (int)$_REQUEST["remote"];
-    $b64 = $_REQUEST["b64"];
+    $b64 = file_get_contents("php://input");
     $renderType = $_REQUEST["renderType"];
     if(!in_array($renderType, [
         "user",

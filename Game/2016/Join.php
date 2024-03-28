@@ -1,7 +1,7 @@
 <?php
 require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
 header('Content-Type: application/json');
-file_put_contents("test.txt", json_encode($_COOKIE));
+
 if(!$loggedin) exit;
 
 function sign($script, $key) {
@@ -26,7 +26,7 @@ $charapp = "http://www.shitblx.cf/v1.1/avatar-fetch/?placeId=1&userId=".(int)$us
 $joinscript = [
     "ClientPort" => 0,
     "MachineAddress" => "86.233.220.4",
-    "ServerPort" => 53640,
+    "ServerPort" => 30004,
     "PingUrl" => "",
     "PingInterval" => 20,
     "UserName" => $user["username"],

@@ -41,16 +41,17 @@ if(!$usr) {
         <h3>ROGGET Game</h3>
         <div class="row">
             <div class="col-md-4">
+            <div class="gameClientCard gameClientCard-big"><?php echo htmlspecialchars($game["gameClient"]); ?></div>
                 <img src="/images/Games/Get.ashx?ID=<?php echo (int)$game["id"]; ?>" onerror='this.src = "/images/loaderror.png";' style="width: 100%;">
             </div>
             <div class="col-md-8">
                 <h2><?php echo htmlspecialchars($game["name"]); ?></h2>
                 <h6>By <a href="/User.aspx?ID=<?php echo (int)$usr["id"]; ?>"><?php echo htmlspecialchars($usr["username"]); ?></a></h6>
-                <br><br><br><br>
+                <div style="height: 87px;"></div>
                 <?php if($loggedin) { ?>
-                <br><button class="btn btn-success" onclick='play();'>Play</button>
+                <button class="btn btn-success" onclick='play();'>Play</button>
                 <?php } else { ?>
-                <br><button class="btn btn-secondary" onclick='window.location = "/Default.aspx";'>Login to play</button>
+                <button class="btn btn-secondary" onclick='window.location = "/Default.aspx";'>Login to play</button>
                 <?php } ?>
             </div>
         </div>

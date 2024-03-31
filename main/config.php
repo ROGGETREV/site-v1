@@ -40,7 +40,8 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/Assemblies/Roblox/Grid/Rcc/Status.php")
 $loggedin = false;
 
 $roggetServersIPs = [
-    "86.233.220.4"
+    "86.233.220.4",
+    "90.23.203.230"
 ];
 
 function isRoggetIP($ip) {
@@ -52,10 +53,10 @@ function isRoggetIP($ip) {
 $RCCS = [
     "renders" => [
         "2008" => "86.233.220.4:30002",
-        "2016" => "86.233.220.4:30003"
+        "2016" => "127.0.0.1:30003"
     ],
     "gameservers" => [
-        "2016" => "86.233.220.4:30003"
+        "2016" => "127.0.0.1:30003"
     ],
 ];
 
@@ -93,6 +94,18 @@ if(isset($_COOKIE["_gameAuthentication"]) && !$loggedin) {
     if(!empty($_COOKIE["_gameAuthentication"])) {
         $q = $con->prepare("SELECT * FROM users WHERE gameAuthentication = :auth");
         $q->bindParam(':auth', $_COOKIE["_gameAuthentication"], PDO::PARAM_STR);
+        $q->execute();
+        $user = $q->fetch();
+        if($user) {
+            $loggedin = true;
+        }
+    }
+}
+
+if(isset($_REQUEST["authentication"]) && !$loggedin) {
+    if(!empty($_REQUEST["authentication"])) {
+        $q = $con->prepare("SELECT * FROM users WHERE gameAuthentication = :auth");
+        $q->bindParam(':auth', $_REQUEST["authentication"], PDO::PARAM_STR);
         $q->execute();
         $user = $q->fetch();
         if($user) {
@@ -269,6 +282,15 @@ function filterBadWords($string) {
         "nigger",
         "niggger",
         "nigggger",
+        "n1gga",
+        "1gga",
+        "n1ggga",
+        "1ggga",
+        "n1gggga",
+        "1gggga",
+        "n1gger",
+        "n1ggger",
+        "n1gggger",
         "stfu",
         "fxck",
         "fawk",
@@ -276,6 +298,10 @@ function filterBadWords($string) {
         "bitche",
         "bitches",
         "bitchs",
+        "b1tch",
+        "b1tche",
+        "b1tches",
+        "b1tchs",
         "lmao",
         "lmfao",
         "wtf",
@@ -284,6 +310,7 @@ function filterBadWords($string) {
         "kms",
         "ass",
         "dick",
+        "d1ck",
         "boobs",
         "boob",
         "pussy",
@@ -295,13 +322,21 @@ function filterBadWords($string) {
         "faggt",
         "fagt",
 
-        "yomi",
+        /*"yomi",
         "madblox",
         "madblxx",
-        "sigma",
+        "sigma",          these are too SIGMA to block
         "rizz",
         "gyatt",
-        "xxxtentation",
+        "xxxtentation",*/
+
+        "caleb",
+        "carly",
+        "caleb lesley",
+        "caleblesley",
+
+        "casey",
+        "cave story",
         
         "fdp",
         "ntm",

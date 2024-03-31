@@ -8,12 +8,16 @@ $q->bindParam(':id', $id, PDO::PARAM_INT);
 $q->execute();
 $usr = $q->fetch();
 if(!$usr) exit;
-$return = "http://".$_SERVER["SERVER_NAME"]."/asset/?redir=/Asset/BodyColors.ashx/?userId=$id;";
+$return = "http://".$_SERVER["SERVER_NAME"];
+if(!isset($_REQUEST["noredir"])) $return .= "/Asset/?redir=";
+$return .= "/Asset/BodyColors.ashx/?userId=$id;";
 
 $q = $con->prepare("SELECT * FROM wearing WHERE user = :id");
 $q->bindParam(':id', $id, PDO::PARAM_INT);
 $q->execute();
 foreach($q->fetchAll() as $wearing) {
-    $return .= "http://".$_SERVER["SERVER_NAME"]."/asset/?redir=/Api/FetchAvatarItem.ashx?ID=".(int)$wearing["item"].";";
+    $return .= "http://".$_SERVER["SERVER_NAME"];
+    if(!isset($_REQUEST["noredir"])) $return .= "/Asset/?redir=";
+    $return .= "/Api/FetchAvatarItem.ashx?ID=".(int)$wearing["item"].";";
 }
 echo substr($return, 0, -1);

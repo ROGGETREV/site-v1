@@ -22,7 +22,7 @@ if(!$game) {
     exit;
 }
 
-$auth = bin2hex(random_bytes(100));
+$auth = bin2hex(random_bytes(20));
 
 $q = $con->prepare("UPDATE users SET gameAuthentication = :auth WHERE id = :id");
 $q->bindParam(':auth', $auth, PDO::PARAM_STR);

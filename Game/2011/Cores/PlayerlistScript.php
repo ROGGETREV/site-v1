@@ -1,7 +1,7 @@
 <?php error_reporting(0); ?>
 print("Starting playerlist...")
 
-authentication = "<?php echo $_REQUEST["authentication"] ?? ""; ?>"
+authentication = "<?php echo addslashes($_REQUEST["authentication"] ?? ""); ?>"
 
 function randint()
     return (math.random() * 99999999) + #game.Workspace:GetChildren() * #game.Players:GetChildren() * (math.random() * 99999999)
@@ -1866,23 +1866,16 @@ local function getFriendStatus(player)
 	if player == game.Players.LocalPlayer then
 		return Enum.FriendStatus.NotFriend
 	else
-		local success, result = pcall(function() return game.Players.LocalPlayer:GetFriendStatus(player) end)
-		if success then
-			return result
+		local apisuccess, apiresult = pcall(function() return dofile("http://shitblx.cf/Game/AreFriends.ashx?authentication="..authentication.."&ID="..player.userId) end)
+		if apisuccess then
+			return apiresult
 		else
-			return Enum.FriendStatus.NotFriend
-		end
-	end
-end
-local function getAPIFriendStatus(player)
-	if player == game.Players.LocalPlayer then
-		return Enum.FriendStatus.NotFriend
-	else
-		local success, result = pcall(function() return dofile("http://shitblx.cf/Game/AreFriends.ashx?authentication="..authentication.."&ID="..player.userId) end)
-		if success then
-			return result
-		else
-			return Enum.FriendStatus.NotFriend
+			local success, result = pcall(function() return game.Players.LocalPlayer:GetFriendStatus(player) end)
+			if success then
+				return result
+			else
+				return Enum.FriendStatus.NotFriend
+			end
 		end
 	end
 end

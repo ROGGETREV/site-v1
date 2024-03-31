@@ -5,3 +5,19 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+.gameClientCard{
+    position: absolute;
+    background-color: #22222280;
+    border-radius: 0 0 5px 0;
+}
+.gameClientCard-small{
+    width: 48px;
+    height: 25px;
+}
+.gameClientCard-big{
+    width: 60px;
+    height: 32px;
+    font-size: 20px;
+}
+</style>

@@ -13,10 +13,10 @@ end
 function kickPlayer(player, reason)
 	name = player.Name
 	player.Name = reason
-	wait(0.1)
-    game.NetworkServer:findFirstChild(name.."|"..player.userId):CloseConnection()
-    print("Player '" .. name .. "' Kicked. Reason: "..reason)
-    -- print("Tried kicking player but 2011E fucking SUCKS ASS MAN")
+	wait(1)
+    pcall(function() game.NetworkServer:findFirstChild(name.."|"..player.userId):CloseConnection() end)
+    pcall(function() player.Name = name end)
+	print("Player '" .. name .. "' Kicked. Reason: "..reason)
 end
 
 function waitForChild(parent, childName)
@@ -85,6 +85,18 @@ function characterRessurection(player)
 		humanoid.Died:connect(function() wait(5) player:LoadCharacter() end)
 	end
 end
+
+function splitString(inputstr, sep)
+	if sep == nil then
+			sep = "%s"
+	end
+	local t={}
+	for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+			table.insert(t, str)
+	end
+	return t
+end
+
 game:service("Players").PlayerAdded:connect(function(player)
 	print("Player joined with authentication: "..player.Name)
 
@@ -99,33 +111,46 @@ game:service("Players").PlayerAdded:connect(function(player)
         end
     end)
     
-	pcall(function() dofile("http://shitblx.cf/Game/AuthenticationCheck.ashx?authentication="..player.Name.."&game="..gameId.."&apiKey="..ROGGETAPIkey.."&"..randint()) end)
-
-    print("Renaming Connection...")
-    pcall(function()
-        for i, v in pairs(game.NetworkServer:GetChildren()) do
-            if(not string.find(v.Name, "|")) then
-                v.Name = player.Name.."|"..player.userId
-            end
-        end
-    end)
-
-    player.CharacterAppearance = "http://shitblx.cf/Game/CharacterFetch.ashx?userId="..player.userId.."&game="..gameId
+	authCheck = splitString(game:httpGetAsync("http://shitblx.cf/Game/AuthenticationCheck.ashx?authentication="..player.Name.."&game="..gameId.."&apiKey="..ROGGETAPIkey.."&"..randint()), ";");
 	
-	print("Loading character...")
-	characterRessurection(player)
+	-- pcall(function() dofile("http://shitblx.cf/Game/AuthenticationCheck.ashx?authentication="..player.Name.."&game="..gameId.."&apiKey="..ROGGETAPIkey.."&"..randint()) end)
 
-	player.Changed:connect(function(name)
-		if name=="Character" then
-			characterRessurection(player)
-		end
-	end)
+	if(authCheck[1] == "false") then
+		kickPlayer(player, "Authentication check failed")
+	else
+		player.userId = authCheck[2]
+		player.Name = authCheck[3]
+		player.CharacterAppearance = authCheck[4]
+
+		print("Renaming Connection...")
+	    pcall(function()
+	        for i, v in pairs(game.NetworkServer:GetChildren()) do
+	            if(not string.find(v.Name, "|")) then
+	                v.Name = player.Name.."|"..player.userId
+	            end
+	        end
+	    end)
+
+	    -- player.CharacterAppearance = "http://shitblx.cf/Game/CharacterFetch.ashx?userId="..player.userId.."&game="..gameId.."&noredir"
+
+		print("Loading character...")
+		characterRessurection(player)
+
+		player.Changed:connect(function(name)
+			if name == "Character" then
+				characterRessurection(player)
+			end
+		end)
+	end
 end)
 
 game.Players.PlayerAdded:connect(function(player)
     count = #game.Players:GetChildren()
     print("Contacting ROGGET API to set the player count to "..count)
     game:httpGet("http://shitblx.cf/Game/SetPlayerCount.ashx?count="..count.."&game="..gameId.."&apiKey="..ROGGETAPIkey.."&"..randint())
+	--player.Chatted:connect(function(msg)
+	--	game:httpGet("http://shitblx.cf/Game/2011/Chat.ashx?text="..msg)
+	--end)
 end)
 
 game.Players.PlayerRemoving:connect(function(player)
@@ -136,7 +161,7 @@ end)
 
 Server:Start(Port, 10)
 
-game:Load("http://shitblx.cf/test.rbxl")
+game:Load("http://shitblx.cf/ironcafe.rbxl")
 
 game:GetService("RunService"):Run()
 

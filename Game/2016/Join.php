@@ -25,8 +25,8 @@ $charapp = "http://www.shitblx.cf/v1.1/avatar-fetch/?placeId=1&userId=".(int)$us
 
 $joinscript = [
     "ClientPort" => 0,
-    "MachineAddress" => "86.233.220.4",
-    "ServerPort" => 30004,
+    "MachineAddress" => "90.23.203.230",
+    "ServerPort" => 53640,
     "PingUrl" => "",
     "PingInterval" => 20,
     "UserName" => $user["username"],

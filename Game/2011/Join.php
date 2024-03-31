@@ -1,6 +1,12 @@
-authentication = "nolanwhyfrfr"
-username = "nolanwhy"
-userid = 69
+<?php
+require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
+header('Content-Type: application/json');
+
+if(!$loggedin) exit;
+?>
+authentication = "<?php echo addslashes($user["gameAuthentication"]); ?>"
+username = "<?php echo addslashes($user["username"]); ?>"
+userid = <?php echo (int)$user["id"]; ?>
 
 dofile("http://shitblx.cf/Game/2011/Cores/StarterScript.lua?authentication="..authentication)
 function onPlayerAdded(player)
@@ -127,11 +133,11 @@ local success, err = pcall(function()
     connectionFailed = client.ConnectionFailed:connect(onConnectionFailed)
     client.Ticket = authentication
 
-    playerConnectSuccess, player = pcall(function() return client:PlayerConnect(userid, "26.134.128.53", 53640, 0, threadSleepTime) end)
+    playerConnectSuccess, player = pcall(function() return client:PlayerConnect(userid, "90.23.203.230", 53640, 0, threadSleepTime) end)
     if not playerConnectSuccess then
         -- Old player connection scheme
         player = game:GetService("Players"):CreateLocalPlayer(userid)
-        client:Connect("26.134.128.53", 53640, 0, threadSleepTime)
+        client:Connect("90.23.203.230", 53640, 0, threadSleepTime)
     end
     player:SetSuperSafeChat(false)
     player:SetMembershipType(Enum.MembershipType.OutrageousBuildersClub)

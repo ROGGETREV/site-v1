@@ -1,4 +1,8 @@
 <?php
+require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
+header('Content-Type: application/json');
+
+if(!$loggedin) exit;
 $randomConnections = [
     "Welcome, {username}! We are connecting you to the game...",
     "Chicken nuggets? {username} is not a chicken nugget.",
@@ -11,12 +15,13 @@ $randomConnections = [
     "I play Pokemon GO everyday!"
 ];
 ?>
+
 client = game:GetService("NetworkClient") -- needs to be at the top, just in case
 
 local serverhost = "127.0.0.1"
 local serverport = 53640
-local authentication = "nolanwhyfrfr"
-local username = "nolanwhy"
+local authentication = "<?php echo addslashes($user["gameAuthentication"]); ?>"
+local username = "<?php echo addslashes($user["username"]); ?>"
 
 function exit(msg)
     game:SetMessage(msg)

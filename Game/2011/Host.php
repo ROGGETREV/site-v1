@@ -1,3 +1,7 @@
+<?php
+require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
+if(!isRoggetIP($_SERVER["REMOTE_ADDR"])) exit("print(\"Sorry, your IP is not whitelisted from ROGGET's internal APIs.\");");
+?>
 ROGGETAPIkey = "EHbKaHdKKrWlRfxneJkbEUWo9vZVLE64"
 
 gameId = 1

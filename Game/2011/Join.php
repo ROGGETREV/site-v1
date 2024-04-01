@@ -2,154 +2,84 @@
 require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
 header('Content-Type: application/json');
 
-if(!$loggedin) exit;
+if(!$loggedin || !isset($_REQUEST["game"])) exit;
+
+// Place join status results
+// Waiting = 0,
+// Loading = 1,
+// Joining = 2,
+// Disabled = 3,
+// Error = 4,
+// GameEnded = 5,
+// GameFull = 6
+// UserLeft = 10
+// Restricted = 11
 ?>
-authentication = "<?php echo addslashes($user["gameAuthentication"]); ?>"
-username = "<?php echo addslashes($user["username"]); ?>"
-userid = <?php echo (int)$user["id"]; ?>
+-- ROGGET PlaceLauncher and Joining handler
+-- Apparently we're forced to using a coroutine, oh well, if it works it works
 
-dofile("http://shitblx.cf/Game/2011/Cores/StarterScript.lua?authentication="..authentication)
-function onPlayerAdded(player)
-    -- override
+function randint()
+    return (math.random() * 99999999) + #game.Workspace:GetChildren() * #game.Players:GetChildren() * (math.random() * 99999999)
 end
 
-game:GetService("ChangeHistoryService"):SetEnabled(false)
-game:GetService("ContentProvider"):SetThreadPool(16)
-game:GetService("InsertService"):SetBaseCategoryUrl("http://shitblx.cf/Game/Tools/InsertAsset.ashx?nsets=10&type=base")
-game:GetService("InsertService"):SetUserCategoryUrl("http://shitblx.cf/Game/Tools/InsertAsset.ashx?nsets=20&type=user&userid=%d")
-game:GetService("InsertService"):SetCollectionUrl("http://shitblx.cf/Game/Tools/InsertAsset.ashx?sid=%d")
-game:GetService("InsertService"):SetAssetUrl("http://shitblx.cf/Asset/?id=%d")
-game:GetService("InsertService"):SetAssetVersionUrl("http://shitblx.cf/Asset/?assetversionid=%d")
--- game:GetService("InsertService"):SetTrustLevel(0)
-game:GetService("InsertService"):SetAdvancedResults(true)
-
-pcall(function() game:GetService("Players"):SetChatStyle(Enum.ChatStyle.ClassicAndBubble) end)
-local waitingForCharacter = false
-pcall(function()
-    if settings().Network.MtuOverride == 0 then
-        settings().Network.MtuOverride = 1400
-    end
-end)
-
-client = game:GetService("NetworkClient")
-visit = game:GetService("Visit")
-
-function setMessage(message)
-    game:SetMessage(message)
-end
-function showErrorWindow(message)
-    game:SetMessage(message)
-end
-function reportError(err)
-    print("***ERROR*** " .. err)
-    visit:SetUploadUrl("")
-    client:Disconnect()
-    wait(4)
-    showErrorWindow("Error: " .. err)
+function splitString(inputstr, sep)
+	if sep == nil then
+			sep = "%s"
+	end
+	local t={}
+	for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+			table.insert(t, str)
+	end
+	return t
 end
 
-function onDisconnection(peer, lostConnection)
-    if lostConnection then
-        showErrorWindow("You have lost the connection to the game")
+-- I should remove that
+function getPLStatusString(status)
+    if status == 0 then
+        return "Waiting for server..."
+    else if status == 1 then
+        return "Server found, loading..."
+    else if status == 2 then
+        return "Joining server"
     else
-        -- showErrorWindow("This game has shut down")
-        showErrorWindow("You have been kicked from the server. Reason: "..player.Name)
+        return "Unknown status"
     end
 end
 
-function requestCharacter(replicator)
-    local connection
-    connection = player.Changed:connect(function(property)
-        if property == "Character" then
-            game:ClearMessage()
-            waitingForCharacter = false
+coroutine.wrap(function()
+    -- Setting things up
+    authentication = "<?php echo addslashes($user["gameAuthentication"]); ?>"
+    username = "<?php echo addslashes($user["username"]); ?>"
+    userid = <?php echo (int)$user["id"]; ?>
 
-            connection:disconnect()
+    -- CoreScripts and disabling menus
+    game:GetService("NetworkClient")
+    dofile("http://shitblx.cf/Game/2011/Cores/StarterScript.lua?authentication="..authentication)
+
+    game:SetMessage("Hello, "..username.."! ROGGET is currently requesting authentication.")
+
+    canJoin = false
+
+    while not canJoin do
+        game:SetMessage("Hello, "..username.."! ROGGET is requesting authentication...")
+        placeLauncherResponse = splitString(game:httpGetAsync("http://shitblx.cf/Game/2011/PlaceLauncher.ashx?authentication="..authentication.."&game=<?php echo (int)$_REQUEST["game"]; ?>&"..randint()), ";")
+        if placeLauncherResponse[1] == "false" then
+            game:SetMessage("Failed to request ROGGET for the game!")
+            wait(math.huge)
         end
-    end)
-
-    setMessage("Requesting character")
-    local success, err = pcall(function()  
-        replicator:RequestCharacter()
-        setMessage("Waiting for character")
-        waitingForCharacter = true
-    end)
-
-    if not success then
-        reportError(err)
-        return
-    end
-end
-
-function onConnectionAccepted(url, replicator)
-    local waitingForMarker = true
-
-    local success, err = pcall(function()  
-        visit:SetPing("", 300)
-
-        if not false then
-            game:SetMessageBrickCount()
+        status = tonumber(placeLauncherResponse[2])
+        if status == 0 then
+            game:SetMessage("Searching for a server...")
+        elseif status == 1 then
+            game:SetMessage(status)
+        elseif status == 2 then
+            game:SetMessage("Currently loading into the server, "..username.."!")
+            canJoin = true
         else
-            setMessage("Teleporting...")
+            game:SetMessage("ROGGET will retry requesting authentication in 5 seconds.")
+            wait(5)
         end
-        replicator.Disconnection:connect(onDisconnection)
-
-        local marker = replicator:SendMarker()
-
-        marker.Received:connect(function()
-            waitingForMarker = false
-            requestCharacter(replicator)
-        end)
-    end)
-
-    if not success then
-        reportError(err)
-        return
     end
 
-    while waitingForMarker do
-        workspace:ZoomToExtents()
-        wait(0.5)
-    end
-end
-
-function onConnectionFailed(_, error)
-    showErrorWindow("Connection failed: ID "..error)
-end
-
-function onConnectionRejected()
-    connectionFailed:disconnect()
-    showErrorWindow("This game is not available. Please try another")
-end
-
-pcall(function() settings().Diagnostics:LegacyScriptMode() end)
-
-local success, err = pcall(function() 
-    game:SetRemoteBuildMode(true)
-
-    setMessage("Connecting to server...")
-    client.ConnectionAccepted:connect(onConnectionAccepted)
-    client.ConnectionRejected:connect(onConnectionRejected)
-    connectionFailed = client.ConnectionFailed:connect(onConnectionFailed)
-    client.Ticket = authentication
-
-    playerConnectSuccess, player = pcall(function() return client:PlayerConnect(userid, "90.23.203.230", 53640, 0, threadSleepTime) end)
-    if not playerConnectSuccess then
-        -- Old player connection scheme
-        player = game:GetService("Players"):CreateLocalPlayer(userid)
-        client:Connect("90.23.203.230", 53640, 0, threadSleepTime)
-    end
-    player:SetSuperSafeChat(false)
-    player:SetMembershipType(Enum.MembershipType.OutrageousBuildersClub)
-    player:SetAccountAge(365)
-
-    onPlayerAdded(player)
-
-    player.Name = authentication
-    visit:SetUploadUrl("")
-end)
-if not success then
-    reportError(err)
-end
-pcall(function() game:SetScreenshotInfo("") end)
-pcall(function() game:SetVideoInfo("") end)
+    dofile(placeLauncherResponse[3].."?authentication="..authentication.."&game=<?php echo (int)$_REQUEST["game"]; ?>&"..randint())
+end)()

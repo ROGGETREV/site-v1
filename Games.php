@@ -66,7 +66,7 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
                                 <div style="height: 0; padding-top: 60%; position: relative;">
                                     <img src="/images/Games/Get.ashx?ID=<?php echo (int)$game["id"]; ?>" class="card-img-top" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; width: 100%; height: 100%;">
                                 </div>
-                                <div class="gameClientCard"><?php echo htmlspecialchars($game["gameClient"]); ?></div>
+                                <div class="gameClientCard gameClientCard-small"><?php echo htmlspecialchars($game["gameClient"]); ?></div>
                                 <div class="card-body" style="padding: 6px;">
                                     <h6 class="card-title" style="margin-bottom: 0;"><?php echo htmlspecialchars($game["name"]); ?></h6>
                                     <p class="card-text">by <strong><?php echo htmlspecialchars($usr["username"]); ?></strong><?php if((int)$game["players"] >= 1) { ?><br><strong><?php echo (int)$game["players"]; ?></strong> playing<?php } ?></p>

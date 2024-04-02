@@ -2,7 +2,7 @@
 require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
 header('Content-Type: application/json');
 
-if(!$loggedin) exit;
+if(!$loggedin && !$guestEnabled) exit;
 
 function sign($script, $key) {
     $signature = "";
@@ -21,11 +21,21 @@ function generateClientTicket($id, $name, $charapp, $jobid, $privatekey) {
     return($final);
 }
 
+if(!$loggedin && $guestEnabled) {
+    $guestId = -1 * random_int(1, 9999);
+    $user = [
+        "id" => $guestId,
+        "username" => "Guest ".$guestId,
+        "buildersclub" => "None"
+    ];
+}
+
 $charapp = "http://www.shitblx.cf/v1.1/avatar-fetch/?placeId=1&userId=".(int)$user["id"];
+if(!$loggedin && $guestEnabled) $charapp .= "&guest";
 
 $joinscript = [
     "ClientPort" => 0,
-    "MachineAddress" => "90.23.203.230",
+    // "MachineAddress" => "90.23.203.230",
     "ServerPort" => 53640,
     "PingUrl" => "",
     "PingInterval" => 20,
@@ -36,6 +46,7 @@ $joinscript = [
     "SuperSafeChat" => false, // FUCKING HELL
     "CharacterAppearance" => $charapp,
     "ClientTicket" => generateClientTicket((int)$user["id"], $user["username"], $charapp, "TestServer1", $clientKeys["private"]),
+    "MachineAddress" => "90.23.203.230",
     "GameId" => "TestServer1",
     "PlaceId" => 1,
     "MeasurementUrl" => "",

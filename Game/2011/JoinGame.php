@@ -2,13 +2,23 @@
 require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
 header('Content-Type: application/json');
 
-if(!$loggedin || !isset($_REQUEST["game"])) exit;
+if(!$loggedin && !$guestEnabled || !isset($_REQUEST["game"])) exit;
+
+if(!$loggedin && $guestEnabled) {
+    $guestId = -1 * random_int(1, 9999);
+    $user = [
+        "id" => $guestId,
+        "username" => "Guest ".$guestId,
+        "buildersclub" => "None",
+        "gameAuthentication" => "guest".$guestId
+    ];
+}
 ?>
 authentication = "<?php echo addslashes($user["gameAuthentication"]); ?>"
 username = "<?php echo addslashes($user["username"]); ?>"
 userid = <?php echo (int)$user["id"]; ?>
 
-dofile("http://shitblx.cf/Game/2011/Cores/StarterScript.lua?authentication="..authentication)
+--dofile("http://shitblx.cf/Game/2011/Cores/StarterScript.lua?authentication="..authentication)
 function onPlayerAdded(player)
     -- override
 end
@@ -52,7 +62,7 @@ function onDisconnection(peer, lostConnection)
     if lostConnection then
         showErrorWindow("You have lost the connection to the game")
     else
-        if player.Name == username then
+        if player.Name == username or player.Name == authentication then
             showErrorWindow("This game has shut down")
         else
             showErrorWindow("You have been kicked from the server. Reason: "..player.Name)
@@ -142,8 +152,8 @@ local success, err = pcall(function()
         player = game:GetService("Players"):CreateLocalPlayer(userid)
         client:Connect("90.23.203.230", 53640, 0, threadSleepTime)
     end
-    player:SetSuperSafeChat(false)
-    player:SetMembershipType(Enum.MembershipType.OutrageousBuildersClub)
+    player:SetSuperSafeChat(<?php if(!str_starts_with($user["gameAuthentication"], "guest")) echo "false"; else echo "true"; ?>)
+    player:SetMembershipType(Enum.MembershipType.<?php echo $user["buildersclub"]; ?>)
     player:SetAccountAge(365)
 
     onPlayerAdded(player)

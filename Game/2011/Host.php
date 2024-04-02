@@ -10,6 +10,8 @@ Port = 53640
 
 Server = game:GetService("NetworkServer")
 
+ChatNotifier = true
+
 function randint()
     return (math.random() * 99999999) + #game.Workspace:GetChildren() * #game.Players:GetChildren() * (math.random() * 99999999)
 end
@@ -102,54 +104,67 @@ function splitString(inputstr, sep)
 end
 
 game:service("Players").PlayerAdded:connect(function(player)
-	print("Player joined with authentication: "..player.Name)
-
-	print("Running authentication check script...")
-
-	print("Renaming Connection...")
-    pcall(function()
-        for i, v in pairs(game.NetworkServer:GetChildren()) do
-            if(not string.find(v.Name, "|")) then
-                v.Name = player.Name.."|"..player.userId
-            end
-        end
-    end)
-    
-	authCheck = splitString(game:httpGetAsync("http://shitblx.cf/Game/AuthenticationCheck.ashx?authentication="..player.Name.."&game="..gameId.."&apiKey="..ROGGETAPIkey.."&"..randint()), ";");
-	
-	-- pcall(function() dofile("http://shitblx.cf/Game/AuthenticationCheck.ashx?authentication="..player.Name.."&game="..gameId.."&apiKey="..ROGGETAPIkey.."&"..randint()) end)
-
-	if(authCheck[1] == "false") then
-		kickPlayer(player, "Authentication check failed")
+	authenticated = Instance.new("BoolValue", player)
+	authenticated.Name = "Authenticated"
+	authenticated.Value = false
+	if player.Name == "Player" then
+		wait(0.3)
+	end
+	if player.Name == "ServerChatNotifier-"..ROGGETAPIkey then
+		authenticated.Value = true
+		player.Name = "[SERVER]"
 	else
-		player.userId = authCheck[2]
-		player.Name = authCheck[3]
-		player.CharacterAppearance = authCheck[4]
+		print("Player joined with authentication: "..player.Name)
+
+		print("Running authentication check script...")
 
 		print("Renaming Connection...")
-	    pcall(function()
-	        for i, v in pairs(game.NetworkServer:GetChildren()) do
-	            if(not string.find(v.Name, "|")) then
-	                v.Name = player.Name.."|"..player.userId
-	            end
-	        end
-	    end)
-
-	    -- player.CharacterAppearance = "http://shitblx.cf/Game/CharacterFetch.ashx?userId="..player.userId.."&game="..gameId.."&noredir"
-
-		print("Loading character...")
-		characterRessurection(player)
-
-		player.Changed:connect(function(name)
-			if name == "Character" then
-				characterRessurection(player)
+		pcall(function()
+			for i, v in pairs(game.NetworkServer:GetChildren()) do
+				if(not string.find(v.Name, "|")) then
+					v.Name = player.Name.."|"..player.userId
+				end
 			end
 		end)
+		
+		authCheck = splitString(game:httpGetAsync("http://shitblx.cf/Game/AuthenticationCheck.ashx?authentication="..player.Name.."&game="..gameId.."&apiKey="..ROGGETAPIkey.."&"..randint()), ";");
+
+		if(authCheck[1] == "false") then
+			kickPlayer(player, "Authentication check failed")
+		else
+			authenticated.Value = true
+			player.userId = authCheck[2]
+			player.Name = authCheck[3]
+			player.CharacterAppearance = authCheck[4]
+
+			print("Renaming Connection...")
+			pcall(function()
+				for i, v in pairs(game.NetworkServer:GetChildren()) do
+					if(not string.find(v.Name, "|")) then
+						v.Name = player.Name.."|"..player.userId
+					end
+				end
+			end)
+
+			if ChatNotifier then
+				game.Players:Chat("Player joined: "..player.Name);
+			end
+
+			print("Loading character...")
+			characterRessurection(player)
+
+			player.Changed:connect(function(name)
+				if name == "Character" then
+					characterRessurection(player)
+				end
+			end)
+		end
 	end
 end)
 
 game.Players.PlayerAdded:connect(function(player)
     count = #game.Players:GetChildren()
+	if ChatNotifier then count = count - 1 end
     print("Contacting ROGGET API to set the player count to "..count)
     game:httpGet("http://shitblx.cf/Game/SetPlayerCount.ashx?count="..count.."&game="..gameId.."&apiKey="..ROGGETAPIkey.."&"..randint())
 	--player.Chatted:connect(function(msg)
@@ -159,14 +174,25 @@ end)
 
 game.Players.PlayerRemoving:connect(function(player)
     count = #game.Players:GetChildren() - 1
+	if ChatNotifier then count = count - 1 end
     print("Contacting ROGGET API to set the player count to "..count)
     game:httpGet("http://shitblx.cf/Game/SetPlayerCount.ashx?count="..count.."&game="..gameId.."&apiKey="..ROGGETAPIkey.."&"..randint())
+	if player.Authenticated.Value == true and ChatNotifier then
+		game.Players:Chat("Player left: "..player.Name);
+	end
 end)
-
-Server:Start(Port, 10)
 
 game:Load("http://shitblx.cf/ironcafe.rbxl")
 
 game:GetService("RunService"):Run()
+
+if ChatNotifier then
+	game.Players:CreateLocalPlayer(-1)
+	game.Players.LocalPlayer.Name = "ServerChatNotifier-"..ROGGETAPIkey
+else
+	game:httpGet("http://shitblx.cf/Game/SetPlayerCount.ashx?count=0&game="..gameId.."&apiKey="..ROGGETAPIkey.."&"..randint())
+end
+
+Server:Start(Port, 10)
 
 print("ROGGET 2011E server started!")

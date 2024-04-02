@@ -26,8 +26,6 @@ if(!$usr) {
     exit;
 }
 
-
-
 $info = [
     "data" => [
         [
@@ -49,8 +47,8 @@ $info = [
             "allowedGearCategories" => [],
             "isGenreEnforced" => true,
             "copyingAllowed" => false,
-            "playing" => 69,
-            "visits" => 69,
+            "playing" => (int)$game["players"],
+            "visits" => 0,
             "maxPlayers" => (int)$game["maxplayers"],
             "created" => date("Y-m-d\TH:i:s.u\Z", (int)$game["created"]),
             "updated" => date("Y-m-d\TH:i:s.u\Z", (int)$game["updated"]),
@@ -60,7 +58,7 @@ $info = [
             "genre" => "All",
             "isAllGenre" => true,
             "isFavoritedByUser" => false,
-            "favoritedCount" => 69
+            "favoritedCount" => 0
         ]
     ]
 ];

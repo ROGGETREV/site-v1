@@ -1,4 +1,3 @@
-
 <?php
 require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
 header("content-type: application/json");

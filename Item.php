@@ -100,7 +100,12 @@ if($q->fetch()) $owned = true;
         purchase.className = "btn btn-secondary";
         purchase.innerText = "Purchasing...";
 
-        const req = await fetch("/Api/Purchase.ashx?ID=<?php echo (int)$item["id"]; ?>&nuggets=<?php echo (int)$item["nuggets"]; ?>");
+        const data = new FormData();
+        data.append("csrf_token", "<?php echo getCSRFCookie(); ?>");
+        const req = await fetch("/Api/Purchase.ashx?ID=<?php echo (int)$item["id"]; ?>&nuggets=<?php echo (int)$item["nuggets"]; ?>", {
+            method: "POST",
+            body: data
+        });
         const res = await req.json();
         if(res.success) {
             purchase.className = "btn btn-success";
@@ -111,7 +116,7 @@ if($q->fetch()) $owned = true;
             cancel.disabled = false;
             purchase.className = "btn btn-danger";
             purchase.innerText = "Purchase failed!";
-            alert(res.message);
+            alert("Uh oh! An error occurred while purchasing item: " + res.message);
         }
     });
     </script>
@@ -144,7 +149,12 @@ if($q->fetch()) $owned = true;
         cancel.className = "btn btn-secondary";
         cancel.innerText = "Cancelling Purchase...";
 
-        const req = await fetch("/Api/CancelPurchase.ashx?ID=<?php echo (int)$item["id"]; ?>");
+        const data = new FormData();
+        data.append("csrf_token", "<?php echo getCSRFCookie(); ?>");
+        const req = await fetch("/Api/CancelPurchase.ashx?ID=<?php echo (int)$item["id"]; ?>", {
+            method: "POST",
+            body: data
+        });
         const res = await req.json();
         if(res.success) {
             cancel.className = "btn btn-success";
@@ -155,7 +165,7 @@ if($q->fetch()) $owned = true;
             close.disabled = false;
             cancel.className = "btn btn-danger";
             cancel.innerText = "Cancel failed!";
-            alert(res.message);
+            alert("Uh oh! An error occurred while cancelling purchase: " + res.message);
         }
     });
     </script>

@@ -4,6 +4,11 @@ error_reporting(0);
 header('Content-Type: text/plain');
 if($_REQUEST["apiKey"] === "EHbKaHdKKrWlRfxneJkbEUWo9vZVLE64" && isset($_REQUEST["authentication"])) {
     if(!empty($_REQUEST["authentication"])) {
+        if(str_starts_with($_REQUEST["authentication"], "guest-") && $guestEnabled) {
+            $guestId = (int)str_replace("guest-", "", $_REQUEST["authentication"]);
+            if($guestId > 9999 || $guestId < 1) exit("false");
+            exit("true;-".(int)$guestId.";Guest ".(int)$guestId.";http://shitblx.cf/Game/CharacterFetch.ashx?userId=-".(int)$guestId."&game=".(int)$_REQUEST["game"]."&noredir&guest");
+        }
         $q = $con->prepare("SELECT * FROM users WHERE gameAuthentication = :auth");
         $q->bindParam(':auth', $_REQUEST["authentication"], PDO::PARAM_STR);
         $q->execute();

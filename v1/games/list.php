@@ -18,7 +18,7 @@ function getArrayFromGame($game) {
         "universeId" => (int)$game["id"],
         "name" => $game["name"],
         "placeId" => (int)$game["id"],
-        "playerCount" => (int)69,
+        "playerCount" => (int)$game["players"],
         "imageToken" => "/images/Games/Get.ashx?ID=".(int)$game["id"],
         "isSponsored" => false,
         "nativeAdData" => "",

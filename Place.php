@@ -50,19 +50,23 @@ if(!$usr) {
                 <div style="height: 87px;"></div>
                 <?php if($loggedin) { ?>
                 <button class="btn btn-success" onclick='play();'>Play</button>
-                <?php } else { ?>
+                <?php } else {
+                if(!$guestEnabled) {
+                ?>
                 <button class="btn btn-secondary" onclick='window.location = "/Default.aspx";'>Login to play</button>
-                <?php } ?>
+                <?php } else { ?>
+                <button class="btn btn-success" onclick='play();'>Play as guest</button>
+                <?php }} ?>
             </div>
         </div>
         <br>
         <h3>Description</h3>
         <h6><?php echo htmlspecialchars($game["description"]); ?></h6>
     </div>
-    <?php if($loggedin) { ?>
+    <?php if($loggedin || $guestEnabled) { ?>
     <script>
         function play() {
-            window.location = "/games/start?placeid=<?php echo (int)$game["id"]; ?>";
+            window.location = "/games/start?placeid=<?php echo (int)$game["id"]; ?>&csrf_token=<?php echo getCSRFCookie(); ?>";
         }
     </script>
     <?php } ?>

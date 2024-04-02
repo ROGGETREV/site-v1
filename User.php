@@ -10,6 +10,11 @@ if(!isset($_REQUEST["ID"])) {
     }
 }
 
+if(str_contains($_SERVER["HTTP_USER_AGENT"], "ROBLOX Android App")) {
+    header('location: /Games.aspx');
+    exit;
+}
+
 $id = (int)$_REQUEST["ID"];
 
 $q = $con->prepare("SELECT * FROM users WHERE id = :id");
@@ -107,7 +112,8 @@ if($loggedin) {
         <div class="card card-body d-flex flex-row overflow-x-auto overflow-x-hidden-sm">
             <?php
             if(count($friends) <= 0) {
-                echo "Looks like this user has no friends :( Why don't you add him?";
+                if($id !== (int)$user["id"]) echo "Looks like this user has no friends :( Why don't you add him?";
+                else echo "Looks like you have no friends :( Try finding some!";
             } else {
                 $showed = 0;
                 $limit = 13;
@@ -132,12 +138,26 @@ if($loggedin) {
     </div>
     <script>
     async function addFriend() {
-        await fetch("/Api/Friendship.ashx?ID=<?php echo (int)$id; ?>&type=add");
-        location.reload();
+        const data = new FormData();
+        data.append("csrf_token", "<?php echo getCSRFCookie(); ?>");
+        const req = await fetch("/Api/Friendship.ashx?ID=<?php echo (int)$id; ?>&type=add", {
+            method: "POST",
+            body: data
+        });
+        const res = await req.json();
+        if(res.success) location.reload();
+        else alert("Uh oh! An error occurred while adding friend: " + res.message);
     }
     async function removeFriend() {
-        await fetch("/Api/Friendship.ashx?ID=<?php echo (int)$id; ?>&type=remove");
-        location.reload();
+        const data = new FormData();
+        data.append("csrf_token", "<?php echo getCSRFCookie(); ?>");
+        const req = await fetch("/Api/Friendship.ashx?ID=<?php echo (int)$id; ?>&type=remove", {
+            method: "POST",
+            body: data
+        });
+        const res = await req.json();
+        if(res.success) location.reload();
+        else alert("Uh oh! An error occurred while removing friend: " + res.message);
     }
     </script>
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/footer.php"); ?>

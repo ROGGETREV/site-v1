@@ -6,6 +6,13 @@ if(!$loggedin) {
     exit(json_encode(["success"=>false,"message"=>"Please login"]));
 }
 
+if(!isset($_REQUEST["csrf_token"])) exit(json_encode(["success"=>false,"message"=>"Please put the csrf_token"]));
+
+if(!isCorrectCSRF($_REQUEST["csrf_token"])) {
+    if(isset($_SERVER["HTTP_REFERER"])) warnCSRF($_SERVER["HTTP_REFERER"]);
+    exit(json_encode(["success"=>false,"message"=>"Invalid csrf_token"]));
+}
+
 if(!isset($_REQUEST["year"])) {
     exit(json_encode(["success"=>false,"message"=>"Please put a year"]));
 }

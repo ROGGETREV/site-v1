@@ -6,20 +6,30 @@ if(!$loggedin) {
     exit;
 }
 
-$q = $con->prepare("SELECT * FROM messages WHERE user2 = :id AND hasBeenRead = 0 AND reply = 0");
-$q->bindParam(':id', $user["id"], PDO::PARAM_INT);
-$q->execute();
-$unread = $q->fetchAll();
 
-$q = $con->prepare("SELECT * FROM messages WHERE user1 = :id AND reply = 0");
-$q->bindParam(':id', $user["id"], PDO::PARAM_INT);
-$q->execute();
-$sent = $q->fetchAll();
+$csrf = true;
+if(!isset($_REQUEST["csrf_token"])) {
+    $csrf = false;
+} else if(!isCorrectCSRF($_REQUEST["csrf_token"])) {
+    $csrf = false;
+}
 
-$q = $con->prepare("SELECT * FROM messages WHERE user2 = :id AND hasBeenRead = 1 AND reply = 0");
-$q->bindParam(':id', $user["id"], PDO::PARAM_INT);
-$q->execute();
-$read = $q->fetchAll();
+if($csrf) {
+    $q = $con->prepare("SELECT * FROM messages WHERE user2 = :id AND hasBeenRead = 0 AND reply = 0");
+    $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
+    $q->execute();
+    $unread = $q->fetchAll();
+
+    $q = $con->prepare("SELECT * FROM messages WHERE user1 = :id AND reply = 0");
+    $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
+    $q->execute();
+    $sent = $q->fetchAll();
+
+    $q = $con->prepare("SELECT * FROM messages WHERE user2 = :id AND hasBeenRead = 1 AND reply = 0");
+    $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
+    $q->execute();
+    $read = $q->fetchAll();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,6 +43,7 @@ $read = $q->fetchAll();
     <div class="<?php echo $containerClasses; ?>">
         <button class="btn btn-outline-primary float-end ms-auto" style="position: absolute;right: 10px;top: 10px;" onclick='window.location = "/MessageSend.aspx";'><i class="bi bi-send-fill"></i></button>
         <h1>Messages</h1>
+        <?php if($csrf) { ?>
         <h3>Unread Messages</h3>
         <?php if(count($unread) >= 1) {
         ?>
@@ -132,7 +143,7 @@ $read = $q->fetchAll();
         $count = 0;
         foreach($read as $message) {
         $q = $con->prepare("SELECT * FROM users WHERE id = :id");
-        $q->bindParam(':id', $message["user2"], PDO::PARAM_INT);
+        $q->bindParam(':id', $message["user1"], PDO::PARAM_INT);
         $q->execute();
         $usr = $q->fetch();
         if($usr) {
@@ -151,6 +162,15 @@ $read = $q->fetchAll();
         </div>
         <?php } else { ?>
         <h6>You didn't read any messages.</h6>
+        <?php } ?>
+        <?php } else { ?>
+        <h3>Loading messages...</h3>
+        <form id="csrfForm" action="" method="POST" hidden>
+            <input type="text" name="csrf_token" value="<?php echo getCSRFCookie(); ?>" hidden>
+        </form>
+        <script>
+        document.querySelector("#csrfForm").submit();
+        </script>
         <?php } ?>
     </div>
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/footer.php"); ?>

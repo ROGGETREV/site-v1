@@ -39,6 +39,8 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/Assemblies/Roblox/Grid/Rcc/Status.php")
 
 $loggedin = false;
 
+$guestEnabled = false;
+
 $roggetServersIPs = [
     "86.233.220.4",
     "90.23.203.230"
@@ -113,6 +115,43 @@ if(isset($_REQUEST["authentication"]) && !$loggedin) {
         }
     }
 }
+
+function setCSRFCookie() {
+    $new = bin2hex(random_bytes(40));
+    setcookie('.csrftoken', $new, time() + 31536000, "/");
+    setcookie('.csrftoken', $new, time() + 31536000, "/", "shitblx.cf");
+    setcookie('.csrftoken', $new, time() + 31536000, "/", ".shitblx.cf");
+    $_COOKIE["_csrftoken"] = $new;
+    return $new;
+}
+
+function getCSRFCookie() {
+    if(!isset($_COOKIE["_csrftoken"])) return null;
+    return $_COOKIE["_csrftoken"];
+}
+
+function isCorrectCSRF($cookie) {
+    if(!isset($_COOKIE["_csrftoken"])) return false;
+    if($cookie !== $_COOKIE["_csrftoken"]) return false;
+    return true;
+}
+
+function warnCSRF($site) {
+    global $con;
+    global $user;
+    global $loggedin;
+    if(!$loggedin || !$user) return false;
+    $warns = json_decode($user["csrfWarns"], true);
+    if(!in_array($site, $warns)) array_push($warns, $site);
+    $warns = json_encode($warns);
+    $q = $con->prepare("UPDATE users SET csrfWarns = :warns WHERE id = :id");
+    $q->bindParam(':warns', $warns, PDO::PARAM_STR);
+    $q->bindParam(':id', $user["id"], PDO::PARAM_INT);
+    $q->execute();
+    return true;
+}
+
+if(!getCSRFCookie()) setCSRFCookie();
 
 $siteTheme = "dark";//"light";
 

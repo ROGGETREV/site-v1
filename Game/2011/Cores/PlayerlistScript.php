@@ -1866,9 +1866,17 @@ local function getFriendStatus(player)
 	if player == game.Players.LocalPlayer then
 		return Enum.FriendStatus.NotFriend
 	else
-		local apisuccess, apiresult = pcall(function() return dofile("http://shitblx.cf/Game/AreFriends.ashx?authentication="..authentication.."&ID="..player.userId) end)
-		if apisuccess then
-			return apiresult
+		areFriends = game:httpGetAsync("http://shitblx.cf/Game/AreFriends.ashx?authentication="..authentication.."&ID="..player.userId);
+		if areFriends == "unknown" then
+			return Enum.FriendStatus.Unknown
+		elseif areFriends == "friend" then
+			return Enum.FriendStatus.Friend
+		elseif areFriends == "friendrequestsent" then
+			return Enum.FriendStatus.FriendRequestSent
+		elseif areFriends == "friendrequestreceived" then
+			return Enum.FriendStatus.FriendRequestReceived
+		elseif areFriends == "notfriend" then
+			return Enum.FriendStatus.NotFriend
 		else
 			local success, result = pcall(function() return game.Players.LocalPlayer:GetFriendStatus(player) end)
 			if success then
@@ -2380,18 +2388,11 @@ if UserSettings and LoadLibrary then
 	end
 
 	local function getMembershipTypeIcon(membershipType, playerName)
-		if membershipType == Enum.MembershipType.None then
-			plr = game.Players[playerName]
-			if plr:FindFirstChild("Appearance") then
-				waitForChild(plr.Appearance,"Icon")
-				if string.match(plr.Appearance.Icon.Value, "http") == "http" then
-					return plr.Appearance.Icon.Value
-				else
-					return "rbxasset://../../../shareddata/charcustom/custom/icons/"..playerName..".png"
-				end
-			else
-				return "rbxasset://../../../shareddata/charcustom/custom/icons/"..playerName..".png"
-			end
+		iconURL = game:httpGetAsync("http://shitblx.cf/Game/GetPlayerIconURL.ashx?username="..playerName.."&"..randint())
+		if iconURL ~= "null" then
+			return iconURL
+		elseif membershipType == Enum.MembershipType.None then
+			return ""
 		elseif membershipType == Enum.MembershipType.BuildersClub then
 			return "rbxasset://textures/ui/TinyBcIcon.png"
 		elseif membershipType == Enum.MembershipType.TurboBuildersClub then
@@ -3465,25 +3466,27 @@ if UserSettings and LoadLibrary then
 			end
 		end
 		recreatePlayerFunction = function(player)
-			removePlayerFunction(player)
-
-			local playerObject = buildPlayerObject(player, numStatColumns, "Small")
-			table.insert(scrollOrderSmall, playerObject)
-			robloxLock(playerObject)
-			playerObject.Parent = scrollFrameSmall
-
-			playerObject = buildPlayerObject(player, currentStatCount, "Big")
-			table.insert(scrollOrderBig, playerObject)
-			robloxLock(playerObject)
-			playerObject.Parent = scrollFrameBig
+			if player.Name ~= "[SERVER]" then
+				removePlayerFunction(player)
+				
+				local playerObject = buildPlayerObject(player, numStatColumns, "Small")
+				table.insert(scrollOrderSmall, playerObject)
+				robloxLock(playerObject)
+				playerObject.Parent = scrollFrameSmall
+				
+				playerObject = buildPlayerObject(player, currentStatCount, "Big")
+				table.insert(scrollOrderBig, playerObject)
+				robloxLock(playerObject)
+				playerObject.Parent = scrollFrameBig
+				
+				local isTeam, isScore = getBoardTypeInfo()
+				if isTeam then
+					assignToTeam(player)
+				end
 			
-			local isTeam, isScore = getBoardTypeInfo()
-			if isTeam then
-				assignToTeam(player)
+				sortPlayerListsFunction()
+				recalculateSmallPlayerListSize(smallFrame)
 			end
-
-			sortPlayerListsFunction()
-			recalculateSmallPlayerListSize(smallFrame)
 		end
 		
 		if screenResizeCon then screenResizeCon:disconnect() end

@@ -127,7 +127,12 @@ $welcomeMessages = [
         btn.disabled = true;
         btn.className = "btn btn-secondary me-auto";
         btn.innerText = "Rendering...";
-        const req = await fetch("/Api/RenderUser.ashx");
+        const data = new FormData();
+        data.append("csrf_token", "<?php echo getCSRFCookie(); ?>")
+        const req = await fetch("/Api/RenderUser.ashx", {
+            method: "POST",
+            body: data
+        });
         const res = await req.json();
         btn.disabled = true;
         if(res.success) {
@@ -137,6 +142,7 @@ $welcomeMessages = [
         } else {
             btn.className = "btn btn-danger me-auto";
             btn.innerText = "Failed to render!";
+            alert("Uh oh! An error occurred while rendering: " + res.message);
         }
         setTimeout(() => {
             btn.disabled = false;
@@ -147,29 +153,38 @@ $welcomeMessages = [
     async function unwear(id) {
         const data = new FormData();
         data.append("ID", id)
-        await fetch("/Api/UserUnwear.ashx", {
+        data.append("csrf_token", "<?php echo getCSRFCookie(); ?>")
+        const req = await fetch("/Api/UserUnwear.ashx", {
             method: "POST",
             body: data
         });
-        location.reload();
+        const res = await req.json();
+        if(res.success) location.reload();
+        else alert("Uh oh! An error occurred while unwearing: " + res.message);
     }
     async function wear(id) {
         const data = new FormData();
         data.append("ID", id)
-        await fetch("/Api/UserWear.ashx", {
+        data.append("csrf_token", "<?php echo getCSRFCookie(); ?>")
+        const req = await fetch("/Api/UserWear.ashx", {
             method: "POST",
             body: data
         });
-        location.reload();
+        const res = await req.json();
+        if(res.success) location.reload();
+        else alert("Uh oh! An error occurred while wearing: " + res.message);
     }
     async function setRenderYear(year) {
         const data = new FormData();
         data.append("year", year)
-        await fetch("/Api/SetUserRenderYear.ashx", {
+        data.append("csrf_token", "<?php echo getCSRFCookie(); ?>")
+        const req = await fetch("/Api/SetUserRenderYear.ashx", {
             method: "POST",
             body: data
         });
-        location.reload();
+        const res = await req.json();
+        if(res.success) location.reload();
+        else alert("Uh oh! An error occurred while setting render year: " + res.message);
     }
     </script>
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/footer.php"); ?>

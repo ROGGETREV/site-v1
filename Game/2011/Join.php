@@ -2,7 +2,16 @@
 require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
 header('Content-Type: application/json');
 
-if(!$loggedin || !isset($_REQUEST["game"])) exit;
+if(!$loggedin && !$guestEnabled || !isset($_REQUEST["game"])) exit;
+
+if(!$loggedin && $guestEnabled) {
+    $guestId = -1 * random_int(1, 9999);
+    $user = [
+        "id" => $guestId,
+        "username" => "Guest ".$guestId,
+        "gameAuthentication" => "guest"
+    ];
+}
 
 // Place join status results
 // Waiting = 0,
@@ -18,8 +27,10 @@ if(!$loggedin || !isset($_REQUEST["game"])) exit;
 -- ROGGET PlaceLauncher and Joining handler
 -- Apparently we're forced to using a coroutine, oh well, if it works it works
 
+currentRandInt = 0
 function randint()
-    return (math.random() * 99999999) + #game.Workspace:GetChildren() * #game.Players:GetChildren() * (math.random() * 99999999)
+    currentRandInt = (currentRandInt + 74864)
+    return currentRandInt
 end
 
 function splitString(inputstr, sep)
@@ -37,9 +48,9 @@ end
 function getPLStatusString(status)
     if status == 0 then
         return "Waiting for server..."
-    else if status == 1 then
+    elseif status == 1 then
         return "Server found, loading..."
-    else if status == 2 then
+    elseif status == 2 then
         return "Joining server"
     else
         return "Unknown status"
@@ -61,7 +72,6 @@ coroutine.wrap(function()
     canJoin = false
 
     while not canJoin do
-        game:SetMessage("Hello, "..username.."! ROGGET is requesting authentication...")
         placeLauncherResponse = splitString(game:httpGetAsync("http://shitblx.cf/Game/2011/PlaceLauncher.ashx?authentication="..authentication.."&game=<?php echo (int)$_REQUEST["game"]; ?>&"..randint()), ";")
         if placeLauncherResponse[1] == "false" then
             game:SetMessage("Failed to request ROGGET for the game!")
@@ -70,8 +80,10 @@ coroutine.wrap(function()
         status = tonumber(placeLauncherResponse[2])
         if status == 0 then
             game:SetMessage("Searching for a server...")
+            wait(5)
         elseif status == 1 then
-            game:SetMessage(status)
+            game:SetMessage("Server found, loading...")
+            wait(5)
         elseif status == 2 then
             game:SetMessage("Currently loading into the server, "..username.."!")
             canJoin = true

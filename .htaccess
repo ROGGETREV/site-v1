@@ -23,6 +23,8 @@ RewriteRule ^games/(\d+)/profile$ /Place.php?ID=$1 [L]
 RewriteRule ^v1/games$ /v1/games/index.php [L,QSA]
 RewriteRule ^v1/games/$ /v1/games/index.php [L,QSA]
 RewriteRule ^v1/games/(\d+)/votes$ /v1/games/votes.php?ID=$1 [L]
+RewriteRule ^v1/games/(\d+)/favorites$ /v1/games/favorites.php?ID=$1 [L]
+RewriteRule ^v2/games/(\d+)/media$ /v2/games/media.php?ID=$1 [L]
 RewriteRule ^v1/users/(\d+)/currency$ /v1/users/currency.php?ID=$1 [L]
 RewriteRule ^v1/users/(\d+)/outfits$ /v1/users/outfits.php?ID=$1 [L]
 

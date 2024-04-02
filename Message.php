@@ -6,58 +6,67 @@ if(!$loggedin) {
     exit;
 }
 
-if(!isset($_REQUEST["ID"])) {
-    header('location: /Messages.aspx');
-    exit;
-}
-$id = (int)$_REQUEST["ID"];
-
-$q = $con->prepare("SELECT * FROM messages WHERE id = :id");
-$q->bindParam(':id', $id, PDO::PARAM_INT);
-$q->execute();
-$message = $q->fetch();
-
-if(!$message) {
-    header('location: /Messages.aspx');
-    exit;
+$csrf = true;
+if(!isset($_REQUEST["csrf_token"])) {
+    $csrf = false;
+} else if(!isCorrectCSRF($_REQUEST["csrf_token"])) {
+    $csrf = false;
 }
 
-if((int)$message["user1"] !== (int)$user["id"] && (int)$message["user2"] !== (int)$user["id"]) {
-    header('location: /Messages.aspx');
-    exit;
-}
+if($csrf) {
+    if(!isset($_REQUEST["ID"])) {
+        header('location: /Messages.aspx');
+        exit;
+    }
+    $id = (int)$_REQUEST["ID"];
 
-if((int)$message["reply"] !== 0) {
-    header('location: /Message.aspx?ID='.(int)$message["reply"]);
-    exit;
-}
-
-$q = $con->prepare("UPDATE messages SET hasBeenRead = 1 WHERE id = :id");
-$q->bindParam(':id', $id, PDO::PARAM_INT);
-$q->execute();
-
-$sender = $user;
-$receiver = $user;
-
-if((int)$message["user1"] === (int)$user["id"]) {
-    $q = $con->prepare("SELECT * FROM users WHERE id = :id");
-    $q->bindParam(':id', $message["user2"], PDO::PARAM_INT);
+    $q = $con->prepare("SELECT * FROM messages WHERE id = :id");
+    $q->bindParam(':id', $id, PDO::PARAM_INT);
     $q->execute();
-    $receiver = $q->fetch();
-} else if((int)$message["user2"] === (int)$user["id"]) {
-    $q = $con->prepare("SELECT * FROM users WHERE id = :id");
-    $q->bindParam(':id', $message["user1"], PDO::PARAM_INT);
+    $message = $q->fetch();
+
+    if(!$message) {
+        header('location: /Messages.aspx');
+        exit;
+    }
+
+    if((int)$message["user1"] !== (int)$user["id"] && (int)$message["user2"] !== (int)$user["id"]) {
+        header('location: /Messages.aspx');
+        exit;
+    }
+
+    if((int)$message["reply"] !== 0) {
+        header('location: /Message.aspx?ID='.(int)$message["reply"]);
+        exit;
+    }
+
+    $q = $con->prepare("UPDATE messages SET hasBeenRead = 1 WHERE id = :id");
+    $q->bindParam(':id', $id, PDO::PARAM_INT);
     $q->execute();
-    $sender = $q->fetch();
+
+    $sender = $user;
+    $receiver = $user;
+
+    if((int)$message["user1"] === (int)$user["id"]) {
+        $q = $con->prepare("SELECT * FROM users WHERE id = :id");
+        $q->bindParam(':id', $message["user2"], PDO::PARAM_INT);
+        $q->execute();
+        $receiver = $q->fetch();
+    } else if((int)$message["user2"] === (int)$user["id"]) {
+        $q = $con->prepare("SELECT * FROM users WHERE id = :id");
+        $q->bindParam(':id', $message["user1"], PDO::PARAM_INT);
+        $q->execute();
+        $sender = $q->fetch();
+    }
+
+    $sentmessages = [];
+    array_push($sentmessages, $message);
+
+    $q = $con->prepare("SELECT * FROM messages WHERE reply = :id");
+    $q->bindParam(':id', $id, PDO::PARAM_INT);
+    $q->execute();
+    foreach($q->fetchAll() as $msg) array_push($sentmessages, $msg);
 }
-
-$sentmessages = [];
-array_push($sentmessages, $message);
-
-$q = $con->prepare("SELECT * FROM messages WHERE reply = :id");
-$q->bindParam(':id', $id, PDO::PARAM_INT);
-$q->execute();
-foreach($q->fetchAll() as $msg) array_push($sentmessages, $msg);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -70,6 +79,7 @@ foreach($q->fetchAll() as $msg) array_push($sentmessages, $msg);
     <br>
     <div class="<?php echo $containerClasses; ?>">
         <a href="/Messages.aspx"><h2>< Back to Messages</h2></a>
+        <?php if($csrf) { ?>
         <h4>Messages between <?php echo htmlspecialchars($sender["username"]); ?> and <?php echo htmlspecialchars($receiver["username"]); ?></h4>
         <?php foreach($sentmessages as $msg) {
         $sender = $user;
@@ -99,6 +109,15 @@ foreach($q->fetchAll() as $msg) array_push($sentmessages, $msg);
             <h3><?php echo htmlspecialchars($msg["subject"]); ?></h3>
             <h6><?php echo nl2br(htmlspecialchars($msg["content"])); ?></h6>
         </div>
+        <?php } ?>
+        <?php } else { ?>
+        <h3>Loading message...</h3>
+        <form id="csrfForm" action="" method="POST" hidden>
+            <input type="text" name="csrf_token" value="<?php echo getCSRFCookie(); ?>" hidden>
+        </form>
+        <script>
+        document.querySelector("#csrfForm").submit();
+        </script>
         <?php } ?>
     </div>
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/footer.php"); ?>

@@ -44,6 +44,6 @@ dofile("http://shitblx.cf/Game/2011/Cores/SettingsScript.lua?<?php echo addslash
 dofile("http://shitblx.cf/Game/2011/Cores/MainBotChatScript.lua?<?php echo addslashes($_SERVER["QUERY_STRING"]); ?>")
 
 -- PlayerlistScript
-dofile("http://shitblx.cf/Game/2011/Cores/PlayerlistScript.lua?<?php echo addslashes($_SERVER["QUERY_STRING"]); ?>")
+--dofile("http://shitblx.cf/Game/2011/Cores/PlayerlistScript.lua?<?php echo addslashes($_SERVER["QUERY_STRING"]); ?>")
 
 end)

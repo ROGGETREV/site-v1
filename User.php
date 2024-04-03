@@ -10,7 +10,7 @@ if(!isset($_REQUEST["ID"])) {
     }
 }
 
-if(str_contains($_SERVER["HTTP_USER_AGENT"], "ROBLOX Android App")) {
+if(str_contains($_SERVER["HTTP_USER_AGENT"], "ROBLOX Android App") && !$loggedin) {
     header('location: /Games.aspx');
     exit;
 }

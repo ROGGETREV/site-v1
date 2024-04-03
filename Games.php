@@ -1,5 +1,11 @@
 <?php
 require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
+$sqlFilters = "";
+$onlyClient = "";
+if($loggedin) if($session["mobileVersion"] !== "None") if($session["mobileVersion"] === "2.271.97572") {
+    $sqlFilters = "AND gameClient = '2016L'";
+    $onlyClient = "2016L";
+};
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +17,7 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/header.php"); ?>
     <br>
     <div class="<?php echo $containerClasses; ?>">
-        <h2>Games</h2>
+        <h2>Games<?php if(!empty($onlyClient)) echo " (".$onlyClient." only)"; ?></h2>
         <div class="row">
             <div class="col-md-2">
                 <img src="/images/CatalogAssets/browsebycategory.png" style="width: 100%;">
@@ -23,7 +29,7 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
                     <h4>Popular Games</h4>
                     <div class="row">
                         <?php
-                        $q = $con->prepare("SELECT * FROM games WHERE moderation = 'Accepted' ORDER BY players DESC");
+                        $q = $con->prepare("SELECT * FROM games WHERE moderation = 'Accepted' ".$sqlFilters." ORDER BY players DESC");
                         $q->execute();
                         foreach($q->fetchAll() as $game) {
                         $qq = $con->prepare("SELECT * FROM users WHERE id = :id");
@@ -52,7 +58,7 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
                     <h4>Recent Games</h4>
                     <div class="row">
                         <?php
-                        $q = $con->prepare("SELECT * FROM games WHERE moderation = 'Accepted'");
+                        $q = $con->prepare("SELECT * FROM games WHERE moderation = 'Accepted' ".$sqlFilters."");
                         $q->execute();
                         foreach($q->fetchAll() as $game) {
                         $qq = $con->prepare("SELECT * FROM users WHERE id = :id");

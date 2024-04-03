@@ -40,12 +40,15 @@ if(
     $time = time();
     $sessKey = bin2hex(random_bytes(100));
     $encryptIP = hash("sha512", $_SERVER["REMOTE_ADDR"]);
+    $mobileVer = "None";
+    if(str_contains($_SERVER["HTTP_USER_AGENT"], "ROBLOX Android App 2.271.97572")) $mobileVer = "2.271.97572";
 
-    $q = $con->prepare("INSERT INTO `sessions` (`id`, `sessKey`, `userId`, `ip`, `userAgent`, `created`) VALUES (NULL, :sessKey, :id, :ip, :ua, :time)");
+    $q = $con->prepare("INSERT INTO `sessions` (`id`, `sessKey`, `userId`, `ip`, `userAgent`, `mobileVersion`, `created`) VALUES (NULL, :sessKey, :id, :ip, :ua, :mobver, :time)");
     $q->bindParam(':sessKey', $sessKey, PDO::PARAM_STR);
     $q->bindParam(':id', $usr["id"], PDO::PARAM_INT);
     $q->bindParam(':ip', $encryptIP, PDO::PARAM_STR);
     $q->bindParam(':ua', $_SERVER["HTTP_USER_AGENT"], PDO::PARAM_STR);
+    $q->bindParam(':mobver', $mobileVer, PDO::PARAM_STR);
     $q->bindParam(':time', $time, PDO::PARAM_INT);
     $q->execute();
 
@@ -56,7 +59,7 @@ if(
     $bc = false;
     if($usr["buildersclub"] !== "None") $bc = true;
 
-    exit(json_encode([
+    echo(json_encode([
         "Status" => "OK",
         "UserInfo" => [
             "userId" => (int)$usr["id"],

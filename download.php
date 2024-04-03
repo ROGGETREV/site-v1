@@ -25,12 +25,12 @@ if(str_contains($_SERVER["HTTP_USER_AGENT"], "ROBLOX Android App")) {
     </center>
     <script>
     function dl() {
-        let res = prompt("Please input the download you want, options are:\n-windows\n-2016Landroid\nPutting any other choice will cancel the download.");
         <?php if($user["permission"] === "Administrator") { ?>
+        let res = prompt("Please input the download you want, options are:\n-windows\n-2016Landroid\nPutting any other choice will cancel the download.");
         if(res === "windows") window.location = "/downloadfiles/windows/RoggetInstaller.exe";
         if(res === "2016Landroid") window.location = "/downloadfiles/android/Rogget2016L.apk";
         <?php } else { ?>
-        alert("Actually, you aren't an admin.");
+        alert("Sorry, downloads will be available when ROGGET releases.");
         <?php } ?>
     }
     </script>

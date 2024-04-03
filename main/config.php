@@ -39,11 +39,11 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/Assemblies/Roblox/Grid/Rcc/Status.php")
 
 $loggedin = false;
 
-$guestEnabled = false;
+$guestEnabled = true;
 
 $roggetServersIPs = [
     "86.233.220.4",
-    "90.23.203.230"
+    "2a02:842a:1c4e:f301:3550:6b4:7339:1001"
 ];
 
 function isRoggetIP($ip) {

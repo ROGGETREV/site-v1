@@ -22,9 +22,9 @@ function generateClientTicket($id, $name, $charapp, $jobid, $privatekey) {
 }
 
 if(!$loggedin && $guestEnabled) {
-    $guestId = -1 * random_int(1, 9999);
+    $guestId = random_int(1, 9999);
     $user = [
-        "id" => $guestId,
+        "id" => -1 * $guestId,
         "username" => "Guest ".$guestId,
         "buildersclub" => "None"
     ];
@@ -35,7 +35,7 @@ if(!$loggedin && $guestEnabled) $charapp .= "&guest";
 
 $joinscript = [
     "ClientPort" => 0,
-    // "MachineAddress" => "90.23.203.230",
+    "MachineAddress" => "86.233.220.4",
     "ServerPort" => 53640,
     "PingUrl" => "",
     "PingInterval" => 20,
@@ -46,7 +46,6 @@ $joinscript = [
     "SuperSafeChat" => false, // FUCKING HELL
     "CharacterAppearance" => $charapp,
     "ClientTicket" => generateClientTicket((int)$user["id"], $user["username"], $charapp, "TestServer1", $clientKeys["private"]),
-    "MachineAddress" => "90.23.203.230",
     "GameId" => "TestServer1",
     "PlaceId" => 1,
     "MeasurementUrl" => "",

@@ -31,11 +31,13 @@ if(!isset($_REQUEST["game"]) || empty($_REQUEST["game"])) loadFail();
 
 if(!str_contains($_SERVER["HTTP_USER_AGENT"], "ROBLOX Android App")) {
     if(isset($_REQUEST["authentication"]) && !empty($_REQUEST["authentication"])) {
-        $q = $con->prepare("SELECT * FROM users WHERE gameAuthentication = :auth");
-        $q->bindParam(':auth', $_REQUEST["authentication"], PDO::PARAM_STR);
-        $q->execute();
-        $usr = $q->fetch();
-        if(!$usr) loadFail();
+        if($_REQUEST["authentication"] === "guest" && $guestEnabled) {} else {
+            $q = $con->prepare("SELECT * FROM users WHERE gameAuthentication = :auth");
+            $q->bindParam(':auth', $_REQUEST["authentication"], PDO::PARAM_STR);
+            $q->execute();
+            $usr = $q->fetch();
+            if(!$usr) loadFail();
+        }
     } else loadFail();
 } else {
     if(!$loggedin) {

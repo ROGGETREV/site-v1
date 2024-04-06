@@ -50,7 +50,12 @@ $loggedin = false;
 $guestEnabled = true;
 
 $enableInviteKeys = true;
-if(str_ends_with($_SERVER["HTTP_HOST"], "rogget.testing.nuka.works")) $enableInviteKeys = false;
+$enableDiscordVerification = true;
+
+if(str_ends_with($_SERVER["HTTP_HOST"], "rogget.testing.nuka.works")) {
+    $enableInviteKeys = false;
+    $enableDiscordVerification = false;
+}
 
 $roggetServersIPs = [
     "90.78.85.2",
@@ -211,7 +216,7 @@ function getDiscordServersFromAccessToken($token) {
     return json_decode(curl_exec($ch), true);
 }
 
-if($loggedin) {
+if($loggedin && $enableDiscordVerification) {
     if((int)$user["banned"] === 1) {
         if(!in_array($_SERVER["PHP_SELF"], [
             "/UserAuthentication/LogOut.php",

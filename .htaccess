@@ -12,6 +12,8 @@ RewriteRule ^games/start$ /Api/PlayGame.php [L,QSA]
 
 RewriteRule ^user/request-friendship$ /users/request-friendship.php [L,QSA]
 RewriteRule ^user/decline-friend-request$ /users/decline-friend-request.php [L,QSA]
+RewriteRule ^users/friends$ /Friends.php [L]
+RewriteRule ^users/profile$ /User.php [L]
 
 RewriteRule ^mobile-app-upgrades/native-ios/bc$ /Nuggets.php [L,QSA]
 

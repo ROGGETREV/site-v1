@@ -69,6 +69,37 @@ $welcomeMessages = [
         </div>
         <br>
         <h4>Recent</h4>
+        <?php
+        $gameList = "";
+        ob_start();
+        $count = 0;
+        $limit = 6;
+        foreach(array_reverse(json_decode($user["playedGames"], true)) as $gameID) {
+        $qq = $con->prepare("SELECT * FROM games WHERE id = :id");
+        $qq->bindParam(':id', $gameID, PDO::PARAM_INT);
+        $qq->execute();
+        $game = $qq->fetch();
+        $qq = $con->prepare("SELECT * FROM users WHERE id = :id");
+        $qq->bindParam(':id', $game["creator"], PDO::PARAM_INT);
+        $qq->execute();
+        $usr = $qq->fetch();
+        if($game && $usr) {
+        $count++;
+        if($count <= $limit) {
+        ?>
+        <div class="col-md-2" style="cursor: pointer;" onclick='window.location = "/Place.aspx?ID=<?php echo (int)$game["id"]; ?>";'>
+            <div class="card">
+                <div style="height: 0; padding-top: 60%; position: relative;">
+                    <img src="/images/Games/Get.ashx?ID=<?php echo (int)$game["id"]; ?>" class="card-img-top" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; width: 100%; height: 100%;">
+                </div>
+                <div class="gameClientCard gameClientCard-small"><?php echo htmlspecialchars($game["gameClient"]); ?></div>
+                <div class="card-body" style="padding: 6px;">
+                    <h6 class="card-title" style="margin-bottom: 0;"><?php echo htmlspecialchars($game["name"]); ?></h6>
+                    <p class="card-text">by <strong><?php echo htmlspecialchars($usr["username"]); ?></strong><?php if((int)$game["players"] >= 1) { ?><br><strong><?php echo (int)$game["players"]; ?></strong> playing<?php } ?></p>
+                </div>
+            </div>
+        </div>
+        <?php } else $count--;}} $gameList = ob_get_clean(); if($count < 1) echo "This user has played no games."; else echo "<div class=\"row\">".$gameList."</div>"; ?>
     </div>
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/footer.php"); ?>
 </body>

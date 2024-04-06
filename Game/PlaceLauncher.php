@@ -68,6 +68,25 @@ $q->execute();
 $game = $q->fetch();
 if(!$game) loadFail();
 
+if($_REQUEST["authentication"] === "guest" && $guestEnabled) {} else {
+    $fetchedPlayedGames = json_decode($usr["playedGames"], true);
+    
+    $playedGames = [];
+    foreach($fetchedPlayedGames as $key => $value) {
+        if($value !== (int)$game["id"]) {
+            $playedGames[] = $value;
+        }
+    }
+
+    $playedGames[] = (int)$game["id"];
+    $playedGames = json_encode($playedGames);
+
+    $q = $con->prepare("UPDATE users SET playedGames = :played WHERE gameAuthentication = :auth");
+    $q->bindParam(':played', $playedGames, PDO::PARAM_STR);
+    $q->bindParam(':auth', $_REQUEST["authentication"], PDO::PARAM_STR);
+    $q->execute();
+}
+
 $response = [
     "jobId" => "TestServer1",
     "status" => $status,

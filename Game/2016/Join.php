@@ -35,7 +35,7 @@ if(!$loggedin && $guestEnabled) $charapp .= "&guest";
 
 $joinscript = [
     "ClientPort" => 0,
-    "MachineAddress" => "86.233.220.4",
+    "MachineAddress" => "90.78.85.2",
     "ServerPort" => 53640,
     "PingUrl" => "",
     "PingInterval" => 20,

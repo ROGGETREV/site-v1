@@ -11,6 +11,14 @@ $sql = [
     "user" => "root",
     "pass" => "NeverGonnaGiveYouUp!?69fg-"
 ];
+if(str_ends_with($_SERVER["HTTP_HOST"], "rogget.testing.nuka.works")) {
+    $sql = [
+        "server" => "localhost",
+        "dbname" => "roggettesting",
+        "user" => "root",
+        "pass" => "RoggetTestingSigmaToilet!?Ohio"
+    ];
+}
 $developement ? $sql["dbname"] = "roggetdev" : $sql["dbname"] = "roggetprod";
 if(!$developement) error_reporting(0); else error_reporting(E_ALL);
 try{
@@ -42,7 +50,7 @@ $loggedin = false;
 $guestEnabled = true;
 
 $roggetServersIPs = [
-    "86.233.220.4",
+    "90.78.85.2",
     "2a02:842a:1c4e:f301:3550:6b4:7339:1001"
 ];
 
@@ -54,11 +62,11 @@ function isRoggetIP($ip) {
 
 $RCCS = [
     "renders" => [
-        "2008" => "86.233.220.4:50001",
-        "2016" => "86.233.220.4:50002"
+        "2008" => "90.78.85.2:50001",
+        "2016" => "90.78.85.2:50002"
     ],
     "gameservers" => [
-        "2016" => "86.233.220.4:50002"
+        "2016" => "90.78.85.2:50002"
     ],
 ];
 

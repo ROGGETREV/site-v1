@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : mar. 02 avr. 2024 à 00:31
+-- Généré le : sam. 06 avr. 2024 à 23:07
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -38,7 +38,7 @@ CREATE TABLE `alerts` (
 --
 
 INSERT INTO `alerts` (`id`, `content`, `color`) VALUES
-(1, 'Welcome to ROGGET Testing, real! Do shit!!!!!', 'danger');
+(1, 'Oh my god. This is too skibidi! I am sigmaing!', 'danger');
 
 -- --------------------------------------------------------
 
@@ -96,9 +96,6 @@ CREATE TABLE `catalog` (
   `created` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Déchargement des données de la table `catalog`
---
 
 -- --------------------------------------------------------
 
@@ -129,10 +126,6 @@ CREATE TABLE `friendships` (
   `responsetime` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Déchargement des données de la table `friendships`
---
-
 -- --------------------------------------------------------
 
 --
@@ -158,6 +151,9 @@ CREATE TABLE `games` (
 -- Déchargement des données de la table `games`
 --
 
+INSERT INTO `games` (`id`, `name`, `description`, `creator`, `maxplayers`, `genre`, `moderation`, `renderYear`, `gameClient`, `players`, `created`, `updated`) VALUES
+(1, 'Skibidi Toilet Simulator', 'Um what the sigma', 2, 50, '', 'Accepted', '2008', '2016L', 0, 1710711655, 1710711655);
+
 -- --------------------------------------------------------
 
 --
@@ -170,10 +166,6 @@ CREATE TABLE `invitekeys` (
   `used` int(11) NOT NULL DEFAULT 0,
   `created` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Déchargement des données de la table `invitekeys`
---
 
 -- --------------------------------------------------------
 
@@ -204,10 +196,6 @@ CREATE TABLE `owneditems` (
   `item` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Déchargement des données de la table `owneditems`
-
-
 -- --------------------------------------------------------
 
 --
@@ -221,6 +209,7 @@ CREATE TABLE `renderqueue` (
   `client` enum('2011') NOT NULL DEFAULT '2011',
   `script` longtext NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 -- --------------------------------------------------------
 
 --
@@ -233,6 +222,7 @@ CREATE TABLE `sessions` (
   `userId` int(11) NOT NULL,
   `ip` varchar(1000) NOT NULL,
   `userAgent` varchar(1000) NOT NULL,
+  `mobileVersion` enum('None','2.271.97572') NOT NULL DEFAULT 'None',
   `created` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -268,6 +258,8 @@ CREATE TABLE `users` (
   `verified` int(11) NOT NULL DEFAULT 0,
   `theme` enum('dark','light') NOT NULL DEFAULT 'dark',
   `gameAuthentication` varchar(1000) NOT NULL,
+  `csrfWarns` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '[]' CHECK (json_valid(`csrfWarns`)),
+  `playedGames` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL DEFAULT '[]' CHECK (json_valid(`playedGames`)),
   `created` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -409,7 +401,7 @@ ALTER TABLE `chats`
 -- AUTO_INCREMENT pour la table `friendships`
 --
 ALTER TABLE `friendships`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT pour la table `games`
@@ -421,43 +413,43 @@ ALTER TABLE `games`
 -- AUTO_INCREMENT pour la table `invitekeys`
 --
 ALTER TABLE `invitekeys`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT pour la table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT pour la table `owneditems`
 --
 ALTER TABLE `owneditems`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
 
 --
 -- AUTO_INCREMENT pour la table `renderqueue`
 --
 ALTER TABLE `renderqueue`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT pour la table `sessions`
 --
 ALTER TABLE `sessions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT pour la table `wearing`
 --
 ALTER TABLE `wearing`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

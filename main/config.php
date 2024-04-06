@@ -49,6 +49,9 @@ $loggedin = false;
 
 $guestEnabled = true;
 
+$enableInviteKeys = true;
+if(str_ends_with($_SERVER["HTTP_HOST"], "rogget.testing.nuka.works")) $enableInviteKeys = false;
+
 $roggetServersIPs = [
     "90.78.85.2",
     "2a02:842a:1c4e:f301:3550:6b4:7339:1001"

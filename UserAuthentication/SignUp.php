@@ -33,9 +33,11 @@ if(str_contains($_SERVER["HTTP_USER_AGENT"], "ROBLOX Android App")) {
             <br>
             <label id="confirmpasswordLabel">Confirm Password <span class="text-danger"></span></label>
             <input type="password" id="confirmpassword" class="form-control" placeholder="Very!Secret?&=52">
+            <?php if($enableInviteKeys) { ?>
             <br>
             <label id="invitekeyLabel">Invite Key <span class="text-danger"></span></label>
             <input type="password" id="invitekey" class="form-control" placeholder="yR8Beon2H7OtkFpN0ej1M2df6AjVcKZa">
+            <?php } ?>
             <br>
             <span id="captchaError" class="text-danger"></span>
             <div class="g-recaptcha" data-theme="<?php echo $siteTheme; ?>" data-sitekey="<?php echo $reCAPTCHA["site"]; ?>"></div>
@@ -48,14 +50,14 @@ if(str_contains($_SERVER["HTTP_USER_AGENT"], "ROBLOX Android App")) {
     const username = document.querySelector("#username");
     const password = document.querySelector("#password");
     const confirmpassword = document.querySelector("#confirmpassword");
-    const invitekey = document.querySelector("#invitekey");
+    <?php if($enableInviteKeys) { ?>const invitekey = document.querySelector("#invitekey");<?php } ?>
     const submit = document.querySelector("#submitBtn");
 
     function clearErrors() {
         document.querySelector("#usernameLabel span").innerText = "";
         document.querySelector("#passwordLabel span").innerText = "";
         document.querySelector("#confirmpasswordLabel span").innerText = "";
-        document.querySelector("#invitekeyLabel span").innerText = "";
+        <?php if($enableInviteKeys) { ?>document.querySelector("#invitekeyLabel span").innerText = "";<?php } ?>
         document.querySelector("#captchaError").innerText = "";
     }
 
@@ -106,15 +108,17 @@ if(str_contains($_SERVER["HTTP_USER_AGENT"], "ROBLOX Android App")) {
             grecaptcha.reset();
             return document.querySelector("#confirmpasswordLabel span").innerText = "must be the same as your password";
         }
+        <?php if($enableInviteKeys) { ?>
         if(invitekey.value.length < 5) {
             enableSubmit();
             grecaptcha.reset();
             return document.querySelector("#invitekeyLabel span").innerText = "must be at least 5 characters";
         }
+        <?php } ?>
         const data = new FormData();
         data.append("username", username.value);
         data.append("password", password.value);
-        data.append("invitekey", invitekey.value);
+        <?php if($enableInviteKeys) { ?>data.append("invitekey", invitekey.value);<?php } ?>
         data.append("g-recaptcha-response", document.querySelector("#g-recaptcha-response").value);
         const req = await fetch("/Api/SignUp.ashx", {
             method: "POST",

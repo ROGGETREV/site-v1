@@ -11,6 +11,7 @@ $sql = [
     "user" => "root",
     "pass" => "NeverGonnaGiveYouUp!?69fg-"
 ];
+$developement ? $sql["dbname"] = "roggetdev" : $sql["dbname"] = "roggetprod";
 if(str_ends_with($_SERVER["HTTP_HOST"], "rogget.testing.nuka.works")) {
     $sql = [
         "server" => "localhost",
@@ -19,7 +20,6 @@ if(str_ends_with($_SERVER["HTTP_HOST"], "rogget.testing.nuka.works")) {
         "pass" => "RoggetTestingSigmaToilet!?Ohio"
     ];
 }
-$developement ? $sql["dbname"] = "roggetdev" : $sql["dbname"] = "roggetprod";
 if(!$developement) error_reporting(0); else error_reporting(E_ALL);
 try{
     $con = new PDO("mysql:host=".$sql["server"].";dbname=".$sql["dbname"], $sql["user"], $sql["pass"]);

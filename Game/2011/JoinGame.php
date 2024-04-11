@@ -146,11 +146,11 @@ local success, err = pcall(function()
     connectionFailed = client.ConnectionFailed:connect(onConnectionFailed)
     client.Ticket = authentication
 
-    playerConnectSuccess, player = pcall(function() return client:PlayerConnect(userid, "86.233.220.4", 53640, 0, threadSleepTime) end)
+    playerConnectSuccess, player = pcall(function() return client:PlayerConnect(userid, "90.78.85.2", 53640, 0, threadSleepTime) end)
     if not playerConnectSuccess then
         -- Old player connection scheme
         player = game:GetService("Players"):CreateLocalPlayer(userid)
-        client:Connect("86.233.220.4", 53640, 0, threadSleepTime)
+        client:Connect("90.78.85.2", 53640, 0, threadSleepTime)
     end
     player:SetSuperSafeChat(<?php if(!str_starts_with($user["gameAuthentication"], "guest")) echo "false"; else echo "true"; ?>)
     player:SetMembershipType(Enum.MembershipType.<?php echo $user["buildersclub"]; ?>)

@@ -1,1 +1,1 @@
-{"browserTrackerId":0,"appDeviceIdentifier":null}
+{"browserTrackerId":0,"appDeviceIdentifier":0}

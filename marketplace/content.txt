@@ -1,1 +1,1 @@
-{"productId":"54132321","currencyTypeId":"1","expectedUnitPrice":"10","placeId":"1","requestId":"943DB98D-A359-4860-B308-804AAEAAC824"} | productId=54132321&currencyTypeId=1&expectedUnitPrice=10&placeId=1&requestId=943DB98D%2DA359%2D4860%2DB308%2D804AAEAAC824
+{"productId":"54132321","currencyTypeId":"1","expectedUnitPrice":"10","placeId":"1","requestId":"C7160F0A-CB6C-48AC-B5E5-050A590420D7"} | productId=54132321&currencyTypeId=1&expectedUnitPrice=10&placeId=1&requestId=C7160F0A%2DCB6C%2D48AC%2DB5E5%2D050A590420D7

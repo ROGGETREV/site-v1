@@ -8,6 +8,7 @@ if(isset($_REQUEST["redir"])) {
 }
 if($_REQUEST["id"] === "niggaaaaaaaaaa") {
     header('location: /NORMAL ELEVATOR HALLOWEEN 16.rbxl');
+    // header('location: /MeepCity.rbxl');
     exit;
 }
 if(!isset($_REQUEST["id"]) || empty($_REQUEST["id"])) {

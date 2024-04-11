@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : sam. 06 avr. 2024 à 23:07
+-- Généré le : jeu. 11 avr. 2024 à 22:21
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -76,7 +76,7 @@ CREATE TABLE `allowedsecurityversions` (
 
 INSERT INTO `allowedsecurityversions` (`id`, `ver`) VALUES
 (1, '0.271.1pcplayer'),
-(2, '0.271.9androidapp');
+(2, '2.271.9androidapp');
 
 -- --------------------------------------------------------
 
@@ -158,20 +158,21 @@ INSERT INTO `friendships` (`id`, `user1`, `user2`, `accepted`, `requesttime`, `r
 (48, 10, 11, 0, 1711221077, 0),
 (51, 11, 2, 1, 1711282935, 1711477738),
 (52, 13, 2, 1, 1711283306, 1712073897),
-(53, 10, 13, 0, 1711309425, 0),
+(53, 10, 13, 1, 1711309425, 1712751019),
 (54, 10, 1, 0, 1711309429, 0),
 (55, 10, 3, 0, 1711309449, 0),
 (63, 2, 9, 1, 1711319201, 1711319204),
 (64, 2, 15, 1, 1711378907, 1711378914),
-(65, 10, 9, 0, 1711379621, 0),
+(65, 10, 9, 1, 1711379621, 1712751395),
 (66, 16, 1, 0, 1711402143, 0),
-(70, 10, 2, 1, 1711474918, 1711544042),
 (71, 10, 15, 0, 1711489187, 0),
 (73, 2, 12, 0, 1711997546, 0),
 (74, 17, 6, 0, 1712427310, 0),
 (75, 2, 17, 1, 1712427622, 1712427740),
 (76, 17, 3, 0, 1712427744, 0),
-(77, 17, 5, 0, 1712427747, 0);
+(77, 17, 5, 0, 1712427747, 0),
+(79, 2, 10, 1, 1712751006, 1712751009),
+(80, 13, 1, 0, 1712752479, 0);
 
 -- --------------------------------------------------------
 
@@ -231,7 +232,8 @@ INSERT INTO `invitekeys` (`id`, `invitekey`, `used`, `created`) VALUES
 (10, 'cJGMiKeLiC2Hf0ToTWDgGReT7H1M8rCu', 1, 1711283429),
 (11, '0W6Gm7pP6aOmYoaY8bK1Ds5yhaa7AZU4', 1, 1711378402),
 (12, 'EJxnL0y29jjRS8RNffxStdEoFL4sK5L8', 1, 1711378436),
-(13, 'zOAIMXwJsFJ0kpvlSHtChNH1ATDFbcgZ', 1, 1712427107);
+(13, 'zOAIMXwJsFJ0kpvlSHtChNH1ATDFbcgZ', 1, 1712427107),
+(14, 'ekANe1KD7ADZPbkNuU6FNQayS6W6LQ44', 1, 1712515210);
 
 -- --------------------------------------------------------
 
@@ -282,7 +284,11 @@ INSERT INTO `messages` (`id`, `user1`, `user2`, `subject`, `content`, `hasBeenRe
 (25, 1, 2, 'You have earned 5 nuggets!', 'User Lahza (ID 10) has bought your item: \"Elon Musk\" at 5 nuggets.\nThe nuggets has been given to you.', 1, 0, 1712074945),
 (26, 1, 10, 'You have bought Elon Musk for 5 nuggets.', 'You have bought an item: \"Elon Musk\" at 5 nuggets from user nolanwhy (ID 2).\nThe item has been given to you.', 1, 0, 1712074945),
 (27, 1, 2, 'You have earned 5 nuggets!', 'User Lahza (ID 10) has bought your item: \"Dog\" at 5 nuggets.\nThe nuggets has been given to you.', 1, 0, 1712078934),
-(28, 1, 10, 'You have bought Dog for 5 nuggets.', 'You have bought an item: \"Dog\" at 5 nuggets from user nolanwhy (ID 2).\nThe item has been given to you.', 1, 0, 1712078934);
+(28, 1, 10, 'You have bought Dog for 5 nuggets.', 'You have bought an item: \"Dog\" at 5 nuggets from user nolanwhy (ID 2).\nThe item has been given to you.', 1, 0, 1712078934),
+(29, 1, 9, 'You have earned 25 nuggets!', 'User newuser (ID 13) has bought your item: \"LeTrisomique\" at 25 nuggets.\nThe nuggets has been given to you.', 0, 0, 1712750991),
+(30, 1, 13, 'You have bought LeTrisomique for 25 nuggets.', 'You have bought an item: \"LeTrisomique\" at 25 nuggets from user LazyAdmin (ID 9).\nThe item has been given to you.', 0, 0, 1712750991),
+(31, 1, 2, 'You have earned 5 nuggets!', 'User newuser (ID 13) has bought your item: \"Dog\" at 5 nuggets.\nThe nuggets has been given to you.', 1, 0, 1712751003),
+(32, 1, 13, 'You have bought Dog for 5 nuggets.', 'You have bought an item: \"Dog\" at 5 nuggets from user nolanwhy (ID 2).\nThe item has been given to you.', 0, 0, 1712751003);
 
 -- --------------------------------------------------------
 
@@ -337,7 +343,9 @@ INSERT INTO `owneditems` (`id`, `user`, `item`) VALUES
 (75, 5, 4),
 (76, 12, 3),
 (78, 10, 3),
-(79, 10, 5);
+(79, 10, 5),
+(80, 13, 4),
+(81, 13, 5);
 
 -- --------------------------------------------------------
 
@@ -363,7 +371,8 @@ INSERT INTO `renderqueue` (`id`, `remote`, `type`, `client`, `script`) VALUES
 (14, 4, 'user', '2011', 'local plr = game.Players:CreateLocalPlayer(0)\r\nplr.CharacterAppearance = \"http://shitblx.cf/Game/CharacterFetch.ashx?userId=4\"\r\nplr:LoadCharacter()\r\n\r\n'),
 (15, 12, 'user', '2011', 'local plr = game.Players:CreateLocalPlayer(0)\r\nplr.CharacterAppearance = \"http://shitblx.cf/Game/CharacterFetch.ashx?userId=12\"\r\nplr:LoadCharacter()\r\n\r\n'),
 (16, 3, 'user', '2011', 'local plr = game.Players:CreateLocalPlayer(0)\r\nplr.CharacterAppearance = \"http://shitblx.cf/Game/CharacterFetch.ashx?userId=3\"\r\nplr:LoadCharacter()\r\n\r\n'),
-(17, 17, 'user', '2011', 'local plr = game.Players:CreateLocalPlayer(0)\r\nplr.CharacterAppearance = \"http://shitblx.cf/Game/CharacterFetch.ashx?userId=17\"\r\nplr:LoadCharacter()\r\n\r\n');
+(17, 17, 'user', '2011', 'local plr = game.Players:CreateLocalPlayer(0)\r\nplr.CharacterAppearance = \"http://shitblx.cf/Game/CharacterFetch.ashx?userId=17\"\r\nplr:LoadCharacter()\r\n\r\n'),
+(18, 18, 'user', '2011', 'local plr = game.Players:CreateLocalPlayer(0)\r\nplr.CharacterAppearance = \"http://shitblx.cf/Game/CharacterFetch.ashx?userId=18\"\r\nplr:LoadCharacter()\r\n\r\n');
 
 -- --------------------------------------------------------
 
@@ -389,7 +398,15 @@ INSERT INTO `sessions` (`id`, `sessKey`, `userId`, `ip`, `userAgent`, `mobileVer
 (1, 'a6988aede76687e1768cce072828002e78315d5334f2df91d479cde8b8899f194af09ce871d989e3e4351b6c17be1c713ca07175da075f0c5d8224d7a3946e6ffac656b2b0e848dafe094a60d8268b939564071d19f63f99ab8542a649acf4da2c566ca1', 2, 'deb8de37ad6900f98037390b2e5350a391e2e3b8001ed4457f324e09d1a90e4d0a3b3116f5261f15fbf150e985c3401b6cd89bf1fe2fdd79ef301df04dea643d', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36', 'None', 1712156234),
 (3, '9618ecdc9d16d1e93bceee14b29445e2f4a11698f0c60d78d0e138ef44d2e9e5b22fc962fad6c52a7961187279dfd210fa1a4576b5cad3867f6e205565ad6bf7fc2e0f11d54cf71e3da0232364ccbdfa5d50d1ca3a977ca63490f1e30219eadec16f7190', 3, 'e847835ccf9ea67396e28724efdfa207c49dbdda50c302a19a76e7323b915d132ed3d83a43debf173106b46ea2b3f6c8ae1e8eb549fd0c125e590a4778cc1a26', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36', 'None', 1712425556),
 (4, '45e61c826f38f27e389df2a169ead486ed6b95862254afe5155af96f4157f6d4a27013aa0d8a501666186a4124830cd32742f95461438a68c13dbfcd0e06a32afc97e2afef75e148ade03c972b0fa06f54ed62e0c5ce071aee8b3f737a3b95c625225bad', 17, '7f6a4fdf68f35b001302da9e1ac55bda251867a6179a741545eaebadcf4c965179f0c89219c36e506b5e0f4d9539fc789f807adbc1f69e81d408997850c88670', 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Mobile Safari/537.36', 'None', 1712427204),
-(5, '1083206411a49192d621503f693e12c2b72dc6bb9b7f206d9be98732ada44aada78eeff5e06916727ded2ee2ac43ae92f5cb963a985ae6019852694b882d56247f5cee5f5e3bfd065c76638dc7a7b69ad1331ad6f58a60cffefa69bfca70fa86928225b0', 2, '234b14550cb6e1c8344142aec7759711ba3e98d66441d48518cfd9fdb86642983718332ce305956111a0287a3c82817b6fed76dce9d8da6bdd3f0b1eb47c11a8', 'Mozilla/5.0 (3679MB; 720x1384; 281x283; 360x692; Samsung SM-G950F; 9) AppleWebKit/537.36 (KHTML, like Gecko)  ROBLOX Android App 2.271.97572 Phone Hybrid() GooglePlayStore', '2.271.97572', 1712427230);
+(5, '1083206411a49192d621503f693e12c2b72dc6bb9b7f206d9be98732ada44aada78eeff5e06916727ded2ee2ac43ae92f5cb963a985ae6019852694b882d56247f5cee5f5e3bfd065c76638dc7a7b69ad1331ad6f58a60cffefa69bfca70fa86928225b0', 3, '234b14550cb6e1c8344142aec7759711ba3e98d66441d48518cfd9fdb86642983718332ce305956111a0287a3c82817b6fed76dce9d8da6bdd3f0b1eb47c11a8', 'Mozilla/5.0 (3679MB; 720x1384; 281x283; 360x692; Samsung SM-G950F; 9) AppleWebKit/537.36 (KHTML, like Gecko)  ROBLOX Android App 2.271.97572 Phone Hybrid() GooglePlayStore', '2.271.97572', 1712427230),
+(6, '3a984fbd238018d61d632c38dcff73ff86929d57859246c535594536866228212defa4c9a354eb1582a19c1a4b06556932618a833e51cf28971a23bdf2404acd70c4ee5b520a0c1e9100ddd55b7313aa184b2ff5d0fa7396ff3f333d9e68ca94d76fe7ac', 8, '34722528f5e141f7245f561f280562c7a1b798f483925c438d0848c8f0318391269f442fe54a6e8310e002817f7a77ffdea3c9ce7937110a8bf230adf1b61ba4', 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36', 'None', 1712442384),
+(7, 'e9c7d4e4387c9495dda4736e1f30252f339040924e9d05290e475bff88e326ae37ac265df7483fac3a4fc96406ff73325975bbca1e7b2190acae572771dbd4c106d41c01b36aec5f62c8651e658c8f56955359b460ed09cd3a53769d8f63dec14cf053de', 9, '0f87f449516fc27dacfc86bbd6a6df505d59c45960d4cce4f0149a4823f692f9d034459f0b7b5560f1e1e7978901ca0de1d87003e1dfbb9de40ba2cdff01ba5a', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/115.0', 'None', 1712443068),
+(8, '5ac06ce802188ad86d0a4b8b8ecef648bd7c25a98f1235e769d37406151a7cfa8666defd48c5079a16e16ca53056c1197af0ef19ebced20646a3f9cd1326d78f12f7f7070e17bb05791db672d544077fd7bdb2e5109cd9564beb60492c5f2c1524df5d97', 10, '9e317cb32eaa1070ec71329bb0e50a4c0c8e3ac18272d4416b76d34a745353686fcccac4a8bdcf215550e3a8108de0bf56f5c884fd5fe4c2316fe3d018c65496', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 OPR/107.0.0.0', 'None', 1712493314),
+(9, '1558a564d919e2c970ee9c1029dae38f9b77d02209c8dfd7a3a5ad8d730f39d8d3bb469619981a96d2e603187696b2b3d6727b297da84548b72b4978158bc0ac337aa28f261be0473074ec3c525b7f3ef8bbf5e14126fef2763dc46de11805afe6b1ff3c', 18, '22b2d9b86af5a8cc8777065749ff98dfa1d86b0e22958d772e17e27be71c03b6be05b8df140f2e4b0c994c3d70d435c9643ba59f8772df7eaf4c0e3782878a05', 'Mozilla/5.0 (iPad; CPU OS 17_3_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3.1 Mobile/15E148 Safari/604.1', 'None', 1712515391),
+(10, '65c35339d062f90dc37a390e74cb48ca0ac57a6a80e6e2e502567dedaf7a0cbacd081a837042a168de6296cc86eb95693b0c4f18c5cb9d121f70bbd9bfc378c45c4f1a7dbdcd581c8fc7bdad1752d37b3a23eae971ca81fc792cb429394889848013ad53', 2, '234b14550cb6e1c8344142aec7759711ba3e98d66441d48518cfd9fdb86642983718332ce305956111a0287a3c82817b6fed76dce9d8da6bdd3f0b1eb47c11a8', 'Mozilla/5.0 (3679MB; 720x1384; 281x283; 360x692; Samsung SM-G950F; 9) AppleWebKit/537.36 (KHTML, like Gecko)  ROBLOX Android App 2.270.96141 Phone Hybrid() GooglePlayStore', 'None', 1712689792),
+(11, '9cfd0ac6c5f94753dec1f15eb5ee418faaa0a54d139f790b7ef6265b90395fe5dceb41f382e8549bbf99f59852234897272f0829f9b66036dc70249b0ef5e03babf6052bb103a99b7ded6e2e723e5bbf5d51dc24e30971ca9a68108113004e7f11af8935', 4, 'd04af40504ffb6e629a9ca16f5e4ed4ee60af3f331ce7e86e5c3cceead89f04ee4f607892900e07dcb553b69c15feefb4b056c343718aaf7e3ddf5c17e47531d', 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Mobile Safari/537.36', 'None', 1712745658),
+(12, 'd177d4d417f54f4ee69dff27d1b9a0d9f3e245fc91c18664d294c3eaa4199257a613897509560123c1b245585b9ab62eb74e9a5c0504a49c961b74ce2352e95a68b6a5c296c3f84d5bdb6c63c7a7f89cd42705ef4bb01793ffbdc891001d46daae11a860', 13, '0c4ab70f8278bd1e46f31366c0afe7c95ad10ea6cdb929f73dfbc89ba1dd0633a296c267f37e39915ae6e05a3171a8cd930dbf051ca80e3c7fcfb88f951d4b2d', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0', 'None', 1712750601),
+(13, '82c5d10dbaac7a2240d06be1d6931a5200faa6559bd5634e85f8b4733407a600543fea6ef89bb925982cb25cac8c1398db2d7b2580262850f58b2af009974be3fd7640832529303552603890681ae63ed29d8fd1aa36811e6b6c65eaa3b9d478b0efc477', 13, '05e74b90ecebb4beffe6b64732db130ba06185522e774b5f345ca3527c0b937f6242a095d85379adf50057013422748ba5b423c84bf0245bd4e6b0fa0f19f276', 'Mozilla/5.0 (3606MB; 1080x2167; 405x405; 392x788; Xiaomi M2103K19G; 13) AppleWebKit/537.36 (KHTML, like Gecko)  ROBLOX Android App 2.270.96141 Phone Hybrid() GooglePlayStore', 'None', 1712750709);
 
 -- --------------------------------------------------------
 
@@ -434,22 +451,23 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `password`, `permission`, `buildersclub`, `lastonline`, `nuggets`, `description`, `renderYear`, `discord_verify_required`, `discord_verified`, `discord_id`, `discord_access_token`, `discord_refresh_token`, `discord_expires_in`, `discord_time_since_no_verification`, `discord_last_server_check`, `banned`, `banreason`, `lastRender`, `bodyColors`, `chatAuthentication`, `verified`, `theme`, `gameAuthentication`, `csrfWarns`, `playedGames`, `created`) VALUES
 (1, 'ROBLOX', '$2y$12$91Gkb.GUjpD7KNPEQlC.JOSLpfnUp8UMQQuqPw/cJnwzqMA4J8Rvi', 'Administrator', 'OutrageousBuildersClub', -1712425598, 99999999, 'This account is not used. Please go to nolanwhy\'s account for the owner.', '2008', 0, 0, '0', '', '', 0, 2147483647, 0, 0, '', 1710601408, '{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}', '', 0, 'dark', '5df17fd93428e888d6cf164d0810793d5f68fe9f', '[]', '[]', 1709051501),
-(2, 'nolanwhy', '$2y$12$91Gkb.GUjpD7KNPEQlC.JOSLpfnUp8UMQQuqPw/cJnwzqMA4J8Rvi', 'Administrator', 'TurboBuildersClub', 1712430503, 100000039, 'I am the owner, and only developer of ROGGET!', '2016', 1, 1, '544207551219105792', 'cuxKiwjQ9MZ8S0y3nHqlj8jDxtDuhj', 'iWau0berseCyHw4D2kUa5CYH87LNXv', 1712757288, 1711221965, 1712428935, 0, '', 1712170618, '{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}', '', 0, 'dark', '4a1b40f11c50a2a00ba5e039c16a1baabd0c5fae', '[]', '[1]', 1709051501),
-(3, 'builderman', '$2y$12$91Gkb.GUjpD7KNPEQlC.JOSLpfnUp8UMQQuqPw/cJnwzqMA4J8Rvi', 'Administrator', 'TurboBuildersClub', 1712425995, 99999999, 'buildrmen', '2016', 0, 0, '', '', '', 1773520754, 2147483647, 0, 0, '', 1712425643, '{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}', '', 0, 'dark', 'ff61292b5518521ef569a42a25b7629d3dd275d4', '[]', '[]', 1709051501),
-(4, 'Shedletsky2', '$2y$12$POWubxjDbdUvMRq0Pd6J7ObIUslk/7TS/7GyxcohDwgN9I.sOYKyK', 'Administrator', 'OutrageousBuildersClub', 1711822299, 99999999, 'I\'m new to ROGGET!', '2008', 1, 1, '715950519188717640', 'ANF2DCPR60Qb2JZRg2i9isUWKSaS5S', '0lZvquPaDQbrLPt9djK950jlNgwBaX', 1711749214, 2147483647, 1711144427, 0, '', 1711821590, '{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}', '', 0, 'dark', '', '[]', '[]', 1709132544),
+(2, 'nolanwhy', '$2y$12$91Gkb.GUjpD7KNPEQlC.JOSLpfnUp8UMQQuqPw/cJnwzqMA4J8Rvi', 'Administrator', 'TurboBuildersClub', 1712753764, 100000044, 'I am the owner, and only developer of ROGGET!', '2016', 1, 1, '544207551219105792', 'cuxKiwjQ9MZ8S0y3nHqlj8jDxtDuhj', 'iWau0berseCyHw4D2kUa5CYH87LNXv', 1712757288, 1711221965, 1712752059, 0, '', 1712170618, '{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}', '', 0, 'dark', '4909d7032547a1e7f1aa72277756079a392246a1', '[]', '[1]', 1709051501),
+(3, 'builderman', '$2y$12$91Gkb.GUjpD7KNPEQlC.JOSLpfnUp8UMQQuqPw/cJnwzqMA4J8Rvi', 'Administrator', 'TurboBuildersClub', 1712754316, 99999999, 'buildrmen', '2016', 0, 0, '', '', '', 1773520754, 2147483647, 0, 0, '', 1712425643, '{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}', '', 0, 'dark', 'a3665e4b3b49b3124bf2bf05cef3dac4ff314234', '[]', '[1]', 1709051501),
+(4, 'Shedletsky2', '$2y$12$POWubxjDbdUvMRq0Pd6J7ObIUslk/7TS/7GyxcohDwgN9I.sOYKyK', 'Administrator', 'OutrageousBuildersClub', 1712745674, 99999999, 'I\'m new to ROGGET!', '2008', 1, 1, '715950519188717640', 'Mu0841xQvo0tyls4S9ViHzoAdp2JFx', 'tETccDyDa42HZyFdb1C6Y8rzkbIsQK', 1713350459, 2147483647, 1712745659, 0, '', 1711821590, '{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}', '', 0, 'dark', '15cdec6a3b0749884724850d5b664a7cf018be15', '[]', '[]', 1709132544),
 (5, 'alix20152', '$2y$12$CObHAI6xFNYHSSTj5ZEd5.Jr39xGEqYLP0DUwQswaK74v.WApPZYW', 'User', 'None', 1712084723, 99999954, 'I\'m new to ROGGET!', '2016', 0, 0, '1188133355057852488', 'F3XWI4mquV4sPMCOqwEygUyeILO7Ur', 'txhopRKzZehUsJV8Cp9qU9cSidZYFm', 1710271403, 2147483647, 0, 0, '', 1711807979, '{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}', '', 0, 'dark', '16bcd0d70554b8b982c566351e2a97477900a64c', '[]', '[]', 1709313658),
 (6, 'copy', '$2y$12$A6ojvI9DtgSQYq/yS9wM3.Kaue6P7VJEHk9.y/F0joOf1N3u.UkP6', 'User', 'None', 1710616916, 99999999, 'I\'m new to ROGGET!', '2011', 1, 0, '523559687384203328', 'hq0dgDNq12GpNcJ9ZdiUsGfmW6g23h', 'Gn4YYFpZUsOpDRVzXQcJ0fhLbUqv2T', 1711126111, 2147483647, 0, 0, '', 1710614656, '{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}', '', 0, 'dark', '', '[]', '[]', 1710521241),
 (7, 'LeGamer', '$2y$12$yCkKHpWCRQOHXSHO4mr3y.T9DCmGYsg6CP6Jpf6pc2g8sfVzTIzCu', 'User', 'None', 1711305799, 99999999, 'I\'m new to ROGGET!', '2008', 1, 0, '786635042142420993', 'QnmCim8rOcOsvLOE3KzBAUkWi8gkUj', 'uGKmUbvutStdkhZqGNaAIDH4OP4dWX', 1711141545, 2147483647, 0, 1, 'Trisomique', 1710791092, '{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}', '', 0, 'dark', '', '[]', '[]', 1710536698),
-(8, 'Powerm1nt', '$2y$12$zgOwO.ztbkoMXTsfthyauuH9rRT.y4WSO6QLwrz.w9UylsKrTOUvu', 'User', 'None', 1710537430, 99999999, 'I\'m new to ROGGET!', '2008', 1, 0, '967171856073392219', 'HtFgXRV4SKM5z0KlgxB2YvSwbPZEqu', '3aKKMyXJMxIPcO1BRC9wflyH5xZufK', 1711142055, 2147483647, 0, 0, '', 1710601393, '{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}', '', 0, 'dark', '', '[]', '[]', 1710537229),
-(9, 'LazyAdmin', '$2y$12$.sAKKiwP1aoaS5UpcDVdvOC0m73o1kgloIYWwVQdOjLH0PDxuB.7.', 'Administrator', 'None', 1711654156, 100000149, 'I\'m new to ROGGET!', '2011edited2016', 1, 1, '1134256002959671368', '8XftO0HR0GVyAlyTyKcQVXJVaKTaZD', 'iYY4MY0Or7oJkq34pv78MAbNld8hVb', 1711476884, 2147483647, 1711389223, 0, '', 1711382793, '{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}', '', 0, 'dark', '', '[]', '[]', 1710537569),
-(10, 'Lahza', '$2y$12$yLBLxDE3MGCWPboiMF8Jq.l8.UWuMjO3FrBP/lqnPuZUp2W0AOEpK', 'User', 'None', 1712080938, 99999769, 'I\'m new to ROGGET!', '2016', 1, 1, '1221172754586271834', 'c77T7DRYiPYuKTPCmjRs1VivY3g3Os', 'aGXMBQB1P199BhN9QpxhwInD0WKCQh', 1711825758, 1711220565, 1711795812, 0, '', 1711544079, '\'{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}\'', '', 0, 'dark', '2fac2d7d9d809cf4c0f3abbcd48b8c66d001497c', '[]', '[]', 1711220565),
+(8, 'Powerm1nt', '$2y$12$zgOwO.ztbkoMXTsfthyauuH9rRT.y4WSO6QLwrz.w9UylsKrTOUvu', 'User', 'None', 1712444558, 99999999, 'I\'m new to ROGGET!', '2008', 1, 1, '967171856073392219', 'At2jcTKlokye1kpwOq93NGvBkj7l2a', 'ZGra38QQlx7Mw442tRdb0yYHB00Y7z', 1713047251, 2147483647, 1712444292, 0, '', 1710601393, '{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}', '', 0, 'dark', 'iAmSigmaAndYouAreCacaBoudin', '[]', '[1]', 1710537229),
+(9, 'LazyAdmin', '$2y$12$.sAKKiwP1aoaS5UpcDVdvOC0m73o1kgloIYWwVQdOjLH0PDxuB.7.', 'Administrator', 'None', 1712751845, 100000174, 'I\'m new to ROGGET!', '2011edited2016', 1, 1, '1134256002959671368', 'EQYNGO1wAfMD68Ib7ExmN59QoM9KeR', '1Yms8d3ZbFiEzXkDGKiBBUrsWdLf7v', 1713047869, 2147483647, 1712751366, 0, '', 1711382793, '{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}', '', 0, 'dark', 'aeb83350b9336f6a0b4095925c58d39a37e1bacb', '[]', '[1]', 1710537569),
+(10, 'Lahza', '$2y$12$yLBLxDE3MGCWPboiMF8Jq.l8.UWuMjO3FrBP/lqnPuZUp2W0AOEpK', 'User', 'None', 1712758817, 99999769, 'I\'m new to ROGGET!', '2016', 1, 1, '1221172754586271834', 'VjRioIjMi2nr3oqgjO2NgDO0xhc4jP', 'aOQx4uCNknei3qPvWZbozzT3u3714y', 1713098115, 1711220565, 1712758815, 0, '', 1711544079, '\'{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}\'', '', 0, 'dark', '79ed2840cef34ba2071c6e48af4b6356e4a7e2e8', '[]', '[1]', 1711220565),
 (11, 'DoggoITA', '$2y$12$qfMEJ8NSKJcSFoc.KMoRIu.r6A13.BGKB2iBALAXLe50UdWnRqVL6', 'User', 'None', 1711283059, 99999999, 'I\'m new to ROGGET!', '2016', 1, 1, '891372299515744306', 'vpFc3Tnf39qd2FuHMYWOYrLMqLj7cX', 'SkB288aomllG3ZbST3rVPr4WrEHJzq', 1711825385, 1711220574, 1711282293, 0, '', 1711221127, '\'{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}\'', '', 0, 'dark', '', '[]', '[]', 1711220574),
 (12, 'hadi', '$2y$12$XVp5NniVTEEJPjxLfHrKaO8Saip6i3C0cz0kuualMKhxlhxB2dSCy', 'User', 'None', 1712075028, 99999994, 'I\'m new to ROGGET!', '2008', 1, 1, '729738850410299453', 'qXw3071Gx0wKYUtQcfoH9MIBsWTUlR', 'wdDie9GsU2u0I0nMaGHWmO5tUAh8nU', 1711825466, 1711220592, 1711566067, 0, '', 1711997533, '\'{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}\'', '', 0, 'dark', 'cd78d23d2950d862ddf12fc379b4a85579cd597f', '[]', '[]', 1711220592),
-(13, 'newuser', '$2y$12$4Qay0qeelPg.ndhNjXPNI.6gXfv/me0pnyER1Twe3FyHQMkwqG4OG', 'User', 'None', 1711566623, 99999999, 'I\'m new to ROGGET!', '2008', 1, 1, '670690147716825118', 'sqx2Bz0ldOfIhkcVBeyEclOrRQVNmw', '4kQxY2ApauINcnFweeYpAVCLeTWdGF', 1711887902, 1711283055, 1711285400, 0, '', 1711283377, '\'{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}\'', '', 0, 'dark', '', '[]', '[]', 1711283055),
+(13, 'newuser', '$2y$12$4Qay0qeelPg.ndhNjXPNI.6gXfv/me0pnyER1Twe3FyHQMkwqG4OG', 'User', 'None', 1712752807, 99999969, 'I\'m new to ROGGET!', '2008', 1, 1, '670690147716825118', 'TTMjh5WL4DmDqQ4jMJCOX3KwtpiWkd', '1RVTmfifasLI39y7L8uUw77JjffOxs', 1713355403, 1711283055, 1711285400, 0, '', 1711283377, '\'{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}\'', '', 0, 'dark', '7dc31a5d1a3dbb412eb00478b811d4069ab16be7', '[]', '[1]', 1711283055),
 (14, 'Lookbehindyou', '$2y$12$6yeZvB6kfOS1gXgFsFflmuPYNUSJf7W/P7XKnon9gPzeESTnSeT.S', 'User', 'None', 1711283703, 99999999, 'I\'m new to ROGGET!', '2008', 1, 1, '932317692789149776', '9LpFXj7AdHlAWxsIJCFo78lxZHGu3E', 'OGdZYuHzeG7kJ0Ovaiep1fuseQJu0p', 1711888367, 1711283450, 1711283568, 0, '', 0, '\'{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}\'', '', 0, 'dark', '', '[]', '[]', 1711283450),
 (15, 'mohamedfaitcaca', '$2y$12$cubYh4CrOOMFM/Iy8kqJC.X1lccp7H3EfT.zF2jt.3r6GWhg.8O3S', 'User', 'None', 1711388568, 99999969, 'I\'m new to ROGGET!', '2016', 1, 1, '1085584581530493039', '0FlTTYzHzJxkP9L05ohzKF25YIRR5v', 'd23UDPufrZgLen0cwnf3FmVi0OhH8H', 1711983450, 1711378556, 1711388564, 0, '', 1711378869, '\'{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}\'', '', 0, 'dark', '', '[]', '[]', 1711378556),
 (16, 'Kelbaz', '$2y$12$rg69Fapteq73WbiAAJxJoON6mdEtQvK0rdVs5qWax/J.r3WASo.YG', 'User', 'None', 1711985557, 99999994, 'I\'m new to ROGGET!', '2016', 1, 1, '465943316538589194', 'GwWOTnfZzb9eLYmqi8NBOuIBbulKLe', 'u6zu3Pn0p0mSf9WIT8rTz9j2s2DdTI', 1711983530, 1711378690, 1711479838, 0, '', 1711393961, '\'{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}\'', '', 0, 'dark', '', '[]', '[]', 1711378690),
-(17, 'rat', '$2y$12$FEeJ0doY9mcJQGlB6bgBKepKUux6cc7/LktjaDnSllejPsk3noJEi', 'User', 'None', 1712433570, 0, 'I\'m new to ROGGET!', '2011edited2016', 1, 1, '1196138118177357945', 'dtXeLcjiHklpvzjw49DG9rOXZ6BygM', 'MoWlKOJlvpepm6mXAqiiT5WtjfsMha', 1713032039, 1712427204, 1712427240, 0, '', 1712427776, '\'{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}\'', '', 0, 'dark', 'cbbd70979d7ecc61d86e6d0cad61e4594bcd0b82', '[]', '[]', 1712427204);
+(17, 'rat', '$2y$12$FEeJ0doY9mcJQGlB6bgBKepKUux6cc7/LktjaDnSllejPsk3noJEi', 'User', 'None', 1712479458, 0, 'I\'m new to ROGGET!', '2011edited2016', 1, 1, '1196138118177357945', 'dtXeLcjiHklpvzjw49DG9rOXZ6BygM', 'MoWlKOJlvpepm6mXAqiiT5WtjfsMha', 1713032039, 1712427204, 1712427240, 0, '', 1712479412, '\'{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}\'', '', 0, 'dark', 'cbbd70979d7ecc61d86e6d0cad61e4594bcd0b82', '[]', '[]', 1712427204),
+(18, 'minifansahel', '$2y$12$jQ7l4OPxRPuDjmhWfVr5melGzx.OzpZUQ9y0JrsvyRilWkEGms/i.', 'User', 'None', 1712593008, 0, 'I\'m new to ROGGET!', '2016', 1, 1, '932732914863595540', 'vSKukMi6rotMPrxz9Hnw5ujCIzJnqq', 'exBE5vnkG7a3oxFMRNWzmD9kYCB8s4', 1713120337, 1712515391, 1712593002, 0, '', 1712515628, '\'{\"head\":24,\"torso\":23,\"leftarm\":24,\"rightarm\":24,\"leftleg\":119,\"rightleg\":119}\'', '', 0, 'dark', '6ba3ab30c813344618e54092bcea23a249ce9e57', '[]', '[]', 1712515391);
 
 -- --------------------------------------------------------
 
@@ -620,7 +638,7 @@ ALTER TABLE `chats`
 -- AUTO_INCREMENT pour la table `friendships`
 --
 ALTER TABLE `friendships`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT pour la table `games`
@@ -632,37 +650,37 @@ ALTER TABLE `games`
 -- AUTO_INCREMENT pour la table `invitekeys`
 --
 ALTER TABLE `invitekeys`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT pour la table `messages`
 --
 ALTER TABLE `messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT pour la table `owneditems`
 --
 ALTER TABLE `owneditems`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 
 --
 -- AUTO_INCREMENT pour la table `renderqueue`
 --
 ALTER TABLE `renderqueue`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT pour la table `sessions`
 --
 ALTER TABLE `sessions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT pour la table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT pour la table `wearing`

@@ -1,4 +1,4 @@
-<?php
+<?php exit('{"data":["0.271.1pcplayer",""2.271.9androidapp"",]}');
 require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
 $info = [];
 

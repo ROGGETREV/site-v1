@@ -1,1 +1,1 @@
-requesterUserId=9 | {"requesterUserId":"9"} | [] | {"_gameAuthentication":"ccdaf22819210b56f57713e0dc7949e503fb7d69f8a6544bb29857c712f6d4399788712856a98b230f52819379892bf08a81dc95c8d4ec72dfbed6f6d834ebc80a29193c3bd17d18b4ae33ee5e2f9624f087fe2685ed0fdb074738668b21ea1d4194291c"}
+requesterUserId=10 | {"requesterUserId":"10"} | [] | {"_csrftoken":"14415a4f3408934ff32ada41620effa9fde7d858f8842b072f597a679e9ba2686226bb760a8a8587","_gameAuthentication":"cb7b2ac05c4acd3ad800a0b611e1777141f69aa4"}

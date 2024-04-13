@@ -10,8 +10,6 @@ $apiKeys = [
 if(!isset($_REQUEST["text"])) exit(json_encode(["success"=>false,"message"=>"Please put the text"]));
 $text = $_REQUEST["text"];
 
-echo $_REQUEST["apikey"];
-
 if(!isset($_REQUEST["apikey"])) exit(json_encode(["success"=>false,"message"=>"Please put the apikey"]));
 if(!in_array($_REQUEST["apikey"], $apiKeys)) exit(json_encode(["success"=>false,"message"=>"Invalid apikey"]));
 

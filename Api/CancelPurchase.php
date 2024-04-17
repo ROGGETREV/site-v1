@@ -18,6 +18,15 @@ $q = $con->prepare("SELECT * FROM catalog WHERE id = :id");
 $q->bindParam(':id', $id, PDO::PARAM_INT);
 $q->execute();
 $item = $q->fetch();
+if(!$item) exit(json_encode(["success"=>false,"message"=>"Item does not exist"]));
+
+$q = $con->prepare("SELECT * FROM users WHERE id = :id");
+$q->bindParam(':id', $item["creator"], PDO::PARAM_INT);
+$q->execute();
+$creator = $q->fetch();
+if(!$creator) exit(json_encode(["success"=>false,"message"=>"Item does not exist"]));
+
+if((int)$creator["id"] === (int)$user["id"]) exit(json_encode(["success"=>false,"message"=>"You made this item"]));
 
 $q = $con->prepare("SELECT * FROM owneditems WHERE user = :id AND item = :iid");
 $q->bindParam(':id', $user["id"], PDO::PARAM_INT);

@@ -67,7 +67,7 @@ if(!$usr) {
     let closeModalTimeout = null;
     function play() {
         setTimeout(() => {
-            window.location = "/games/start?placeid=<?php echo (int)$game["id"]; ?>&csrf_token=<?php echo getCSRFCookie(); ?>";
+            window.location = "/games/start?placeid=<?php echo (int)$game["id"]; ?>&csrf_token=" + getCSRFCookie();
         }, 1000);
 
         clearTimeout(closeModalTimeout);

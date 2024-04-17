@@ -101,7 +101,7 @@ if($q->fetch()) $owned = true;
         purchase.innerText = "Purchasing...";
 
         const data = new FormData();
-        data.append("csrf_token", "<?php echo getCSRFCookie(); ?>");
+        data.append("csrf_token", getCSRFCookie());
         const req = await fetch("/Api/Purchase.ashx?ID=<?php echo (int)$item["id"]; ?>&nuggets=<?php echo (int)$item["nuggets"]; ?>", {
             method: "POST",
             body: data
@@ -150,7 +150,7 @@ if($q->fetch()) $owned = true;
         cancel.innerText = "Cancelling Purchase...";
 
         const data = new FormData();
-        data.append("csrf_token", "<?php echo getCSRFCookie(); ?>");
+        data.append("csrf_token", getCSRFCookie());
         const req = await fetch("/Api/CancelPurchase.ashx?ID=<?php echo (int)$item["id"]; ?>", {
             method: "POST",
             body: data

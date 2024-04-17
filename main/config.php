@@ -12,14 +12,6 @@ $sql = [
     "pass" => "NeverGonnaGiveYouUp!?69fg-"
 ];
 $developement ? $sql["dbname"] = "roggetdev" : $sql["dbname"] = "roggetprod";
-if(str_ends_with($_SERVER["HTTP_HOST"], "rogget.testing.nuka.works")) {
-    $sql = [
-        "server" => "localhost",
-        "dbname" => "roggettesting",
-        "user" => "root",
-        "pass" => "RoggetTestingSigmaToilet!?Ohio"
-    ];
-}
 if(!$developement) error_reporting(0); else error_reporting(E_ALL);
 try{
     $con = new PDO("mysql:host=".$sql["server"].";dbname=".$sql["dbname"], $sql["user"], $sql["pass"]);
@@ -51,11 +43,6 @@ $guestEnabled = true;
 
 $enableInviteKeys = true;
 $enableDiscordVerification = true;
-
-if(str_ends_with($_SERVER["HTTP_HOST"], "rogget.testing.nuka.works")) {
-    $enableInviteKeys = false;
-    $enableDiscordVerification = false;
-}
 
 $roggetServersIPs = [
     "90.78.85.2",

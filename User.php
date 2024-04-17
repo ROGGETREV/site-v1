@@ -172,7 +172,7 @@ if($loggedin) {
     <script>
     async function addFriend() {
         const data = new FormData();
-        data.append("csrf_token", "<?php echo getCSRFCookie(); ?>");
+        data.append("csrf_token", getCSRFCookie());
         const req = await fetch("/Api/Friendship.ashx?ID=<?php echo (int)$id; ?>&type=add", {
             method: "POST",
             body: data
@@ -183,7 +183,7 @@ if($loggedin) {
     }
     async function removeFriend() {
         const data = new FormData();
-        data.append("csrf_token", "<?php echo getCSRFCookie(); ?>");
+        data.append("csrf_token", getCSRFCookie());
         const req = await fetch("/Api/Friendship.ashx?ID=<?php echo (int)$id; ?>&type=remove", {
             method: "POST",
             body: data

@@ -113,9 +113,10 @@ if($csrf) {
         <?php } else { ?>
         <h3>Loading message...</h3>
         <form id="csrfForm" action="" method="POST" hidden>
-            <input type="text" name="csrf_token" value="<?php echo getCSRFCookie(); ?>" hidden>
+            <input type="text" name="csrf_token" hidden>
         </form>
         <script>
+        document.querySelector("#csrfForm input").value = getCSRFCookie();
         document.querySelector("#csrfForm").submit();
         </script>
         <?php } ?>

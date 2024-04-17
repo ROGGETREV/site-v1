@@ -42,7 +42,7 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/Management/inc.php");
                 }
                 ?>
                 <form action method="POST">
-                    <input type="text" name="csrf_token" value="<?php echo getCSRFCookie(); ?>" hidden>
+                    <input type="text" name="csrf_token" hidden>
                     <span class="text-danger"><?php echo $error; ?></span>
                     <input type="number" name="id" class="form-control" placeholder="ID" style="width: 220px;margin-bottom: 5px;">
                     <button type="submit" class="btn btn-primary me-auto">Unmoderate</button>
@@ -50,6 +50,9 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/Management/inc.php");
             </div>
         </div>
     </div>
+    <script>
+    document.querySelector("form input[name='csrf_token']").value = getCSRFCookie();
+    </script>
     <?php require_once($_SERVER["DOCUMENT_ROOT"]."/main/footer.php"); ?>
 </body>
 </html>

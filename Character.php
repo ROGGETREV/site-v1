@@ -128,7 +128,7 @@ $welcomeMessages = [
         btn.className = "btn btn-secondary me-auto";
         btn.innerText = "Rendering...";
         const data = new FormData();
-        data.append("csrf_token", "<?php echo getCSRFCookie(); ?>")
+        data.append("csrf_token", getCSRFCookie())
         const req = await fetch("/Api/RenderUser.ashx", {
             method: "POST",
             body: data
@@ -153,7 +153,7 @@ $welcomeMessages = [
     async function unwear(id) {
         const data = new FormData();
         data.append("ID", id)
-        data.append("csrf_token", "<?php echo getCSRFCookie(); ?>")
+        data.append("csrf_token", getCSRFCookie())
         const req = await fetch("/Api/UserUnwear.ashx", {
             method: "POST",
             body: data
@@ -165,7 +165,7 @@ $welcomeMessages = [
     async function wear(id) {
         const data = new FormData();
         data.append("ID", id)
-        data.append("csrf_token", "<?php echo getCSRFCookie(); ?>")
+        data.append("csrf_token", getCSRFCookie())
         const req = await fetch("/Api/UserWear.ashx", {
             method: "POST",
             body: data
@@ -177,7 +177,7 @@ $welcomeMessages = [
     async function setRenderYear(year) {
         const data = new FormData();
         data.append("year", year)
-        data.append("csrf_token", "<?php echo getCSRFCookie(); ?>")
+        data.append("csrf_token", getCSRFCookie())
         const req = await fetch("/Api/SetUserRenderYear.ashx", {
             method: "POST",
             body: data

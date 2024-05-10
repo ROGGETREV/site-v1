@@ -32,7 +32,7 @@ if(isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
 
 $maintenance = [
     "enabled" => true,
-    "reason" => "MAINTENANCE PAGE WILL GET CHANGED SOON LMAO SORRY"
+    "reason" => "Currently moving servers, check back soon!"
 ];
 
 if($maintenance["enabled"] && !in_array($_SERVER["PHP_SELF"], [

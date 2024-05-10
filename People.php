@@ -13,7 +13,7 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/main/config.php");
     <div class="<?php echo $containerClasses; ?>">
         <h2>Users</h2>
         <?php
-        $q = $con->prepare("SELECT * FROM users WHERE banned = 0 ORDER BY lastonline DESC");
+        $q = $con->prepare("SELECT * FROM users WHERE banned = false ORDER BY lastonline DESC");
         $q->execute();
         foreach($q->fetchAll() as $usr) { ?>
         <div class="card" style="margin-top: 5px;cursor: pointer;" onclick='window.location = "/User.aspx?ID=<?php echo (int)$usr["id"]; ?>";'>

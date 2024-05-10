@@ -4,27 +4,11 @@ $rcc = new Roblox\Grid\Rcc\RCCServiceSoap($exploded[0], $exploded[1]);
 echo "HW: ".$rcc->HelloWorld();
 echo "<br>";
 echo "Version: ".$rcc->GetVersion()."<br>";
-/*echo "<img src='data:image/png;base64,".$rcc->OpenJobEx("Testt", new Roblox\Grid\Rcc\ScriptExecution("Testt-Script", json_encode([
-    "Mode" => "Thumbnail",
-    "Settings" => [
-        "Type" => "Closeup",
-        "PlaceId" => 1,
-        "UserId" => 5,
-        "BaseUrl" => "shitblx.cf",
-        "MatchmakingContextId" => 1,
-        "Arguments" => ["https://www.shitblx.cf/", "https://www.shitblx.cf/Game/CharacterFetch.ashx?userId=2", "PNG", 768, 768, true]
-    ],
-    "Arguments"=> [
-        "MachineAddress"=> "127.0.0.1"
-    ]
-])))."'>";*/
-// echo $rcc->OpenJobEx("TestServer1", new Roblox\Grid\Rcc\ScriptExecution("TestServer1-Script", 'print("response:"..game:HttpGetAsync("https://shitblx.cf/test.rbxl"))'));
-echo json_encode(json_decode(json_encode($rcc->GetAllJobsEx()), true));
-$job = new Roblox\Grid\Rcc\Job("TestServer1", 2147483647);
-$script = new Roblox\Grid\Rcc\ScriptExecution("TestServer1-Script", '
+echo $rcc->OpenJobEx(new Roblox\Grid\Rcc\Job("TestServer1", 2147483647), new Roblox\Grid\Rcc\ScriptExecution("TestServer1-Script", '
 local placeId = 1
-local port = 8542
+local port = 29105
 local url = "http://shitblx.cf"
+local ROGGETAPIkey = "EHbKaHdKKrWlRfxneJkbEUWo9vZVLE64"
 ------------------- UTILITY FUNCTIONS --------------------------
 
 
@@ -98,13 +82,22 @@ settings().Diagnostics.LuaRamLimit = 0
 --settings().Network.SendRate = 35
 --settings().Network.PhysicsSend = 0  -- 1==RoundRobin
 
+function randint()
+    return (math.random() * 99999999) + #game.Workspace:GetChildren() * #game.Players:GetChildren() * (math.random() * 99999999)
+end
 
 game:GetService("Players").PlayerAdded:connect(function(player)
 	print("Player " .. player.userId .. " added")
+	count = #game.Players:GetChildren()
+    print("Contacting ROGGET API to set the player count to "..count)
+    game:HttpGet("http://shitblx.cf/Game/SetPlayerCount.ashx?count="..count.."&game="..placeId.."&apiKey="..ROGGETAPIkey.."&"..randint())
 end)
 
 game:GetService("Players").PlayerRemoving:connect(function(player)
 	print("Player " .. player.userId .. " leaving")
+	count = #game.Players:GetChildren() - 1
+    print("Contacting ROGGET API to set the player count to "..count)
+    game:HttpGet("http://shitblx.cf/Game/SetPlayerCount.ashx?count="..count.."&game="..placeId.."&apiKey="..ROGGETAPIkey.."&"..randint())
 end)
 
 if placeId~=nil and url~=nil then
@@ -117,7 +110,7 @@ if placeId~=nil and url~=nil then
 end
 
 -- Now start the connection
-ns:Start(53640) 
+ns:Start(port) 
 
 
 scriptContext:SetTimeout(10)
@@ -131,9 +124,7 @@ scriptContext.ScriptsDisabled = false
 
 -- StartGame -- 
 game:GetService("RunService"):Run()
-');
-echo json_encode($script);
-echo $rcc->OpenJobEx($job, $script);
+'));
 
 /*$timeout = 5;
 $rcc->ExecuteEx("TestServer1", new Roblox\Grid\Rcc\ScriptExecution('Game-AntiCheat', '

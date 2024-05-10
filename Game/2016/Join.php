@@ -35,8 +35,8 @@ if(!$loggedin && $guestEnabled) $charapp .= "&guest";
 
 $joinscript = [
     "ClientPort" => 0,
-    "MachineAddress" => "90.78.85.2",
-    "ServerPort" => 53640,
+    "MachineAddress" => "gameservers.shitblx.cf",
+    "ServerPort" => 29105,
     "PingUrl" => "",
     "PingInterval" => 20,
     "UserName" => $user["username"],

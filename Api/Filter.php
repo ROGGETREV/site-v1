@@ -4,7 +4,8 @@ header("content-type: application/json");
 
 $apiKeys = [
     "OdcAFk6MvV9PPLGunL5nKhqlliIDtBa8", // old madblox apikey, subject to remove
-    "ThesupercoolapikeyFRFR!!!!!96464645132" // nodeblox fake src
+    "ThesupercoolapikeyFRFR!!!!!96464645132", // nodeblox fake src
+    "npodTYDS3uWAKGmkRIC50In0KpF2swi2", // rbx09 or whatever shit
 ];
 
 if(!isset($_REQUEST["text"])) exit(json_encode(["success"=>false,"message"=>"Please put the text"]));

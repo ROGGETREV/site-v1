@@ -30,6 +30,20 @@ if(isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
     $_SERVER["REMOTE_ADDR"] = $_SERVER["HTTP_CF_CONNECTING_IP"];
 }
 
+$maintenance = [
+    "enabled" => true,
+    "reason" => "MAINTENANCE PAGE WILL GET CHANGED SOON LMAO SORRY"
+];
+
+if($maintenance["enabled"] && !in_array($_SERVER["PHP_SELF"], [
+    "/maintenance.php",
+    "/images/Users/Get.php",
+    "/Api/Maintenance.php"
+])) {
+    header('location: /maintenance.aspx');
+    exit;
+}
+
 require_once($_SERVER["DOCUMENT_ROOT"]."/Assemblies/Roblox/Grid/Rcc/RCCServiceSoap.php");
 require_once($_SERVER["DOCUMENT_ROOT"]."/Assemblies/Roblox/Grid/Rcc/Job.php");
 require_once($_SERVER["DOCUMENT_ROOT"]."/Assemblies/Roblox/Grid/Rcc/LuaType.php");

@@ -31,7 +31,7 @@ if(isset($_SERVER["HTTP_CF_CONNECTING_IP"])) {
 }
 
 $maintenance = [
-    "enabled" => true,
+    "enabled" => false,
     "reason" => "Currently moving servers, check back soon!"
 ];
 

@@ -117,7 +117,7 @@ $randomuser2 = $q->fetch();
     <div class="text">
       <h1>Maintenance</h1>
       <p>Sorry, the site is currently undergoing maintenance. We'll be back soon!</p>
-      <p>“<?php echo $maintenance["reason"]; ?>”</p>
+      <p id="reason">“<?php echo htmlspecialchars($maintenance["reason"]); ?>”</p>
       <p>You will get redirected when ROGGET is back online.</p>
     </div>
     <div id="character1"><?php echo htmlspecialchars($randomuser1["username"]); ?></div>
@@ -133,6 +133,7 @@ $randomuser2 = $q->fetch();
             const req = await fetch("/Api/Maintenance.ashx");
             const res = await req.json();
             if(res.enabled === false) window.location = "<?php echo addslashes($returnUrl); ?>";
+            document.querySelector("#reason").innerText = `“${res.reason}”`;
         }, 4000);
     </script>
   </body>
